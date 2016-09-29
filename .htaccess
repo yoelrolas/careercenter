@@ -1,0 +1,4 @@
+RewriteEngine on
+RewriteBase /cdc
+RewriteCond $1 !^(index\.php|assets|files|sitemap.xml|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1 [L]

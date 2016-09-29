@@ -1,0 +1,58 @@
+body{
+	background: #faffc8;
+	margin: 0;
+	padding: 0;
+	font-family: "Segoe UI", Verdana;
+	font-size: 12px;
+}
+#container{
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+#topbar{
+	
+}
+.padlim{
+	padding: 5px;
+}
+#leftbox{
+	width: 350px;
+	height: 550px;
+	display: block;
+	float: left;
+	border-right: #abcc00 1px solid;
+}
+#rightbox{
+	overflow: hidden;
+}
+.clear{
+	clear: both;
+}
+#footer{
+	
+}
+#mainpanel{
+	margin: 5px;
+}
+
+.form td{
+	padding:6px;
+}
+
+#mainpanel li .ui-icon-close { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+#mainpanel li .ui-icon-arrowrefresh-1-w { float: left; margin: 0.4em 0.2em 0 0; cursor: pointer; }
+
+#loading{
+	width: 250px;
+	height: 60px;
+	padding: 5px 10px;
+	position: fixed;
+	top: -10px;
+	right: -270px;
+}
+
+.required{
+	background: #FCEFA1;
+	border: 1px solid #459E00;
+}
