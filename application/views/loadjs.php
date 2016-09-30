@@ -17,6 +17,8 @@
 <script src="<?=base_url()?>assets/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- ChartJS 1.0.1 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/chartjs/Chart.min.js"></script>
+<!-- Select 2 -->
+<script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.js"></script>
 
 <!-- Block UI -->
 <script type="text/javascript" src="<?=base_url() ?>assets/js/jquery.blockUI.js"></script>
@@ -27,7 +29,7 @@
 <script type="text/javascript" src="<?=base_url()?>assets/tbs/js/plugins/datatables/jquery.dataTables.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/tbs/js/plugins/datatables/dataTables.bootstrap.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/tbs/js/plugins/datatables/ColReorderWithResize.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/bootstrap-multiselect.js"></script>
+<!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/js/bootstrap-multiselect.js"></script>-->
 
 <script>
     Date.prototype.setISO8601 = function (string) {

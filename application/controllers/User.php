@@ -5,6 +5,7 @@ class User extends MY_Controller {
         $this->load->library('encrypt');
         $this->load->helper('captcha');
         $this->load->library('user_agent');
+        $this->load->model('muser');
     }
 
     function Login(){
@@ -28,11 +29,14 @@ class User extends MY_Controller {
             $username = $this->input->post(COL_USERNAME);
             $password = $this->input->post(COL_PASSWORD);
 
-            $this->load->model('muser');
             if($this->muser->authenticate($username, $password)) {
                 if($this->muser->IsSuspend($username)) {
                     redirect(site_url('user/login')."?msg=suspend");
                 }
+
+                // Update Last Login IP
+                $this->db->where(COL_USERNAME, $username);
+                $this->db->update(TBL_USERS, array(COL_LASTLOGIN=>date('Y-m-d H:i:s'), COL_LASTLOGINIP=>$this->input->ip_address()));
 
                 $userdetails = $this->muser->getdetails($username);
                 SetLoginSession($userdetails);

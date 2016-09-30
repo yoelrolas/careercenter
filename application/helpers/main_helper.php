@@ -30,8 +30,9 @@ function ShowJsonSuccess($success){
     echo json_encode(array('error'=>0,'success'=>$success));
 }
 function GetCombobox($query,$primary,$view,$selected=""){
-    $q = mysql_query($query);
-    while($r = mysql_fetch_array($q)){
+    $CI =& get_instance();
+    $q = $CI->db->query($query)->result_array();
+    foreach($q as $r){
         if(is_array($view)){
             $views = $r[$view[0]]."(".$r[$view[1]].")";
         }else{

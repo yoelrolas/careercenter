@@ -24,6 +24,9 @@
     <link href="<?=base_url()?>assets/css/my.css" rel="stylesheet" type="text/css" />
     <link href="<?=base_url()?>assets/tbs/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 
+    <!-- Select 2 -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
