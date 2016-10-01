@@ -235,7 +235,7 @@ a:focus {
   .main-header .navbar-custom-menu a,
   .main-header .navbar-right a {
     color: inherit;
-    background: transparent;
+    #background: transparent;
   }
 }
 @media (max-width: 767px) {
@@ -2384,6 +2384,9 @@ a:focus {
  */
 .alert {
   border-radius: 3px;
+  padding-left: 30px;
+  margin-left: 15px;
+  position: relative;
 }
 .alert h4 {
   font-weight: 600;
@@ -2416,6 +2419,20 @@ a:focus {
 }
 .alert-info {
   border-color: #00acd6;
+}
+.alert > .fa, .alert > .glyphicon {
+    position: absolute;
+    left: -15px;
+    top: -15px;
+    width: 35px;
+    height: 35px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    line-height: 35px;
+    text-align: center;
+    background: inherit;
+    border: inherit;
 }
 /*
  * Component: Nav
@@ -3224,9 +3241,12 @@ table.text-center th {
 .register-page {
   background: #d2d6de;
 }
-.login-box,
+.login-box {
+	width: 360px;
+	margin: 7% auto;
+}
 .register-box {
-  width: 360px;
+  width: 720px;
   margin: 7% auto;
 }
 @media (max-width: 768px) {

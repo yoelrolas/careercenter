@@ -96,15 +96,17 @@ class MCompany extends CI_Model {
             return false;
         }
         // Get user
-        $user = $this->db->where(COL_COMPANYID, $datum)->get(TBL_USERINFORMATION)->row_array();
+        $user = $this->db->where(COL_COMPANYID, $datum)->get(TBL_USERINFORMATION)->result_array();
         if($user) {
-            if(!$this->db->delete(TBL_USERINFORMATION, array(COL_USERNAME, $user[COL_USERNAME]))) {
-                $this->db->trans_rollback();
-                return false;
-            }
-            if(!$this->db->delete(TBL_USERS, array(COL_USERNAME, $user[COL_USERNAME]))) {
-                $this->db->trans_rollback();
-                return false;
+            foreach($user as $u) {
+                if(!$this->db->delete(TBL_USERINFORMATION, array(COL_USERNAME => $u[COL_USERNAME]))) {
+                    $this->db->trans_rollback();
+                    return false;
+                }
+                if(!$this->db->delete(TBL_USERS, array(COL_USERNAME => $u[COL_USERNAME]))) {
+                    $this->db->trans_rollback();
+                    return false;
+                }
             }
         }
 

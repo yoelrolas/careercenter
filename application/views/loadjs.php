@@ -18,7 +18,7 @@
 <!-- ChartJS 1.0.1 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/chartjs/Chart.min.js"></script>
 <!-- Select 2 -->
-<script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.js"></script>
+<script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.full.min.js"></script>
 
 <!-- Block UI -->
 <script type="text/javascript" src="<?=base_url() ?>assets/js/jquery.blockUI.js"></script>
@@ -26,9 +26,15 @@
 <script type="text/javascript" src="<?=base_url()?>assets/template/js/function.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/template/js/jquery.form.js"></script>
 
-<script type="text/javascript" src="<?=base_url()?>assets/tbs/js/plugins/datatables/jquery.dataTables.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/tbs/js/plugins/datatables/dataTables.bootstrap.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/tbs/js/plugins/datatables/ColReorderWithResize.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="<?=base_url()?>assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+<!-- CK Editor -->
+<script src="https://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+
+<!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/tbs/js/plugins/datatables/jquery.dataTables.js"></script>-->
+<!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/tbs/js/plugins/datatables/dataTables.bootstrap.js"></script>-->
+<!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/tbs/js/plugins/datatables/ColReorderWithResize.js"></script>-->
 <!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/js/bootstrap-multiselect.js"></script>-->
 
 <script>
@@ -163,5 +169,8 @@
         $('a[href="<?=current_url()?>"]').addClass('active').parents('li').addClass('active');
         $('li.treeview.active').find('ul').eq(0).show();
         $('li.treeview.active').find('.fa-angle-left').removeClass('fa-angle-left').addClass('fa-angle-down');
+
+        $(".editor").wysihtml5();
+        $("select").select2();
     });
 </script>

@@ -7,6 +7,11 @@
     <title><?=!empty($title) ? 'DCC | '.$title : SITENAME?></title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <!-- JQUERY -->
+    <script src="<?=base_url()?>assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="<?=base_url()?>assets/adminlte/plugins/modernizr/modernizr.js"></script>
+
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/bootstrap/css/bootstrap.min.css">
     <!-- font Awesome -->
@@ -15,17 +20,41 @@
     <link href="<?=base_url()?>assets/tbs/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- jvectormap -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+
+    <link href="<?=base_url()?>assets/css/my.css" rel="stylesheet" type="text/css" />
+    <!--<link href="--><?//=base_url()?><!--assets/tbs/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />-->
+
+    <!-- Select 2 -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
+
+    <!-- datatable css -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/datatable/media/css/dataTables.bootstrap.min.css">
+
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/media/js/jquery.dataTables.min.js?ver=1"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/media/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/media/js/ColReorderWithResize.js"></script>
+
+    <!-- datatable buttons ext + resp + print -->
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.print.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.print.min.js"></script>
+    <link href="<?=base_url()?>assets/datatable/ext/buttons/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?=base_url()?>assets/datatable/ext/responsive/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/jszip/jszip.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/pdfmake/build/pdfmake.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/pdfmake/build/vfs_fonts.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/responsive/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.html5.min.js"></script>
+
+    <!-- WYSIHTML5 -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/skins/_all-skins.min.css">
-
-    <link href="<?=base_url()?>assets/css/my.css" rel="stylesheet" type="text/css" />
-    <link href="<?=base_url()?>assets/tbs/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
-
-    <!-- Select 2 -->
-    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,10 +62,6 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
-
-    <script src="<?=base_url()?>assets/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
-    <script src="<?=base_url()?>assets/adminlte/plugins/modernizr/modernizr.js"></script>
 </head>
 <!-- Preloader Style -->
 <style>
@@ -186,21 +211,28 @@
             <ul class="sidebar-menu">
                 <li class="header">MAIN NAVIGATION</li>
                 <li class="treeview">
-                    <a href="<?=site_url('user/dashboard')?>">
+                    <a href="#">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-                        <!--<span class="pull-right-container">
+                        <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
-                        </span>-->
+                        </span>
                     </a>
-                    <!--<ul class="treeview-menu">
-                        <li><a href="index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                        <li class="active"><a href="index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-                    </ul>-->
+                    <ul class="treeview-menu">
+                        <li><a href="<?=site_url('user/dashboard')?>"><i class="fa fa-circle-o"></i> Dashboard</a></li>
+                        <li><a href="<?=site_url()?>"><i class="fa fa-circle-o"></i> Homepage</a></li>
+                    </ul>
                 </li>
                 <li class="treeview">
-                    <a href="<?=site_url()?>">
-                        <i class="fa fa-home"></i> <span>Homepage</span>
+                    <a href="#">
+                        <i class="fa fa-user"></i> <span>Account</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
                     </a>
+                    <ul class="treeview-menu">
+                        <li><a href="<?=site_url('user/profile')?>"><i class="fa fa-circle-o"></i> Profile</a></li>
+                        <li><a href="<?=site_url('user/changepassword')?>"><i class="fa fa-circle-o"></i> Change Password</a></li>
+                    </ul>
                 </li>
                 <li class="treeview">
                     <a href="#">

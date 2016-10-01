@@ -30,7 +30,7 @@
                 ?>
                 <div class="form-group">
                     <label class="form-label">Name</label>
-                    <input type="text" class="form-control" name="<?=COL_INDUSTRYTYPENAME?>" value="<?= $edit ? $data[COL_INDUSTRYTYPENAME] : ""?>" />
+                    <input type="text" class="form-control" name="<?=COL_INDUSTRYTYPENAME?>" value="<?= $edit ? $data[COL_INDUSTRYTYPENAME] : ""?>" required>
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Simpan</button>

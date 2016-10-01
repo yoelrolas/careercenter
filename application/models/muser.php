@@ -25,6 +25,7 @@ class MUser extends CI_Model {
         $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_USERNAME." = ".TBL_USERS.".".COL_USERNAME,"inner");
         $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_USERINFORMATION.".".COL_COMPANYID,"left");
         $this->db->join(TBL_EMPLOYEES,TBL_EMPLOYEES.'.'.COL_EMPLOYEEID." = ".TBL_USERINFORMATION.".".COL_EMPLOYEEID,"left");
+        $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"left");
         $this->db->where(TBL_USERS.".".COL_USERNAME,$username);
 
         return $this->db->get($this->table)->row_array();

@@ -45,12 +45,16 @@ $data = json_encode($res);
     <script type="text/javascript">
         $(document).ready(function() {
             var dataTable = $('#datalist').dataTable({
-                "sDom": "Rlfrtip",
+                //"sDom": "Rlfrtip",
                 "aaData": <?=$data?>,
                 //"bJQueryUI": true,
-                "aaSorting" : [[2,'asc']],
+                //"aaSorting" : [[5,'desc']],
+                "scrollY" : 400,
+                "scrollX": "200%",
                 "iDisplayLength": 100,
                 "aLengthMenu": [[100, 1000, 5000, -1], [100, 1000, 5000, "Semua"]],
+                "dom":"R<'row'<'col-sm-4'l><'col-sm-4'B><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "buttons": ['copyHtml5','excelHtml5','csvHtml5','pdfHtml5'],
                 "aoColumns": [
                     {"sTitle": "<input type=\"checkbox\" id=\"cekbox\" class=\"\" />","sWidth":15,bSortable:false},
                     {"sTitle": "Name"}

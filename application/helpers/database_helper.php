@@ -19,6 +19,7 @@ define('COL_COMPANYFAX','CompanyFax');
 define('COL_COMPANYWEBSITE','CompanyWebsite');
 define('COL_COMPANYEMAIL','CompanyEmail');
 define('COL_INDUSTRYTYPEID','IndustryTypeID');
+define('COL_COMPANYDESCRIPTION','CompanyDescription');
 define('COL_REGISTERDATE','RegisterDate');
 define('COL_APPROVEDDATE','ApprovedDate');
 define('COL_EDUCATIONTYPEID','EducationTypeID');

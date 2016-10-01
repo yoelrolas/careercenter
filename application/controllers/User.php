@@ -26,8 +26,13 @@ class User extends MY_Controller {
         );
         $this->form_validation->set_rules($rules);
         if($this->form_validation->run()){
+            $this->load->library('si/securimage');
             $username = $this->input->post(COL_USERNAME);
             $password = $this->input->post(COL_PASSWORD);
+
+            if($this->securimage->check($this->input->post('Captcha')) != true){
+                redirect(site_url('user/login')."?msg=captcha");
+            }
 
             if($this->muser->authenticate($username, $password)) {
                 if($this->muser->IsSuspend($username)) {
@@ -58,5 +63,45 @@ class User extends MY_Controller {
             redirect('user/login');
         }
         $this->load->view('user/dashboard');
+    }
+    function Profile() {
+        if(!IsLogin()) {
+            redirect('user/login');
+        }
+        $user = GetLoggedUser();
+        $data['data'] = $rdata = $this->muser->getdetails($user[COL_USERNAME]);
+        $data['title'] = 'Profile';
+        if(!$rdata) {
+            echo $this->db->last_query();
+            return;
+        }
+        if(!empty($_POST)) {
+            $this->load->model('mcompany');
+            $rules = $this->mcompany->rules(false);
+            $this->form_validation->set_rules($rules);
+
+            if($this->form_validation->run()){
+                $companydata = array(
+                    COL_COMPANYNAME => $this->input->post(COL_COMPANYNAME),
+                    COL_COMPANYADDRESS => $this->input->post(COL_COMPANYADDRESS),
+                    COL_COMPANYTELP => $this->input->post(COL_COMPANYTELP),
+                    COL_COMPANYFAX => $this->input->post(COL_COMPANYFAX),
+                    COL_COMPANYWEBSITE => $this->input->post(COL_COMPANYWEBSITE),
+                    COL_COMPANYEMAIL => $this->input->post(COL_COMPANYEMAIL),
+                    COL_INDUSTRYTYPEID => $this->input->post(COL_INDUSTRYTYPEID),
+                    COL_COMPANYDESCRIPTION => $this->input->post(COL_COMPANYDESCRIPTION)
+                );
+
+                $reg = $this->db->where(COL_COMPANYID, $rdata[COL_COMPANYID])->update(TBL_COMPANIES, $companydata);
+                if($reg) redirect(site_url('user/profile')."?success=1");
+                else redirect(site_url('user/profile')."?error=1");
+            }
+            else {
+                $this->load->view('user/profile', $data);
+            }
+        }
+        else {
+            $this->load->view('user/profile', $data);
+        }
     }
 }
