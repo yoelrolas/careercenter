@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?=!empty($title) ? $title : SITENAME?></title>
+    <title><?=!empty($title) ? 'DCC | '.$title : SITENAME?></title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/bootstrap/css/bootstrap.min.css">
     <!-- font Awesome -->
-    <link href="<?=base_url()?>assets/tbs/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?=base_url()?>assets/tbs/css/font-awesome.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
     <link href="<?=base_url()?>assets/tbs/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- jvectormap -->
@@ -214,6 +214,18 @@
                         <li><a href="<?=site_url('master/its')?>"><i class="fa fa-circle-o"></i> Industry Types</a></li>
                         <li><a href="<?=site_url('master/vts')?>"><i class="fa fa-circle-o"></i> Vacancy Types</a></li>
                         <li><a href="<?=site_url('master/locations')?>"><i class="fa fa-circle-o"></i> Locations</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-building-o"></i> <span>Companies</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="<?=site_url('company/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                        <li><a href="<?=site_url('company/add')?>"><i class="fa fa-circle-o"></i> Add Company</a></li>
                     </ul>
                 </li>
             </ul>
