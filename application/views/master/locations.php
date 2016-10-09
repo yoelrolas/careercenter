@@ -32,7 +32,7 @@ $data = json_encode($res);
             <?=anchor('master/locationadd','<i class="fa fa-plus"></i> Data Baru',array('class'=>'btn btn-primary'))
             ?>
         </p>
-        <div class="box-body table-responsive">
+        <div class="box-body">
             <form id="dataform" method="post" action="#">
                 <table id="datalist" class="table table-bordered table-striped">
 

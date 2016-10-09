@@ -50,6 +50,11 @@
     <!-- WYSIHTML5 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/datepicker/datepicker3.css">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -174,7 +179,7 @@
 
                                 <p>
                                     <?=$displayname?>
-                                    <small>Member since Nov. 2012</small>
+                                    <small>Member since <?=date('M Y', strtotime(($ruser[COL_REGISTERDATE])))?></small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->
@@ -234,30 +239,47 @@
                         <li><a href="<?=site_url('user/changepassword')?>"><i class="fa fa-circle-o"></i> Change Password</a></li>
                     </ul>
                 </li>
+
+                <?php if($ruser[COL_ROLEID] == ROLEADMIN) { ?>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-anchor"></i> <span>Master Data</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=site_url('master/ets')?>"><i class="fa fa-circle-o"></i> Education Types</a></li>
+                            <li><a href="<?=site_url('master/its')?>"><i class="fa fa-circle-o"></i> Industry Types</a></li>
+                            <li><a href="<?=site_url('master/vts')?>"><i class="fa fa-circle-o"></i> Vacancy Types</a></li>
+                            <li><a href="<?=site_url('master/locations')?>"><i class="fa fa-circle-o"></i> Locations</a></li>
+                            <li><a href="<?=site_url('master/positions')?>"><i class="fa fa-circle-o"></i> Positions</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-building-o"></i> <span>Companies</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=site_url('company/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                            <li><a href="<?=site_url('company/add')?>"><i class="fa fa-circle-o"></i> Add Company</a></li>
+                        </ul>
+                    </li>
+                <?php } ?>
                 <li class="treeview">
                     <a href="#">
-                        <i class="fa fa-anchor"></i> <span>Master Data</span>
+                        <i class="fa fa-bookmark-o"></i> <span>Vacancies</span>
                         <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="<?=site_url('master/ets')?>"><i class="fa fa-circle-o"></i> Education Types</a></li>
-                        <li><a href="<?=site_url('master/its')?>"><i class="fa fa-circle-o"></i> Industry Types</a></li>
-                        <li><a href="<?=site_url('master/vts')?>"><i class="fa fa-circle-o"></i> Vacancy Types</a></li>
-                        <li><a href="<?=site_url('master/locations')?>"><i class="fa fa-circle-o"></i> Locations</a></li>
-                    </ul>
-                </li>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-building-o"></i> <span>Companies</span>
-                        <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="<?=site_url('company/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
-                        <li><a href="<?=site_url('company/add')?>"><i class="fa fa-circle-o"></i> Add Company</a></li>
+                        <li><a href="<?=site_url('vacancy/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                        <li><a href="<?=site_url('vacancy/add')?>"><i class="fa fa-circle-o"></i> Add Vacancy</a></li>
                     </ul>
                 </li>
             </ul>

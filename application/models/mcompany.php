@@ -62,11 +62,6 @@ class MCompany extends CI_Model {
         return $rules;
     }
 
-    function GetLastID() {
-        $last = $this->db->select(COL_COMPANYID)->order_by(COL_COMPANYID, 'desc')->get($this->table)->row_array();
-        return $last ? $last[COL_COMPANYID] : 0;
-    }
-
     function register($userdata, $userinfo, $companydata) {
         $retval = true;
 

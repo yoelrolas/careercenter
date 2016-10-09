@@ -30,7 +30,13 @@
 <script src="<?=base_url()?>assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 
 <!-- CK Editor -->
-<script src="https://cdn.ckeditor.com/4.5.7/standard/ckeditor.js"></script>
+<script src="<?=base_url()?>assets/js/ckeditor/ckeditor.js"></script>
+
+<!-- date-range-picker -->
+<script src="<?=base_url()?>assets/js/moment.js"></script>
+<script src="<?=base_url()?>assets/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="<?=base_url()?>assets/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
 
 <!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/tbs/js/plugins/datatables/jquery.dataTables.js"></script>-->
 <!--<script type="text/javascript" src="--><?//=base_url()?><!--assets/tbs/js/plugins/datatables/dataTables.bootstrap.js"></script>-->
@@ -172,5 +178,9 @@
 
         $(".editor").wysihtml5();
         $("select").select2();
+        $('.datepicker').datepicker({
+            autoclose: true,
+            format: 'dd M yyyy',
+        });
     });
 </script>

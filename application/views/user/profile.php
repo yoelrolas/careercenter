@@ -31,7 +31,7 @@
                             </li>
                         </ul>
 
-                        <a href="#" class="btn btn-primary btn-block btn-flat"><b> Change Password</b></a>
+                        <a href="<?=site_url('user/changepassword')?>" class="btn btn-primary btn-block btn-flat"><b> Change Password</b></a>
                     </div>
                 </div>
             </div>
@@ -41,6 +41,7 @@
 
                 <?php if(validation_errors()){ ?>
                     <div class="alert alert-danger">
+                        <i class="fa fa-ban"></i>
                         <?= validation_errors() ?>
                     </div>
                 <?php } ?>

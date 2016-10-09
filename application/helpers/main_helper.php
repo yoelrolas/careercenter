@@ -29,7 +29,7 @@ function ShowJsonError($error){
 function ShowJsonSuccess($success){
     echo json_encode(array('error'=>0,'success'=>$success));
 }
-function GetCombobox($query,$primary,$view,$selected=""){
+function GetCombobox($query,$primary,$view,$selected=null){
     $CI =& get_instance();
     $q = $CI->db->query($query)->result_array();
     foreach($q as $r){
@@ -38,10 +38,30 @@ function GetCombobox($query,$primary,$view,$selected=""){
         }else{
             $views = $r[$view];
         }
-        if($r[$primary] == $selected){
-            echo '<option selected="selected" value="'.$r[$primary].'">'.$views.'</option>';
-        }else{
+        if(!empty($selected)) {
+            if(is_array($selected)) {
+                if(in_array($r[$primary], $selected)) {
+                    echo '<option selected="selected" value="'.$r[$primary].'">'.$views.'</option>';
+                }
+                else {
+                    echo '<option value="'.$r[$primary].'">'.$views.'</option>';
+                }
+            }
+            else {
+                if($r[$primary] == $selected){
+                    echo '<option selected="selected" value="'.$r[$primary].'">'.$views.'</option>';
+                }else{
+                    echo '<option value="'.$r[$primary].'">'.$views.'</option>';
+                }
+            }
+        }
+        else {
             echo '<option value="'.$r[$primary].'">'.$views.'</option>';
         }
     }
+}
+function GetLastID($tbl, $col) {
+    $CI =& get_instance();
+    $last = $CI->db->select($col)->order_by($col, 'desc')->get($tbl)->row_array();
+    return $last ? $last[$col] : 0;
 }

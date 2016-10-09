@@ -1,9 +1,11 @@
 <?php
+
 define('TBL_COMPANIES','companies');
 define('TBL_EDUCATIONTYPES','educationtypes');
 define('TBL_EMPLOYEES','employees');
 define('TBL_INDUSTRYTYPES','industrytypes');
 define('TBL_LOCATIONS','locations');
+define('TBL_POSITIONS','positions');
 define('TBL_USERINFORMATION','userinformation');
 define('TBL_USERS','users');
 define('TBL_VACANCIES','vacancies');
@@ -35,6 +37,8 @@ define('COL_GRADUATEDDATE','GraduatedDate');
 define('COL_INDUSTRYTYPENAME','IndustryTypeName');
 define('COL_LOCATIONID','LocationID');
 define('COL_LOCATIONNAME','LocationName');
+define('COL_POSITIONID','PositionID');
+define('COL_POSITIONNAME','PositionName');
 define('COL_USERNAME','UserName');
 define('COL_EMAIL','Email');
 define('COL_PASSWORD','Password');
@@ -44,7 +48,7 @@ define('COL_LASTLOGIN','LastLogin');
 define('COL_LASTLOGINIP','LastLoginIP');
 define('COL_VACANCYID','VacancyID');
 define('COL_VACANCYTYPEID','VacancyTypeID');
-define('COL_VACANCYPOSITION','VacancyPosition');
+define('COL_VACANCYTITLE','VacancyTitle');
 define('COL_ENDDATE','EndDate');
 define('COL_VACANCYEMAIL','VacancyEmail');
 define('COL_VACANCYDESC','VacancyDesc');
@@ -57,4 +61,6 @@ define('COL_CREATEDON','CreatedOn');
 define('COL_UPDATEDBY','UpdatedBy');
 define('COL_UPDATEDON','UpdatedOn');
 define('COL_VACANCYTYPENAME','VacancyTypeName');
+
+
 

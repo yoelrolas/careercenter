@@ -13,7 +13,7 @@ class Company extends MY_Controller {
 
         $this->form_validation->set_rules($rules);
         if($this->form_validation->run()){
-            $companyid = $this->mcompany->GetLastID() + 1;
+            $companyid = GetLastID(TBL_COMPANIES, COL_COMPANYID) + 1;
 
             $userdata = array(
                 COL_USERNAME => $this->input->post(COL_USERNAME),
@@ -72,7 +72,7 @@ class Company extends MY_Controller {
             $rules = $this->mcompany->rules();
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
-                $companyid = $this->mcompany->GetLastID() + 1;
+                $companyid = GetLastID(TBL_COMPANIES, COL_COMPANYID) + 1;
 
                 $userdata = array(
                     COL_USERNAME => $this->input->post(COL_USERNAME),
@@ -185,9 +185,9 @@ class Company extends MY_Controller {
             }
         }
         if($deleted){
-            ShowJsonSuccess($deleted." data diaktifkan");
+            ShowJsonSuccess($deleted." data diubah");
         }else{
-            ShowJsonError("Tidak ada data yang diaktifkan");
+            ShowJsonError("Tidak ada data yang diubah");
         }
     }
 }

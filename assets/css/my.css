@@ -38,3 +38,7 @@ label.error{
 .alert {
 	margin-top: 10px !important;
 }
+
+.form-group {
+	display: block;
+}
