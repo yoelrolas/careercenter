@@ -7,39 +7,37 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><?=!empty($title) ? $title : SITENAME?></title>
+    <title><?=!empty($title) ? $title." | ".SITENAME : SITENAME?></title>
     <!-- for-mobile-apps -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="Del, Career, Career Center, Job Board" />
     <!-- //for-mobile-apps -->
-    <link href="<?=FRONTENDPATH?>/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="<?=FRONTENDPATH?>/css/style.css" rel="stylesheet" type="text/css" media="all" />
-    <link class="include" rel="stylesheet" type="text/css" href="<?=FRONTENDPATH?>/css/jquery.jqplot.css" />
-    <!-- calender -->
-    <link type="text/css" href="<?=FRONTENDPATH?>/css/jquery.simple-dtpicker.css" rel="stylesheet" />
-    <!-- //calender -->
+    <link href="<?=FRONTENDURL?>/css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="<?=FRONTENDURL?>/css/style.css" rel="stylesheet" type="text/css" media="all" />
+    <link class="include" rel="stylesheet" type="text/css" href="<?=FRONTENDURL?>/css/jquery.jqplot.css" />
+
     <!-- different-chart-bar -->
-    <link rel="stylesheet" href="<?=FRONTENDPATH?>/css/chart.min.css">
+    <link rel="stylesheet" href="<?=FRONTENDURL?>/css/chart.min.css">
     <!-- //different-chart-bar -->
     <!-- font-awesome icons -->
-    <link rel="stylesheet" href="<?=FRONTENDPATH?>/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="<?=FRONTENDURL?>/css/font-awesome.min.css" />
     <!-- //font-awesome icons -->
     <!-- js -->
-    <script src="<?=FRONTENDPATH?>/js/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="<?=FRONTENDPATH?>/js/jquery.marquee.min.js"></script>
+    <script src="<?=FRONTENDURL?>/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="<?=FRONTENDURL?>/js/jquery.marquee.min.js"></script>
     <!-- js -->
     <!-- pop-up -->
-    <link href="<?=FRONTENDPATH?>/css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="<?=FRONTENDURL?>/css/popuo-box.css" rel="stylesheet" type="text/css" media="all" />
     <!-- //pop-up -->
     <!-- left-chart -->
-    <script src="<?=FRONTENDPATH?>/js/jquery.flot.min.js" type="text/javascript"></script>
-    <script src="<?=FRONTENDPATH?>/js/jquery.flot.animator.min.js" type="text/javascript"></script>
+    <script src="<?=FRONTENDURL?>/js/jquery.flot.min.js" type="text/javascript"></script>
+    <script src="<?=FRONTENDURL?>/js/jquery.flot.animator.min.js" type="text/javascript"></script>
     <!-- //left-chart -->
     <link href="//fonts.googleapis.com/css?family=Muli:300,300i,400,400i" rel="stylesheet">
     <!-- start-smoth-scrolling -->
-    <script type="text/javascript" src="<?=FRONTENDPATH?>/js/move-top.js"></script>
-    <script type="text/javascript" src="<?=FRONTENDPATH?>/js/easing.js"></script>
+    <script type="text/javascript" src="<?=FRONTENDURL?>/js/move-top.js"></script>
+    <script type="text/javascript" src="<?=FRONTENDURL?>/js/easing.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function($) {
             $(".scroll").click(function(event){
@@ -49,6 +47,42 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         });
     </script>
     <!-- start-smoth-scrolling -->
+
+    <!-- Select 2 -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
+
+    <!-- datatable css -->
+    <link rel="stylesheet" href="<?= base_url() ?>assets/datatable/media/css/dataTables.bootstrap.min.css">
+
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/media/js/jquery.dataTables.min.js?ver=1"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/media/js/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/media/js/ColReorderWithResize.js"></script>
+
+    <!-- datatable buttons ext + resp + print -->
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.bootstrap.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.print.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.print.min.js"></script>
+    <link href="<?=base_url()?>assets/datatable/ext/buttons/buttons.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?=base_url()?>assets/datatable/ext/responsive/css/responsive.bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/jszip/jszip.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/pdfmake/build/pdfmake.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/pdfmake/build/vfs_fonts.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/responsive/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>assets/datatable/ext/buttons/buttons.html5.min.js"></script>
+
+    <!-- WYSIHTML5 -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/datepicker/datepicker3.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/skins/_all-skins.min.css">
 </head>
 
 <!-- Preloader Style -->
@@ -77,7 +111,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </script>
 <!-- /.preloader script -->
 
-<body>
+<body class="layout-top-nav">
 <!-- preloader -->
 <div class="se-pre-con"></div>
 <!-- /.preloader -->
@@ -119,7 +153,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <div class="w3ls_header_middle">
         <div class="container">
             <div class="agileits_logo">
-                <h1><a href="<?=site_url()?>"><span>ITD</span> Career Center<i> Find your future job here</i></a></h1>
+                <h1><a href="<?=site_url()?>"><span>Del</span> Career Center<i> Excellence Starts Here!</i></a></h1>
             </div>
             <div class="agileits_search">
                 <form action="#" method="post">
@@ -159,7 +193,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <nav class="wthree_nav">
                     <ul class="nav navbar-nav nav_1">
                         <li class="act"><a href="<?=site_url()?>">Home</a></li>
-                        <li><a href="#">Vacancies</a></li>
+                        <li><a href="<?=site_url('vacancy/all')?>">Vacancies</a></li>
+                        <li><a href="<?=site_url('company/all')?>">Companies</a></li>
                         <li><a href="#">News</a></li>
                         <li><a href="#">About</a></li>
                         <!--<li class="dropdown">
@@ -178,65 +213,5 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     </div>
 </div>
 <!-- //navigation -->
-<!-- banner -->
-<div class="banner">
-    <section class="slider">
-        <div class="flexslider">
-            <ul class="slides">
-                <li>
-                    <div class="w3_agile_banner_text banner1">
-                        <h3>trade over world's leading stock exchanges</h3>
-                        <div class="more">
-                            <a href="single.html" class="button button--isi button--text-thick button--text-upper button--size-s"><span>Learn More</span></a>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="w3_agile_banner_text banner2">
-                        <h3>creating wealth with real estate investment</h3>
-                        <div class="more">
-                            <a href="single.html" class="button button--isi button--text-thick button--text-upper button--size-s"><span>Learn More</span></a>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="w3_agile_banner_text banner3">
-                        <p>national pension scheme</p>
-                        <h3>start today for happy retirement</h3>
-                        <div class="more">
-                            <a href="single.html" class="button button--isi button--text-thick button--text-upper button--size-s"><span>Learn More</span></a>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="w3_agile_banner_text banner4">
-                        <h3>open a savings account & enjoy unique benefits</h3>
-                        <div class="more">
-                            <a href="single.html" class="button button--isi button--text-thick button--text-upper button--size-s"><span>Learn More</span></a>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="w3_agile_banner_text banner5">
-                        <h4>grow your money with trade market</h4>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </section>
-    <!-- flexSlider -->
-    <link rel="stylesheet" href="<?=FRONTENDPATH?>/css/flexslider.css" type="text/css" media="screen" property="" />
-    <script defer src="<?=FRONTENDPATH?>/js/jquery.flexslider.js"></script>
-    <script type="text/javascript">
-        $(window).load(function(){
-            $('.flexslider').flexslider({
-                animation: "slide",
-                start: function(slider){
-                    $('body').removeClass('loading');
-                }
-            });
-        });
-    </script>
-    <!-- //flexSlider -->
-</div>
-<!-- //banner -->
+<!-- content-wrapper -->
+<div class="content-wrap">

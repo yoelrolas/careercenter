@@ -244,4 +244,33 @@ class Vacancy extends MY_Controller {
             ShowJsonError("Tidak ada data yang diubah");
         }
     }
+
+    function all() {
+        $data['keyword'] =  $keyword = $this->input->post('Keyword');
+        $data['pos'] =  $pos = $this->input->post(COL_POSITIONID);
+        $data['industry'] =  $industry = $this->input->post(COL_INDUSTRYTYPEID);
+        $data['loc'] =  $location = $this->input->post(COL_LOCATIONID);
+
+        $data['title'] = "Lowongan";
+        $data['res'] = $res = $this->mvacancy->search(0, $keyword, $pos, $industry, $location);
+        //echo $this->db->last_query();
+        $this->load->view('vacancy/all', $data);
+    }
+
+    function detail($id) {
+        $this->load->model('mvacancy');
+        $data['vacancy'] = $rvacancy = $this->mvacancy->detail($id, false);
+        if(!$rvacancy) {
+            show_404();
+            return;
+        }
+        $data['title'] = $rvacancy[COL_VACANCYTITLE];
+
+        // Update total view
+        $this->db->where(COL_VACANCYID, $id);
+        $this->db->set(COL_TOTALVIEW, COL_TOTALVIEW."+1", FALSE);
+        $this->db->update(TBL_VACANCIES);
+
+        $this->load->view('vacancy/detail', $data);
+    }
 }

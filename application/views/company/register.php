@@ -17,6 +17,8 @@
     <link href="<?=base_url()?>assets/tbs/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <!-- Ionicons -->
     <link href="<?=base_url()?>assets/tbs/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <!-- Select 2 -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/AdminLTE.min.css">
     <!-- iCheck -->
@@ -88,7 +90,16 @@
             <div class="alert alert-danger">
                 <?= validation_errors() ?>
             </div>
-        <?php } ?>
+        <?php }
+        if(!empty($upload_errors)) {
+            ?>
+            <div class="alert alert-danger">
+                <i class="fa fa-ban"></i>
+                <?=$upload_errors?>
+            </div>
+            <?php
+        }
+        ?>
 
         <?php  if($this->input->get('success')){ ?>
             <div class="form-group alert alert-success">
@@ -104,7 +115,7 @@
             </div>
         <?php } ?>
 
-        <?= form_open(current_url(),array('id'=>'validate')) ?>
+        <?= form_open_multipart(current_url(),array('id'=>'validate')) ?>
 
         <div class="col-sm-6">
             <h4>Company Info</h4>
@@ -128,6 +139,10 @@
             </div>
             <div class="form-group">
                 <textarea class="form-control" rows="3" placeholder="Company Address" name="<?=COL_COMPANYADDRESS?>" required><?=!empty($data[COL_COMPANYADDRESS]) ? $data[COL_COMPANYADDRESS] : ''?></textarea>
+            </div>
+            <div class="form-group">
+                <label class="label-control">Logo (Optional - Max size: 500KB)</label>
+                <input type="file" name="userfile" />
             </div>
         </div>
 
@@ -170,5 +185,10 @@
         <?= form_close(); ?>
     </div>
 </div>
+<!-- Select 2 -->
+<script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.full.min.js"></script>
+<script>
+    $("select").select2();
+</script>
 </body>
 </html>

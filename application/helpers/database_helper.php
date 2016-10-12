@@ -1,5 +1,4 @@
 <?php
-
 define('TBL_COMPANIES','companies');
 define('TBL_EDUCATIONTYPES','educationtypes');
 define('TBL_EMPLOYEES','employees');
@@ -24,6 +23,7 @@ define('COL_INDUSTRYTYPEID','IndustryTypeID');
 define('COL_COMPANYDESCRIPTION','CompanyDescription');
 define('COL_REGISTERDATE','RegisterDate');
 define('COL_APPROVEDDATE','ApprovedDate');
+define('COL_FILENAME','FileName');
 define('COL_EDUCATIONTYPEID','EducationTypeID');
 define('COL_EDUCATIONTYPENAME','EducationTypeName');
 define('COL_EMPLOYEEID','EmployeeID');
@@ -61,6 +61,4 @@ define('COL_CREATEDON','CreatedOn');
 define('COL_UPDATEDBY','UpdatedBy');
 define('COL_UPDATEDON','UpdatedOn');
 define('COL_VACANCYTYPENAME','VacancyTypeName');
-
-
 

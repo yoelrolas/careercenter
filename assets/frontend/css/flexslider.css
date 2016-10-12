@@ -99,9 +99,11 @@ html[xmlns] .slides {display: block;}
 	border-radius:20px;
 }
 .flex-control-paging li a.flex-active { 
-	background:#EC600B;
+	#background:#EC600B;
+    background: #009688;
     cursor: default;
-    border: 2px solid #EC600B;
+    #border: 2px solid #EC600B;
+    border: 2px solid #009688;
 }
 .flex-control-thumbs {margin: 5px 0 0; position: static; overflow: hidden;}
 .flex-control-thumbs li {width: 25%; float: left; margin: 0;}
@@ -120,7 +122,7 @@ html[xmlns] .slides {display: block;}
 @media screen and (max-width:991px) {
 	
 }
-@media screen and (max-width:667px) {
+@media screen and (max-width:667px) {}
 	
 @media screen and (max-width: 600px) {
 	
@@ -133,7 +135,7 @@ html[xmlns] .slides {display: block;}
 		padding: 0px 0px;
 	}
 }
-@media screen and (max-width: 414px){
+@media screen and (max-width: 414px){}
 	
 @media screen and (max-width: 320px) {
 	section.slider {

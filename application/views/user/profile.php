@@ -15,7 +15,7 @@
                 <!-- Profile Image -->
                 <div class="box box-primary">
                     <div class="box-body box-profile">
-                        <img class="profile-user-img img-responsive img-circle" src="<?=MY_IMAGEURL.'company-icon.jpg'?>" alt="User profile picture">
+                        <img class="profile-user-img img-responsive" src="<?=!empty($data) ? MY_UPLOADURL.$data[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg' ?>" alt="Logo">
 
                         <h3 class="profile-username text-center"><?=!empty($data) ? $data[COL_COMPANYNAME] : "-"?></h3>
                         <p class="text-muted text-center"><?=!empty($data) ? $data[COL_INDUSTRYTYPENAME] : "-"?></p>
@@ -44,7 +44,16 @@
                         <i class="fa fa-ban"></i>
                         <?= validation_errors() ?>
                     </div>
-                <?php } ?>
+                <?php }
+                if(!empty($upload_errors)) {
+                    ?>
+                    <div class="alert alert-danger">
+                        <i class="fa fa-ban"></i>
+                        <?=$upload_errors?>
+                    </div>
+                    <?php
+                }
+                ?>
 
                 <?php  if($this->input->get('success')){ ?>
                     <div class="form-group alert alert-success">
@@ -64,7 +73,7 @@
                 <div class="box box-primary">
                     <div class="box-body box-profile">
                         <h4>Profile Edit</h4>
-                        <?= form_open(current_url(),array('id'=>'profile')) ?>
+                        <?= form_open_multipart(current_url(),array('id'=>'profile')) ?>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="input-group">
@@ -114,6 +123,10 @@
                             <div class="form-group">
                                 <label>Description</label>
                                 <textarea id="ckeditor" class="form-control" rows="4" placeholder="Company Description" name="<?=COL_COMPANYDESCRIPTION?>" required><?=!empty($data[COL_COMPANYDESCRIPTION]) ? $data[COL_COMPANYDESCRIPTION] : ''?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="label-control">Logo (Optional - Max size: 500KB)</label>
+                                <input type="file" name="userfile" />
                             </div>
                         </div>
                         <div class="clearfix"></div>

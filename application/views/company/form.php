@@ -18,17 +18,33 @@
                     <span class="errorMsg"></span>
                 </div>
                 <?php
-                if($this->input->get('success') == 1){
+                if($this->input->get('error') == 1){
                     ?>
-                    <div class="alert alert-success">
-                        <i class="fa fa-check"></i>
-                        <span class="">Data disimpan</span>
+                    <div class="alert alert-danger">
+                        <i class="fa fa-ban"></i>
+                        <span class="">Data gagal disimpan, silahkan coba kembali</span>
+                    </div>
+                    <?php
+                }
+                if(validation_errors()){
+                    ?>
+                    <div class="alert alert-danger">
+                        <i class="fa fa-ban"></i>
+                        <?=validation_errors()?>
+                    </div>
+                    <?php
+                }
+                if(!empty($upload_errors)) {
+                    ?>
+                    <div class="alert alert-danger">
+                        <i class="fa fa-ban"></i>
+                        <?=$upload_errors?>
                     </div>
                     <?php
                 }
                 ?>
             </div>
-            <?=form_open(current_url(),array('role'=>'form','id'=>'deviceForm'))?>
+            <?=form_open_multipart(current_url(),array('role'=>'form','id'=>'deviceForm'))?>
             <?php if(!$edit) {
                 ?>
                 <div class="col-sm-4">
@@ -110,6 +126,13 @@
                     <div class="form-group">
                         <textarea class="form-control" rows="3" placeholder="Company Address" name="<?=COL_COMPANYADDRESS?>" required><?=!empty($data[COL_COMPANYADDRESS]) ? $data[COL_COMPANYADDRESS] : ''?></textarea>
                     </div>
+                    <div class="form-group">
+                        <?php if(!empty($data[COL_FILENAME])) { ?>
+                            <img src="<?=MY_UPLOADURL.$data[COL_FILENAME]?>" alt="Logo" height="80" /><br />
+                        <?php } ?>
+                        <label class="label-control">Logo (Optional - Max size: 500KB)</label>
+                        <input type="file" name="userfile" />
+                    </div>
                 </div>
 
                 <div class="clearfix"></div>
@@ -124,7 +147,7 @@
     </section>
 
 <?php $this->load->view('loadjs') ?>
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
         $("#deviceForm").validate({
             submitHandler : function(form){
                 $(form).find('btn').attr('disabled',true);
@@ -141,10 +164,13 @@
                     },
                     error : function(a,b,c){
                         alert('Response Error');
+                        console.log(a);
+                        console.log(b);
+                        console.log(c);
                     }
                 });
                 return false;
             }
         });
-    </script>
+    </script>-->
 <?php $this->load->view('footer') ?>

@@ -1,5 +1,5 @@
 <?php
-define('SITENAME', 'ITD Career Center');
+define('SITENAME', 'Del Career Center');
 
 define('ROLEADMIN', 1);
 define('ROLECOMPANY', 2);

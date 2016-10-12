@@ -13,6 +13,23 @@ class Company extends MY_Controller {
 
         $this->form_validation->set_rules($rules);
         if($this->form_validation->run()){
+            $config['upload_path'] = MY_UPLOADPATH;
+            $config['allowed_types'] = "gif|jpg|jpeg|png";
+            $config['max_size']	= 500;
+            $config['max_width']  = 1024;
+            $config['max_height']  = 768;
+            $config['overwrite'] = FALSE;
+
+            $this->load->library('upload',$config);
+            if(!empty($_FILES["userfile"]["name"])) {
+                if(!$this->upload->do_upload()){
+                    $data['upload_errors'] = $this->upload->display_errors();
+                    $this->load->view('company/register', $data);
+                    return;
+                }
+            }
+
+            $dataupload = $this->upload->data();
             $companyid = GetLastID(TBL_COMPANIES, COL_COMPANYID) + 1;
 
             $userdata = array(
@@ -37,8 +54,12 @@ class Company extends MY_Controller {
                 COL_COMPANYWEBSITE => $this->input->post(COL_COMPANYWEBSITE),
                 COL_COMPANYEMAIL => $this->input->post(COL_COMPANYEMAIL),
                 COL_INDUSTRYTYPEID => $this->input->post(COL_INDUSTRYTYPEID),
-                COL_REGISTERDATE => date('Y-m-d H:i:s')
+                COL_REGISTERDATE => date('Y-m-d H:i:s'),
+                COL_FILENAME => $dataupload['file_name']
             );
+            if(!empty($dataupload) && $dataupload['file_name']) {
+                $companydata[COL_FILENAME] = $dataupload['file_name'];
+            }
 
             $reg = $this->mcompany->register($userdata, $userinfo, $companydata);
             if($reg) redirect(site_url('company/register')."?success=1");
@@ -51,6 +72,11 @@ class Company extends MY_Controller {
     function index() {
         if(!IsLogin()) {
             redirect(site_url('user/login'));
+        }
+        $loginuser = GetLoggedUser();
+        if(!$loginuser || $loginuser[COL_ROLEID] != ROLEADMIN) {
+            show_error('Anda tidak memiliki akses terhadap modul ini.');
+            return;
         }
         $data['title'] = "Companies";
 
@@ -66,12 +92,35 @@ class Company extends MY_Controller {
         if(!IsLogin()) {
             redirect(site_url('user/login'));
         }
+        $loginuser = GetLoggedUser();
+        if(!$loginuser || $loginuser[COL_ROLEID] != ROLEADMIN) {
+            show_error('Anda tidak memiliki akses terhadap modul ini.');
+            return;
+        }
+
         $data['title'] = "Companies";
         $data['edit'] = FALSE;
         if(!empty($_POST)){
             $rules = $this->mcompany->rules();
             $this->form_validation->set_rules($rules);
-            if($this->form_validation->run()){
+            if($this->form_validation->run()) {
+                $config['upload_path'] = MY_UPLOADPATH;
+                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['max_size']	= 500;
+                $config['max_width']  = 1024;
+                $config['max_height']  = 768;
+                $config['overwrite'] = FALSE;
+
+                $this->load->library('upload',$config);
+                if(!empty($_FILES["userfile"]["name"])) {
+                    if(!$this->upload->do_upload()){
+                        $data['upload_errors'] = $this->upload->display_errors();
+                        $this->load->view('company/form', $data);
+                        return;
+                    }
+                }
+
+                $dataupload = $this->upload->data();
                 $companyid = GetLastID(TBL_COMPANIES, COL_COMPANYID) + 1;
 
                 $userdata = array(
@@ -97,15 +146,16 @@ class Company extends MY_Controller {
                     COL_COMPANYEMAIL => $this->input->post(COL_COMPANYEMAIL),
                     COL_INDUSTRYTYPEID => $this->input->post(COL_INDUSTRYTYPEID),
                     COL_REGISTERDATE => date('Y-m-d H:i:s'),
-                    COL_APPROVEDDATE => date('Y-m-d H:i:s')
+                    COL_APPROVEDDATE => date('Y-m-d H:i:s'),
+                    COL_FILENAME => $dataupload['file_name']
                 );
 
                 $reg = $this->mcompany->register($userdata, $userinfo, $companydata);
-                if($reg) echo json_encode(array('error'=>0, 'redirect'=>site_url('company/index')));
-                else ShowJsonError('Gagal menambah data');
+                if($reg) redirect(site_url('company/index'));
+                else redirect(current_url().'?error=1');
             }
             else {
-                ShowJsonError(validation_errors());
+                $this->load->view('company/form', $data);
             }
         }
         else {
@@ -116,6 +166,11 @@ class Company extends MY_Controller {
     function edit($id) {
         if(!IsLogin()) {
             redirect(site_url('user/login'));
+        }
+        $loginuser = GetLoggedUser();
+        if(!$loginuser || $loginuser[COL_ROLEID] != ROLEADMIN) {
+            show_error('Anda tidak memiliki akses terhadap modul ini.');
+            return;
         }
         $data['title'] = "Companies";
         $data['edit'] = TRUE;
@@ -129,7 +184,23 @@ class Company extends MY_Controller {
             $rules = $this->mcompany->rules(false);
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
+                $config['upload_path'] = MY_UPLOADPATH;
+                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['max_size']	= 500;
+                $config['max_width']  = 1024;
+                $config['max_height']  = 768;
+                $config['overwrite'] = FALSE;
 
+                $this->load->library('upload',$config);
+                if(!empty($_FILES["userfile"]["name"])) {
+                    if(!$this->upload->do_upload()){
+                        $data['upload_errors'] = $this->upload->display_errors();
+                        $this->load->view('company/form', $data);
+                        return;
+                    }
+                }
+
+                $dataupload = $this->upload->data();
                 $companydata = array(
                     COL_COMPANYNAME => $this->input->post(COL_COMPANYNAME),
                     COL_COMPANYADDRESS => $this->input->post(COL_COMPANYADDRESS),
@@ -139,13 +210,16 @@ class Company extends MY_Controller {
                     COL_COMPANYEMAIL => $this->input->post(COL_COMPANYEMAIL),
                     COL_INDUSTRYTYPEID => $this->input->post(COL_INDUSTRYTYPEID)
                 );
+                if(!empty($dataupload) && $dataupload['file_name']) {
+                    $companydata[COL_FILENAME] = $dataupload['file_name'];
+                }
 
                 $reg = $this->db->where(COL_COMPANYID, $id)->update(TBL_COMPANIES, $companydata);
-                if($reg) echo json_encode(array('error'=>0, 'redirect'=>site_url('company/index')));
-                else ShowJsonError('Gagal mengubah data');
+                if($reg) redirect(site_url('company/index'));
+                else redirect(current_url().'?error=1');
             }
             else {
-                ShowJsonError(validation_errors());
+                $this->load->view('company/form', $data);
             }
         }
         else {
@@ -154,6 +228,15 @@ class Company extends MY_Controller {
     }
 
     function delete(){
+        if(!IsLogin()) {
+            ShowJsonError('Silahkan login terlebih dahulu');
+            return;
+        }
+        $loginuser = GetLoggedUser();
+        if(!$loginuser || $loginuser[COL_ROLEID] != ROLEADMIN) {
+            ShowJsonError('Anda tidak memiliki akses terhadap modul ini.');
+            return;
+        }
         $this->load->model('mcompany');
         $data = $this->input->post('cekbox');
         $deleted = 0;
@@ -169,7 +252,16 @@ class Company extends MY_Controller {
         }
     }
 
-    function activate($suspend=false){
+    function activate($suspend=false) {
+        if(!IsLogin()) {
+            ShowJsonError('Silahkan login terlebih dahulu');
+            return;
+        }
+        $loginuser = GetLoggedUser();
+        if(!$loginuser || $loginuser[COL_ROLEID] != ROLEADMIN) {
+            ShowJsonError('Anda tidak memiliki akses terhadap modul ini.');
+            return;
+        }
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
@@ -189,5 +281,29 @@ class Company extends MY_Controller {
         }else{
             ShowJsonError("Tidak ada data yang diubah");
         }
+    }
+
+    function detail($id) {
+        $this->load->model('mcompany');
+        $this->load->model('mvacancy');
+        $data['company'] = $rcompany = $this->mcompany->detail($id);
+        if(!$rcompany) {
+            show_404();
+            return;
+        }
+        $data['title'] = $rcompany[COL_COMPANYNAME];
+        $data['vacancies'] = $this->mvacancy->getbycompany($id, false);
+
+        $this->load->view('company/detail', $data);
+    }
+
+    function all() {
+        $data['keyword'] =  $keyword = $this->input->post('Keyword');
+        $data['industry'] =  $industry = $this->input->post(COL_INDUSTRYTYPEID);
+
+        $data['title'] = "Lowongan";
+        $data['res'] = $res = $this->mcompany->search(0, $keyword, $industry);
+        //echo $this->db->last_query();
+        $this->load->view('company/all', $data);
     }
 }

@@ -38,12 +38,14 @@ $data = json_encode($res);
             <?=anchor('company/activate/1','<i class="fa fa-warning"></i> Suspend',array('class'=>'cekboxaction btn btn-warning','confirm'=>'Apa anda yakin?'))?>
             <?=anchor('company/add','<i class="fa fa-plus"></i> Data Baru',array('class'=>'btn btn-primary'))?>
         </p>
-        <div class="box-body">
-            <form id="dataform" method="post" action="#">
-                <table id="datalist" class="table table-bordered table-striped">
+        <div class="box box-default">
+            <div class="box-body">
+                <form id="dataform" method="post" action="#">
+                    <table id="datalist" class="table table-bordered table-hover">
 
-                </table>
-            </form>
+                    </table>
+                </form>
+            </div>
         </div>
     </section>
 

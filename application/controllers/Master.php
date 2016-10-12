@@ -64,6 +64,9 @@ class Master extends MY_Controller {
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
+            $rcheck = $this->db->where(COL_EDUCATIONTYPEID, $datum)->get(TBL_VACANCYEDUCATIONS)->num_rows();
+            if($rcheck > 0) continue;
+
             $this->db->delete(TBL_EDUCATIONTYPES, array(COL_EDUCATIONTYPEID => $datum));
             $deleted++;
         }
@@ -131,6 +134,9 @@ class Master extends MY_Controller {
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
+            $rcheck = $this->db->where(COL_INDUSTRYTYPEID, $datum)->get(TBL_COMPANIES)->num_rows();
+            if($rcheck > 0) continue;
+
             $this->db->delete(TBL_INDUSTRYTYPES, array(COL_INDUSTRYTYPEID => $datum));
             $deleted++;
         }
@@ -198,6 +204,9 @@ class Master extends MY_Controller {
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
+            $rcheck = $this->db->where(COL_VACANCYTYPEID, $datum)->get(TBL_VACANCIES)->num_rows();
+            if($rcheck > 0) continue;
+
             $this->db->delete(TBL_VACANCYTYPES, array(COL_VACANCYTYPEID => $datum));
             $deleted++;
         }
@@ -265,6 +274,9 @@ class Master extends MY_Controller {
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
+            $rcheck = $this->db->where(COL_LOCATIONID, $datum)->get(TBL_VACANCYLOCATIONS)->num_rows();
+            if($rcheck > 0) continue;
+
             $this->db->delete(TBL_LOCATIONS, array(COL_LOCATIONID => $datum));
             $deleted++;
         }
@@ -332,6 +344,9 @@ class Master extends MY_Controller {
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
+            $rcheck = $this->db->where(COL_POSITIONID, $datum)->get(TBL_VACANCIES)->num_rows();
+            if($rcheck > 0) continue;
+
             $this->db->delete(TBL_POSITIONS, array(COL_POSITIONID => $datum));
             $deleted++;
         }

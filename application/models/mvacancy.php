@@ -69,4 +69,95 @@ class MVacancy extends CI_Model {
         $this->db->trans_commit();
         return true;
     }
+
+    function search($limit=0,$keyword="", $position=array(), $industry=array(), $location=array(), $type=array(), $educationtype=array()) {
+        $select = "*";
+        $select .= ", GROUP_CONCAT(DISTINCT ".TBL_LOCATIONS.".".COL_LOCATIONNAME." SEPARATOR ', ') as Locations";
+        $select .= ", GROUP_CONCAT(DISTINCT ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." SEPARATOR ', ') as Educations";
+        $this->db->select($select);
+
+        $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+        $this->db->join(TBL_POSITIONS,TBL_POSITIONS.'.'.COL_POSITIONID." = ".TBL_VACANCIES.".".COL_POSITIONID,"inner");
+        $this->db->join(TBL_VACANCYTYPES,TBL_VACANCYTYPES.'.'.COL_VACANCYTYPEID." = ".TBL_VACANCIES.".".COL_VACANCYTYPEID,"inner");
+        $this->db->join(TBL_VACANCYLOCATIONS,TBL_VACANCYLOCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+        $this->db->join(TBL_LOCATIONS,TBL_LOCATIONS.'.'.COL_LOCATIONID." = ".TBL_VACANCYLOCATIONS.".".COL_LOCATIONID,"left");
+        $this->db->join(TBL_VACANCYEDUCATIONS,TBL_VACANCYEDUCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+        $this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_VACANCYEDUCATIONS.".".COL_EDUCATIONTYPEID,"left");
+
+        if(!empty($keyword)) {
+            $where = "(".TBL_COMPANIES.".".COL_COMPANYNAME." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_VACANCIES.".".COL_VACANCYTITLE." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_POSITIONS.".".COL_POSITIONNAME." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_VACANCYTYPES.".".COL_VACANCYTYPENAME." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_LOCATIONS.".".COL_LOCATIONNAME." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." LIKE '%".$keyword."%'";
+            $where .= ")";
+
+            $this->db->where($where);
+        }
+        if(!empty($position) && count($position) > 0) $this->db->where_in(TBL_VACANCIES.".".COL_POSITIONID, $position);
+        if(!empty($industry) && count($industry) > 0) $this->db->where_in(TBL_COMPANIES.".".COL_INDUSTRYTYPEID, $industry);
+        if(!empty($location) && count($location) > 0) $this->db->where_in(TBL_VACANCYLOCATIONS.".".COL_LOCATIONID, $location);
+        if(!empty($type) && count($type) > 0) $this->db->where_in(TBL_VACANCIES.".".COL_VACANCYTYPEID, $type);
+        if(!empty($educationtype) && count($educationtype) > 0) $this->db->where_in(TBL_VACANCYEDUCATIONS.".".COL_EDUCATIONTYPEID, $educationtype);
+        if($limit > 0) $this->db->limit($limit);
+
+        $this->db->where(TBL_VACANCIES.".".COL_ISSUSPEND, false);
+        $this->db->where(TBL_VACANCIES.".".COL_ENDDATE." >= ", date("Y-m-d"));
+        $this->db->order_by(TBL_VACANCIES.".".COL_CREATEDON, "desc");
+        $this->db->group_by(TBL_VACANCIES.".".COL_VACANCYID);
+        $res = $this->db->get($this->table)->result_array();
+        return $res;
+    }
+
+    function getbycompany($compid, $all=false) {
+        $select = "*";
+        $select .= ", GROUP_CONCAT(DISTINCT ".TBL_LOCATIONS.".".COL_LOCATIONNAME." SEPARATOR ', ') as Locations";
+        $select .= ", GROUP_CONCAT(DISTINCT ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." SEPARATOR ', ') as Educations";
+        $this->db->select($select);
+
+        $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+        $this->db->join(TBL_POSITIONS,TBL_POSITIONS.'.'.COL_POSITIONID." = ".TBL_VACANCIES.".".COL_POSITIONID,"inner");
+        $this->db->join(TBL_VACANCYTYPES,TBL_VACANCYTYPES.'.'.COL_VACANCYTYPEID." = ".TBL_VACANCIES.".".COL_VACANCYTYPEID,"inner");
+        $this->db->join(TBL_VACANCYLOCATIONS,TBL_VACANCYLOCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+        $this->db->join(TBL_LOCATIONS,TBL_LOCATIONS.'.'.COL_LOCATIONID." = ".TBL_VACANCYLOCATIONS.".".COL_LOCATIONID,"left");
+        $this->db->join(TBL_VACANCYEDUCATIONS,TBL_VACANCYEDUCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+        $this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_VACANCYEDUCATIONS.".".COL_EDUCATIONTYPEID,"left");
+
+        if(!$all) {
+            $this->db->where(TBL_VACANCIES.".".COL_ISSUSPEND, false);
+            $this->db->where(TBL_VACANCIES.".".COL_ENDDATE." >= ", date("Y-m-d"));
+        }
+        $this->db->where(TBL_VACANCIES.".".COL_COMPANYID, $compid);
+        $this->db->order_by(TBL_VACANCIES.".".COL_CREATEDON, "desc");
+        $this->db->group_by(TBL_VACANCIES.".".COL_VACANCYID);
+        $res = $this->db->get($this->table)->result_array();
+        return $res;
+    }
+
+    function detail($id, $all=false) {
+        $select = "*";
+        $select .= ", GROUP_CONCAT(DISTINCT ".TBL_LOCATIONS.".".COL_LOCATIONNAME." SEPARATOR ', ') as Locations";
+        $select .= ", GROUP_CONCAT(DISTINCT ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." SEPARATOR ', ') as Educations";
+        $this->db->select($select);
+
+        $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+        $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"inner");
+        $this->db->join(TBL_POSITIONS,TBL_POSITIONS.'.'.COL_POSITIONID." = ".TBL_VACANCIES.".".COL_POSITIONID,"inner");
+        $this->db->join(TBL_VACANCYTYPES,TBL_VACANCYTYPES.'.'.COL_VACANCYTYPEID." = ".TBL_VACANCIES.".".COL_VACANCYTYPEID,"inner");
+        $this->db->join(TBL_VACANCYLOCATIONS,TBL_VACANCYLOCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+        $this->db->join(TBL_LOCATIONS,TBL_LOCATIONS.'.'.COL_LOCATIONID." = ".TBL_VACANCYLOCATIONS.".".COL_LOCATIONID,"left");
+        $this->db->join(TBL_VACANCYEDUCATIONS,TBL_VACANCYEDUCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+        $this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_VACANCYEDUCATIONS.".".COL_EDUCATIONTYPEID,"left");
+
+        if(!$all) {
+            $this->db->where(TBL_VACANCIES.".".COL_ISSUSPEND, false);
+            $this->db->where(TBL_VACANCIES.".".COL_ENDDATE." >= ", date("Y-m-d"));
+        }
+        $this->db->where(TBL_VACANCIES.".".COL_VACANCYID, $id);
+        $this->db->order_by(TBL_VACANCIES.".".COL_CREATEDON, "desc");
+        $this->db->group_by(TBL_VACANCIES.".".COL_VACANCYID);
+        $res = $this->db->get($this->table)->row_array();
+        return $res;
+    }
 }

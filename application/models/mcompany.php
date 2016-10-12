@@ -104,8 +104,44 @@ class MCompany extends CI_Model {
                 }
             }
         }
+        // Delete vacancies
+        $rvacancy = $this->db->where(COL_COMPANYID, $datum)->get(TBL_VACANCIES)->result_array();
+        $this->load->model('mvacancy');
+        foreach($rvacancy as $vac) {
+            if(!$this->mvacancy->delete($rvacancy[COL_VACANCYID])) {
+                $this->db->trans_rollback();
+                return false;
+            }
+        }
 
         $this->db->trans_commit();
         return true;
+    }
+
+    function search($limit=0, $keyword="", $industrytype=array()) {
+        $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"inner");
+        if(!empty($keyword)) {
+            $where = "(".TBL_COMPANIES.".".COL_COMPANYNAME." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_INDUSTRYTYPES.".".COL_INDUSTRYTYPENAME." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_COMPANIES.".".COL_COMPANYDESCRIPTION." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_COMPANIES.".".COL_COMPANYEMAIL." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_COMPANIES.".".COL_COMPANYWEBSITE." LIKE '%".$keyword."%'";
+            $where .= ")";
+
+            $this->db->where($where);
+        }
+        if(!empty($industrytype) && count($industrytype) > 0) $this->db->where_in(TBL_COMPANIES.".".COL_INDUSTRYTYPEID, $industrytype);
+        if(!empty($limit) && $limit > 0) $this->db->limit($limit);
+
+        $res = $this->db->get($this->table)->result_array();
+        return $res;
+    }
+
+    function detail($id) {
+        $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"inner");
+        $this->db->where(COL_COMPANYID, $id);
+
+        $res = $this->db->get($this->table)->row_array();
+        return $res;
     }
 }

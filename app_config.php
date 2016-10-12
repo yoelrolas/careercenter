@@ -2,7 +2,7 @@
 $dbpconnect = TRUE;
 
 //MY_CONSTANT
-define('MY_BASEURL', 'http://localhost/cdc');
+define('MY_BASEURL', 'http://192.168.1.100/cdc');
 define('MY_DBHOST', 'localhost');
 define('MY_DBUSER', 'root');
 define('MY_DBPASS', '');
@@ -16,5 +16,6 @@ define('MY_UPLOADPATH', './assets/media/upload/');
 define('MY_UPLOADURL', MY_ASSETURL.'/media/upload/');
 define('SYSTEMUSERNAME', 'admin');
 
+define('FRONTENDURL', MY_ASSETURL.'/frontend');
 define('FRONTENDPATH', './assets/frontend');
 define('FRONTENDVIEWPATH', FRONTENDPATH.'/view');
