@@ -1,5 +1,5 @@
 <?php
-class MVacancy extends CI_Model {
+class Mvacancy extends CI_Model {
     private $table = TBL_VACANCIES;
 
     function rules($newdata=true) {

@@ -1,6 +1,6 @@
 <?php
 
-class MCompany extends CI_Model {
+class Mcompany extends CI_Model {
     private $table = TBL_COMPANIES;
 
     function rules($newdata=true) {

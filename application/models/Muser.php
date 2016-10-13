@@ -1,6 +1,6 @@
 <?php
 
-class MUser extends CI_Model {
+class Muser extends CI_Model {
     private $table = TBL_USERS;
 
     function authenticate($username, $password) {

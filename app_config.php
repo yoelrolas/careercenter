@@ -2,7 +2,7 @@
 $dbpconnect = TRUE;
 
 //MY_CONSTANT
-define('MY_BASEURL', 'http://192.168.1.100/cdc');
+define('MY_BASEURL', 'http://localhost/cdc');
 define('MY_DBHOST', 'localhost');
 define('MY_DBUSER', 'root');
 define('MY_DBPASS', '');
