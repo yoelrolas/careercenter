@@ -15,7 +15,7 @@
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/bootstrap/css/bootstrap.min.css">
     <!-- font Awesome -->
-    <link href="<?=base_url()?>assets/tbs/css/font-awesome.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="<?=base_url()?>assets/tbs/css/font-awesome.min.css" />
     <!-- Ionicons -->
     <link href="<?=base_url()?>assets/tbs/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- jvectormap -->
@@ -23,6 +23,9 @@
 
     <link href="<?=base_url()?>assets/css/my.css" rel="stylesheet" type="text/css" />
     <!--<link href="--><?//=base_url()?><!--assets/tbs/css/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />-->
+
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/iCheck/all.css">
 
     <!-- Select 2 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
@@ -254,6 +257,7 @@
                             <li><a href="<?=site_url('master/vts')?>"><i class="fa fa-circle-o"></i> Vacancy Types</a></li>
                             <li><a href="<?=site_url('master/locations')?>"><i class="fa fa-circle-o"></i> Locations</a></li>
                             <li><a href="<?=site_url('master/positions')?>"><i class="fa fa-circle-o"></i> Positions</a></li>
+                            <li><a href="<?=site_url('master/categories')?>"><i class="fa fa-circle-o"></i> Post Categories</a></li>
                         </ul>
                     </li>
 
@@ -282,6 +286,47 @@
                         <li><a href="<?=site_url('vacancy/add')?>"><i class="fa fa-circle-o"></i> Add Vacancy</a></li>
                     </ul>
                 </li>
+
+                <?php if($ruser[COL_ROLEID] == ROLEADMIN) { ?>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-tags"></i> <span>Posts</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=site_url('post/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                            <li><a href="<?=site_url('post/add')?>"><i class="fa fa-circle-o"></i> Add Post</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i> <span>Users</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=site_url('user/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                            <li><a href="<?=site_url('user/add')?>"><i class="fa fa-circle-o"></i> Add User</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-cogs"></i> <span>Settings</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=site_url('setting/main')?>"><i class="fa fa-circle-o"></i> Main</a></li>
+                            <li><a href="<?=site_url('setting/notification')?>"><i class="fa fa-circle-o"></i> Notification</a></li>
+                        </ul>
+                    </li>
+                <?php } ?>
             </ul>
         </section>
         <!-- /.sidebar -->

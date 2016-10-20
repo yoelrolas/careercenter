@@ -3,7 +3,7 @@
 <!-- jQuery 2.2.3 -->
 <!-- Already in header -->
 <!-- Bootstrap 3.3.6 -->
-<script src="<?=base_url()?>assets/adminlte/bootstrap/js/bootstrap.min.js"></script>
+<script src="<?=base_url()?>assets/adminlte/bootstrap/js/bootstrap.js"></script>
 <!-- FastClick -->
 <script src="<?=base_url()?>assets/adminlte/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -17,6 +17,8 @@
 <script src="<?=base_url()?>assets/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- ChartJS 1.0.1 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/chartjs/Chart.min.js"></script>
+<!-- iCheck 1.0.1 -->
+<script src="<?=base_url()?>assets/adminlte/plugins/iCheck/icheck.min.js"></script>
 <!-- Select 2 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.full.min.js"></script>
 
@@ -150,11 +152,47 @@
         if($('.cekboxaction').length){
             $('.cekboxaction').click(function(){
                 var a = $(this);
+                var confirmDialog = $("#confirmDialog");
+                var alertDialog = $("#alertDialog");
+
+                confirmDialog.on("hidden.bs.modal", function(){
+                    $(".modal-body", confirmDialog).html("");
+                });
+                alertDialog.on("hidden.bs.modal", function(){
+                    $(".modal-body", alertDialog).html("");
+                });
+
                 if($('.cekbox:checked').length < 1){
-                    alert('Tidak ada data dipilih');
+                    $(".modal-body", alertDialog).html("Tidak ada data dipilih");
+                    alertDialog.modal("show");
+                    //alert('Tidak ada data dipilih');
                     return false;
                 }
-                var yakin = confirm("Apa anda yakin?");
+
+                $(".modal-body", confirmDialog).html("Apa anda yakin?");
+                confirmDialog.modal("show");
+                $(".btn-ok", confirmDialog).click(function() {
+                    $(this).html("Loading...");
+                    $('#dataform').ajaxSubmit({
+                        dataType: 'json',
+                        url : a.attr('href'),
+                        success : function(data){
+                            if(data.error==0){
+                                //alert(data.success);
+                                window.location.reload();
+                            }else{
+                                //alert(data.error);
+                                $(".modal-body", alertDialog).html(data.error);
+                                alertDialog.modal("show");
+                            }
+                        },
+                        complete: function(){
+                            $(this).html("OK");
+                            confirmDialog.modal("hide");
+                        }
+                    });
+                });
+                /*var yakin = confirm("Apa anda yakin?");
                 if(yakin){
                     $('#dataform').ajaxSubmit({
                         dataType: 'json',
@@ -168,7 +206,7 @@
                             }
                         }
                     });
-                }
+                }*/
                 return false;
             });
         }
@@ -180,7 +218,12 @@
         $("select").select2();
         $('.datepicker').datepicker({
             autoclose: true,
-            format: 'dd M yyyy',
+            format: 'dd M yyyy'
         });
+        //iCheck for checkbox and radio inputs
+        /*$('input[type="checkbox"], input[type="radio"]').iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });*/
     });
 </script>

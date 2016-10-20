@@ -14,8 +14,12 @@ define('MY_IMAGEPATH', './assets/media/image/');
 define('MY_IMAGEURL', MY_ASSETURL.'/media/image/');
 define('MY_UPLOADPATH', './assets/media/upload/');
 define('MY_UPLOADURL', MY_ASSETURL.'/media/upload/');
+define('MY_NOIMAGEURL', MY_ASSETURL.'/media/image/no-image.png');
+define('MY_NODATAURL', MY_ASSETURL.'/media/image/no-data.png');
 define('SYSTEMUSERNAME', 'admin');
 
 define('FRONTENDURL', MY_ASSETURL.'/frontend');
 define('FRONTENDPATH', './assets/frontend');
 define('FRONTENDVIEWPATH', FRONTENDPATH.'/view');
+
+define("URL_SUFFIX", ".aspx");

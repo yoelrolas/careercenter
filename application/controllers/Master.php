@@ -356,4 +356,74 @@ class Master extends MY_Controller {
             ShowJsonError("Tidak ada dihapus");
         }
     }
+
+    function categories() {
+        $data['title'] = 'Categories';
+        $this->db->order_by(COL_POSTCATEGORYNAME, 'asc');
+        $data['res'] = $this->db->get(TBL_POSTCATEGORIES)->result_array();
+        $this->load->view('master/categories', $data);
+    }
+    function categoryadd() {
+        $data['title'] = "Categories";
+        $data['edit'] = FALSE;
+
+        if(!empty($_POST)){
+            $resp = array();
+            $resp['error'] = 0;
+            $resp['success'] = 1;
+            $resp['redirect'] = site_url('master/categories');
+            $data = array(
+                COL_POSTCATEGORYNAME => $this->input->post(COL_POSTCATEGORYNAME)
+            );
+            if(!$this->db->insert(TBL_POSTCATEGORIES, $data)){
+                $resp['error'] = 1;
+                $resp['success'] = 0;
+            }
+            echo json_encode($resp);
+        }else{
+            $this->load->view('master/categoryform',$data);
+        }
+    }
+    function categoryedit($id) {
+        $rdata = $data['data'] = $this->db->where(COL_POSTCATEGORYID, $id)->get(TBL_POSTCATEGORIES)->row_array();
+        if(empty($rdata)){
+            show_404();
+            return;
+        }
+
+        $data['title'] = 'Categories';
+        $data['edit'] = TRUE;
+        if(!empty($_POST)){
+            $resp = array();
+            $resp['error'] = 0;
+            $resp['success'] = 1;
+            $resp['redirect'] = site_url('master/categories');
+            $data = array(
+                COL_POSTCATEGORYNAME => $this->input->post(COL_POSTCATEGORYNAME)
+            );
+            if(!$this->db->where(COL_POSTCATEGORYID, $id)->update(TBL_POSTCATEGORIES, $data)){
+                $resp['error'] = 1;
+                $resp['success'] = 0;
+            }
+            echo json_encode($resp);
+        }else{
+            $this->load->view('master/categoryform',$data);
+        }
+    }
+    function categorydelete(){
+        $data = $this->input->post('cekbox');
+        $deleted = 0;
+        foreach ($data as $datum) {
+            $rcheck = $this->db->where(COL_POSTCATEGORYID, $datum)->get(TBL_POSTS)->num_rows();
+            if($rcheck > 0) continue;
+
+            $this->db->delete(TBL_POSTCATEGORIES, array(COL_POSTCATEGORYID => $datum));
+            $deleted++;
+        }
+        if($deleted){
+            ShowJsonSuccess($deleted." data dihapus");
+        }else{
+            ShowJsonError("Tidak ada dihapus");
+        }
+    }
 }

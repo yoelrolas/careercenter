@@ -160,4 +160,64 @@ class Mvacancy extends CI_Model {
         $res = $this->db->get($this->table)->row_array();
         return $res;
     }
+
+    function sendnotification($data) {
+        // Notifications
+        $rcompany = $this->db->where(COL_COMPANYID, $data[COL_COMPANYID])->get(TBL_COMPANIES)->row_array();
+        $rtype = $this->db->where(COL_VACANCYTYPEID, $data[COL_VACANCYTYPEID])->get(TBL_VACANCYTYPES)->row_array();
+        $rposition = $this->db->where(COL_POSITIONID, $data[COL_POSITIONID])->get(TBL_POSITIONS)->row_array();
+
+        if(IsNotificationActive(NOTIFICATION_LOWONGANBARUADMIN)) {
+            $this->load->library('email',GetEmailConfig());
+            $this->email->set_newline("\r\n");
+
+            $pref = GetNotification(NOTIFICATION_LOWONGANBARUADMIN);
+
+            $content = $pref[COL_NOTIFICATIONCONTENT];
+            $subject = $pref[COL_NOTIFICATIONSUBJECT];
+
+            $subject = str_replace(array("@COMPANYNAME@"), array((!empty($rcompany)?$rcompany[COL_COMPANYNAME]:"Unknown")), $subject);
+            $content = str_replace(array("@COMPANYNAME@", "@SITENAME@", "@VACANCYTITLE@", "@VACANCYTYPE@", "@VACANCYPOSITION@", "@URL@", "@STATUS@"),
+                array((!empty($rcompany)?$rcompany[COL_COMPANYNAME]:"Unknown"), SITENAME, $data[COL_VACANCYTITLE], (!empty($rtype)?$rtype[COL_VACANCYTYPENAME]:"Unknown"),
+                    (!empty($rposition)?$rposition[COL_POSITIONNAME]:"Unknown"), site_url('vacancy/index'), ($data[COL_ISSUSPEND]?"SUSPEND":"AKTIF")),
+                $content);
+
+            $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+            $this->email->to(GetSetting(SETTING_WEBMAIL));
+            $this->email->subject($subject);
+            $this->email->message($content);
+            $this->email->send();
+        }
+        if(!$data[COL_ISSUSPEND]) {
+            if(IsNotificationActive(NOTIFICATION_LOWONGANBARUUSER)) {
+                $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_USERNAME." = ".TBL_USERS.".".COL_USERNAME,"inner");
+                $this->db->where(COL_ROLEID, ROLEUSER);
+                $alluser = $this->db->get(TBL_USERS)->result_array();
+
+                $this->load->library('email',GetEmailConfig());
+                $this->email->set_newline("\r\n");
+
+                $pref = GetNotification(NOTIFICATION_LOWONGANBARUUSER);
+                $oricontent = $pref[COL_NOTIFICATIONCONTENT];
+                $subject = $pref[COL_NOTIFICATIONSUBJECT];
+
+                $subject = str_replace(array("@COMPANYNAME@"), array((!empty($rcompany)?$rcompany[COL_COMPANYNAME]:"Unknown")), $subject);
+
+                foreach($alluser as $u) {
+                    if(!empty($u[COL_EMAIL])) {
+                        $content = str_replace(array("@COMPANYNAME@", "@SITENAME@", "@VACANCYTITLE@", "@VACANCYTYPE@", "@VACANCYPOSITION@", "@URL@", "@NAME@"),
+                            array((!empty($rcompany)?$rcompany[COL_COMPANYNAME]:"Unknown"), SITENAME, $data[COL_VACANCYTITLE], (!empty($rtype)?$rtype[COL_VACANCYTYPENAME]:"Unknown"),
+                                (!empty($rposition)?$rposition[COL_POSITIONNAME]:"Unknown"), site_url('vacancy/detail/'.$data[COL_VACANCYID]), $u[COL_NAME]),
+                            $oricontent);
+
+                        $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+                        $this->email->to($u[COL_EMAIL]);
+                        $this->email->subject($subject);
+                        $this->email->message($content);
+                        $this->email->send();
+                    }
+                }
+            }
+        }
+    }
 }

@@ -84,6 +84,7 @@ class Mcompany extends CI_Model {
     }
 
     function delete($datum) {
+        $this->load->model('mvacancy');
         $this->db->trans_begin();
 
         if(!$this->db->delete(TBL_COMPANIES, array(COL_COMPANYID => $datum))) {
@@ -106,9 +107,8 @@ class Mcompany extends CI_Model {
         }
         // Delete vacancies
         $rvacancy = $this->db->where(COL_COMPANYID, $datum)->get(TBL_VACANCIES)->result_array();
-        $this->load->model('mvacancy');
         foreach($rvacancy as $vac) {
-            if(!$this->mvacancy->delete($rvacancy[COL_VACANCYID])) {
+            if(!$this->mvacancy->delete($vac[COL_VACANCYID])) {
                 $this->db->trans_rollback();
                 return false;
             }
@@ -120,6 +120,8 @@ class Mcompany extends CI_Model {
 
     function search($limit=0, $keyword="", $industrytype=array()) {
         $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"inner");
+        $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_COMPANYID." = ".TBL_COMPANIES.".".COL_COMPANYID,"inner");
+        $this->db->join(TBL_USERS,TBL_USERS.'.'.COL_USERNAME." = ".TBL_USERINFORMATION.".".COL_USERNAME,"inner");
         if(!empty($keyword)) {
             $where = "(".TBL_COMPANIES.".".COL_COMPANYNAME." LIKE '%".$keyword."%'";
             $where .= " OR ".TBL_INDUSTRYTYPES.".".COL_INDUSTRYTYPENAME." LIKE '%".$keyword."%'";
@@ -130,9 +132,12 @@ class Mcompany extends CI_Model {
 
             $this->db->where($where);
         }
+
+        $this->db->where(TBL_USERS.".".COL_ISSUSPEND, false);
         if(!empty($industrytype) && count($industrytype) > 0) $this->db->where_in(TBL_COMPANIES.".".COL_INDUSTRYTYPEID, $industrytype);
         if(!empty($limit) && $limit > 0) $this->db->limit($limit);
 
+        $this->db->order_by(TBL_COMPANIES.".".COL_REGISTERDATE, "desc");
         $res = $this->db->get($this->table)->result_array();
         return $res;
     }

@@ -25,6 +25,7 @@ class Vacancy extends MY_Controller {
         $data['edit'] = FALSE;
 
         if(!empty($_POST)){
+            $data['data'] = $_POST;
             $rules = $this->mvacancy->rules();
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
@@ -47,7 +48,7 @@ class Vacancy extends MY_Controller {
                     COL_CREATEDON => date('Y-m-d H:i:s'),
                     COL_UPDATEDBY => $user[COL_USERNAME],
                     COL_UPDATEDON => date('Y-m-d H:i:s'),
-                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : true) : true)
+                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false) : true)
                 );
 
                 if(empty($data[COL_ISALLLOCATION]) || !$data[COL_ISALLLOCATION]) {
@@ -76,20 +77,21 @@ class Vacancy extends MY_Controller {
                 if(count($locations) > 0) {
                     if(!$this->db->insert_batch(TBL_VACANCYLOCATIONS, $locations)) {
                         $this->db->trans_rollback();
-                        redirect(site_url('vacancy/index').'?error=1');
+                        redirect(site_url('vacancy/add').'?error=1');
                     }
                 }
                 if(count($educations) > 0) {
                     if(!$this->db->insert_batch(TBL_VACANCYEDUCATIONS, $educations)) {
                         $this->db->trans_rollback();
-                        redirect(site_url('vacancy/index').'?error=1');
+                        redirect(site_url('vacancy/add').'?error=1');
                     }
                 }
                 if(!$this->db->insert(TBL_VACANCIES, $data)) {
                     $this->db->trans_rollback();
-                    redirect(site_url('vacancy/index').'?error=1');
+                    redirect(site_url('vacancy/add').'?error=1');
                 }
                 $this->db->trans_commit();
+                $this->mvacancy->sendnotification($data);
                 redirect(site_url('vacancy/index'));
             }
             else {
@@ -133,6 +135,7 @@ class Vacancy extends MY_Controller {
         $data['edus'] = $edus;
 
         if(!empty($_POST)){
+            $data['data'] = $_POST;
             $rules = $this->mvacancy->rules();
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
@@ -179,31 +182,32 @@ class Vacancy extends MY_Controller {
                 $this->db->trans_begin();
                 if(!$this->db->delete(TBL_VACANCYLOCATIONS, array(COL_VACANCYID=>$id))) {
                     $this->db->trans_rollback();
-                    redirect(site_url('vacancy/index').'?error=1');
+                    redirect(site_url('vacancy/add').'?error=1');
                 }
                 if(count($locations) > 0) {
                     if(!$this->db->insert_batch(TBL_VACANCYLOCATIONS, $locations)) {
                         $this->db->trans_rollback();
-                        redirect(site_url('vacancy/index').'?error=1');
+                        redirect(site_url('vacancy/add').'?error=1');
                     }
                 }
 
                 if(!$this->db->delete(TBL_VACANCYEDUCATIONS, array(COL_VACANCYID=>$id))) {
                     $this->db->trans_rollback();
-                    redirect(site_url('vacancy/index').'?error=1');
+                    redirect(site_url('vacancy/add').'?error=1');
                 }
                 if(count($educations) > 0) {
                     if(!$this->db->insert_batch(TBL_VACANCYEDUCATIONS, $educations)) {
                         $this->db->trans_rollback();
-                        redirect(site_url('vacancy/index').'?error=1');
+                        redirect(site_url('vacancy/add').'?error=1');
                     }
                 }
 
                 if(!$this->db->insert(TBL_VACANCIES, $data)) {
                     $this->db->trans_rollback();
-                    redirect(site_url('vacancy/index').'?error=1');
+                    redirect(site_url('vacancy/add').'?error=1');
                 }
                 $this->db->trans_commit();
+                $this->mvacancy->sendnotification($data);
                 redirect(site_url('vacancy/index'));
             }
             else {
@@ -236,6 +240,8 @@ class Vacancy extends MY_Controller {
         $deleted = 0;
         foreach ($data as $datum) {
             $this->db->where(COL_VACANCYID, $datum)->update(TBL_VACANCIES, array(COL_ISSUSPEND=>$suspend));
+            $rvacancy = $this->db->where(COL_VACANCYID, $datum)->get(TBL_VACANCIES)->row_array();
+            $this->mvacancy->sendnotification($rvacancy);
             $deleted++;
         }
         if($deleted){

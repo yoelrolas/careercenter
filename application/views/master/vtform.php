@@ -13,29 +13,33 @@
     <section class="content">
         <div class="row">
             <div class="col-sm-6">
-                <?=form_open(current_url(),array('role'=>'form','id'=>'deviceForm'))?>
-                <div style="display: none" class="alert alert-danger errorBox">
-                    <i class="fa fa-ban"></i>
-                    <span class="errorMsg"></span>
-                </div>
-                <?php
-                if($this->input->get('success') == 1){
-                    ?>
-                    <div class="alert alert-success">
-                        <i class="fa fa-check"></i>
-                        <span class="">Data disimpan</span>
+                <div class="box box-primary" style="border-top-color: transparent">
+                    <div class="box-body">
+                        <?=form_open(current_url(),array('role'=>'form','id'=>'deviceForm'))?>
+                        <div style="display: none" class="alert alert-danger errorBox">
+                            <i class="fa fa-ban"></i>
+                            <span class="errorMsg"></span>
+                        </div>
+                        <?php
+                        if($this->input->get('success') == 1){
+                            ?>
+                            <div class="alert alert-success">
+                                <i class="fa fa-check"></i>
+                                <span class="">Data disimpan</span>
+                            </div>
+                            <?php
+                        }
+                        ?>
+                        <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" name="<?=COL_VACANCYTYPENAME?>" value="<?= $edit ? $data[COL_VACANCYTYPENAME] : ""?>" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-flat pull-right">Simpan</button>
+                        </div>
+                        <?=form_close()?>
                     </div>
-                    <?php
-                }
-                ?>
-                <div class="form-group">
-                    <label class="form-label">Name</label>
-                    <input type="text" class="form-control" name="<?=COL_VACANCYTYPENAME?>" value="<?= $edit ? $data[COL_VACANCYTYPENAME] : ""?>" required>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-                <?=form_close()?>
             </div>
         </div>
     </section>

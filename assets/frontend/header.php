@@ -34,7 +34,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <script src="<?=FRONTENDURL?>/js/jquery.flot.min.js" type="text/javascript"></script>
     <script src="<?=FRONTENDURL?>/js/jquery.flot.animator.min.js" type="text/javascript"></script>
     <!-- //left-chart -->
-    <link href="//fonts.googleapis.com/css?family=Muli:300,300i,400,400i" rel="stylesheet">
+    <!--<link href="//fonts.googleapis.com/css?family=Muli:300,300i,400,400i" rel="stylesheet">-->
+    <link href="<?=FRONTENDURL?>/css/fonts.css" rel="stylesheet" type="text/css" media="all" />
     <!-- start-smoth-scrolling -->
     <script type="text/javascript" src="<?=FRONTENDURL?>/js/move-top.js"></script>
     <script type="text/javascript" src="<?=FRONTENDURL?>/js/easing.js"></script>
@@ -134,7 +135,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         $ruser = GetLoggedUser();
                         ?>
                         <li class="w3layouts_header_list">
-                            <a href="<?=site_url('user/dashboard')?>">Dashboard (<?=$ruser[COL_USERNAME]?>)</a><i>|</i>
+                            <a href="<?=site_url('user/dashboard')?>">Dashboard</a><i>|</i>
+                        </li>
+                        <li class="w3layouts_header_list">
+                            <a href="<?=site_url('user/logout')?>">Logout (<?=$ruser[COL_USERNAME]?>)</a><i>|</i>
                         </li>
                     <?php
                     }
@@ -156,16 +160,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <h1><a href="<?=site_url()?>"><span>Del</span> Career Center<i> Excellence Starts Here!</i></a></h1>
             </div>
             <div class="agileits_search">
-                <form action="#" method="post">
-                    <input name="Search" type="text" placeholder="Keyword" required="">
-                    <select id="agileinfo_search" name="agileinfo_search">
-                        <option value="commodities">Commodities</option>
-                        <option value="navs">NAVs</option>
-                        <option value="quotes">Quotes</option>
-                        <option value="videos">Videos</option>
-                        <option value="news">News</option>
-                        <option value="notices">Notices</option>
-                        <option value="all">All</option>
+                <form action="<?=site_url('post/search')?>" method="post">
+                    <input name="Keyword" type="text" placeholder="Keyword" value="<?=!empty($datapost["Keyword"])?$datapost["Keyword"]:""?>">
+                    <select id="agileinfo_search" name="<?=COL_POSTCATEGORYID?>">
+                        <option value="">All</option>
+                        <option value="<?=POSTCATEGORY_NEWS?>" <?=!empty($datapost[COL_POSTCATEGORYID]) && $datapost[COL_POSTCATEGORYID] == POSTCATEGORY_NEWS ? "selected":""?>>News</option>
+                        <option value="<?=POSTCATEGORY_EVENT?>" <?=!empty($datapost[COL_POSTCATEGORYID]) && $datapost[COL_POSTCATEGORYID] == POSTCATEGORY_EVENT ? "selected":""?>>Events</option>
+                        <option value="<?=POSTCATEGORY_BLOG?>" <?=!empty($datapost[COL_POSTCATEGORYID]) && $datapost[COL_POSTCATEGORYID] == POSTCATEGORY_BLOG ? "selected":""?>>Blogs</option>
                     </select>
                     <input type="submit" value="Search">
                 </form>
@@ -195,8 +196,18 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         <li class="act"><a href="<?=site_url()?>">Home</a></li>
                         <li><a href="<?=site_url('vacancy/all')?>">Vacancies</a></li>
                         <li><a href="<?=site_url('company/all')?>">Companies</a></li>
-                        <li><a href="#">News</a></li>
-                        <li><a href="#">About</a></li>
+                        <!--<li><a href="#">News</a></li>-->
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Posts<span class="caret"></span></a>
+                            <div class="dropdown-menu w3ls_vegetables_menu" style="display: none;">
+                                <ul>
+                                    <li><a href="<?=site_url('post/all/'.POSTCATEGORY_NEWS)?>">News</a></li>
+                                    <li><a href="<?=site_url('post/all/'.POSTCATEGORY_BLOG)?>">Blog</a></li>
+                                    <li><a href="<?=site_url('post/all/'.POSTCATEGORY_EVENT)?>">Events</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!--<li><a href="#">About</a></li>-->
                         <!--<li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Short Codes<span class="caret"></span></a>
                             <div class="dropdown-menu w3ls_vegetables_menu">

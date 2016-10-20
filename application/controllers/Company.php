@@ -9,6 +9,7 @@ class Company extends MY_Controller {
     function register() {
         $data['title'] = "Register as Employer";
         $datapost = !empty($_POST) ? $this->input->post() : null;
+        $data['data'] = $datapost;
         $rules = $this->mcompany->rules();
 
         $this->form_validation->set_rules($rules);
@@ -62,6 +63,28 @@ class Company extends MY_Controller {
             }
 
             $reg = $this->mcompany->register($userdata, $userinfo, $companydata);
+
+            // Notifications
+            if(IsNotificationActive(NOTIFICATION_PERUSAHAANBARU)) {
+                $this->load->library('email',GetEmailConfig());
+                $this->email->set_newline("\r\n");
+
+                $pref = GetNotification(NOTIFICATION_PERUSAHAANBARU);
+
+                $content = $pref[COL_NOTIFICATIONCONTENT];
+                $subject = $pref[COL_NOTIFICATIONSUBJECT];
+
+                $content = str_replace(array("@USERNAME@", "@EMAIL@", "@COMPANYNAME@", "@SITENAME@", "@URL@"),
+                    array($userinfo[COL_USERNAME], $userinfo[COL_EMAIL], $companydata[COL_COMPANYNAME], SITENAME, site_url('company/index')),
+                    $content);
+
+                $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+                $this->email->to(GetSetting(SETTING_WEBMAIL));
+                $this->email->subject($subject);
+                $this->email->message($content);
+                $this->email->send();
+            }
+
             if($reg) redirect(site_url('company/register')."?success=1");
             else redirect(site_url('company/register')."?error=1");
         }else{
@@ -101,6 +124,7 @@ class Company extends MY_Controller {
         $data['title'] = "Companies";
         $data['edit'] = FALSE;
         if(!empty($_POST)){
+            $data['data'] = $_POST;
             $rules = $this->mcompany->rules();
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()) {
@@ -181,6 +205,7 @@ class Company extends MY_Controller {
         }
 
         if(!empty($_POST)){
+            $data['data'] = $_POST;
             $rules = $this->mcompany->rules(false);
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
@@ -266,13 +291,37 @@ class Company extends MY_Controller {
         $deleted = 0;
         foreach ($data as $datum) {
             // Get User
-            $user = $this->db->where(COL_COMPANYID, $datum)->get(TBL_USERINFORMATION)->row_array();
-            if($user) {
-                if($this->db->where(COL_USERNAME, $user[COL_USERNAME])->update(TBL_USERS, array(COL_ISSUSPEND=>$suspend))) {
+            $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"inner");
+            $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_COMPANYID." = ".TBL_COMPANIES.".".COL_COMPANYID,"inner");
+            $this->db->join(TBL_USERS,TBL_USERS.'.'.COL_USERNAME." = ".TBL_USERINFORMATION.".".COL_USERNAME,"inner");
+            $row = $this->db->where(TBL_COMPANIES.".".COL_COMPANYID, $datum)->get(TBL_COMPANIES)->row_array();
+            if($row) {
+                if($this->db->where(COL_USERNAME, $row[COL_USERNAME])->update(TBL_USERS, array(COL_ISSUSPEND=>$suspend))) {
                     $deleted++;
                 }
                 if(!$suspend) {
                     $this->db->where(COL_COMPANYID, $datum)->update(TBL_COMPANIES, array(COL_APPROVEDDATE=>date('Y-m-d H:i:s')));
+
+                    // Notifications
+                    if(IsNotificationActive(NOTIFICATION_AKTIVASIAKUNPERUSAHAAN)) {
+                        $this->load->library('email',GetEmailConfig());
+                        $this->email->set_newline("\r\n");
+
+                        $pref = GetNotification(NOTIFICATION_AKTIVASIAKUNPERUSAHAAN);
+
+                        $content = $pref[COL_NOTIFICATIONCONTENT];
+                        $subject = $pref[COL_NOTIFICATIONSUBJECT];
+
+                        $content = str_replace(array("@USERNAME@", "@EMAIL@", "@COMPANYNAME@", "@SITENAME@", "@URL@"),
+                            array($row[COL_USERNAME], $row[COL_EMAIL], $row[COL_COMPANYNAME], SITENAME, site_url('user/login')),
+                            $content);
+
+                        $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+                        $this->email->to($row[COL_EMAIL]);
+                        $this->email->subject($subject);
+                        $this->email->message($content);
+                        $this->email->send();
+                    }
                 }
             }
         }

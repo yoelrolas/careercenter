@@ -77,7 +77,6 @@ $data = json_encode($res);
             $('#cekbox').click(function(){
                 if($(this).is(':checked')){
                     $('.cekbox').prop('checked',true);
-                    console.log('clicked');
                 }else{
                     $('.cekbox').prop('checked',false);
                 }

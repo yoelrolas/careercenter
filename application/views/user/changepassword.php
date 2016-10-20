@@ -11,59 +11,63 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            <?=form_open(current_url(),array('role'=>'form','id'=>'changepassword'))?>
             <div class="col-sm-6">
-                <?php if(validation_errors()){ ?>
-                    <div class="form group alert alert-danger">
-                        <i class="fa fa-ban"></i>
-                        <?= validation_errors() ?>
-                    </div>
-                <?php } ?>
+                <div class="box box-primary" style="border-top-color: transparent">
+                    <div class="box-body">
+                        <?=form_open(current_url(),array('role'=>'form','id'=>'changepassword'))?>
+                        <?php if(validation_errors()){ ?>
+                            <div class="form group alert alert-danger">
+                                <i class="fa fa-ban"></i>
+                                <?= validation_errors() ?>
+                            </div>
+                        <?php } ?>
 
-                <?php  if($this->input->get('success')){ ?>
-                    <div class="form-group alert alert-success">
-                        <i class="fa fa-check"></i>
-                        Ganti password berhasil.
-                    </div>
-                <?php } ?>
+                        <?php  if($this->input->get('success')){ ?>
+                            <div class="form-group alert alert-success">
+                                <i class="fa fa-check"></i>
+                                Ganti password berhasil.
+                            </div>
+                        <?php } ?>
 
-                <?php  if($this->input->get('error')){ ?>
-                    <div class="form-group alert alert-danger">
-                        <i class="fa fa-ban"></i>
-                        Gagal mengganti password, silahkan coba kembali
-                    </div>
-                <?php } ?>
+                        <?php  if($this->input->get('error')){ ?>
+                            <div class="form-group alert alert-danger">
+                                <i class="fa fa-ban"></i>
+                                Gagal mengganti password, silahkan coba kembali
+                            </div>
+                        <?php } ?>
 
-                <?php  if($this->input->get('nomatch')){ ?>
-                    <div class="form-group alert alert-danger">
-                        <i class="fa fa-ban"></i>
-                        Password lama tidak sesuai
-                    </div>
-                <?php } ?>
+                        <?php  if($this->input->get('nomatch')){ ?>
+                            <div class="form-group alert alert-danger">
+                                <i class="fa fa-ban"></i>
+                                Password lama tidak sesuai
+                            </div>
+                        <?php } ?>
 
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                        <input type="password" class="form-control" name="OldPassword" placeholder="Old Password" required>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                <input type="password" class="form-control" name="OldPassword" placeholder="Old Password" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                <input type="password" class="form-control" name="<?=COL_PASSWORD?>" placeholder="New Password" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-key"></i></div>
+                                <input type="password" class="form-control" name="RepeatPassword" placeholder="Repeat Password" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-flat pull-right">Simpan</button>
+                        </div>
+                        <?=form_close()?>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                        <input type="password" class="form-control" name="<?=COL_PASSWORD?>" placeholder="New Password" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                        <input type="password" class="form-control" name="RepeatPassword" placeholder="Repeat Password" required>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-flat pull-right">Simpan</button>
                 </div>
             </div>
-            <?=form_close()?>
         </div>
     </section>
 
