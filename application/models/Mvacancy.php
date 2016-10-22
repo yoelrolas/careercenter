@@ -33,6 +33,11 @@ class Mvacancy extends CI_Model {
                 'field' => COL_VACANCYEMAIL,
                 'label' => 'Email',
                 'rules' => 'required'
+            ),
+            array(
+                'field' => "EducationTypeID[]",
+                'label' => 'Pendidikan',
+                'rules' => 'required'
             )
         );
 
@@ -72,6 +77,7 @@ class Mvacancy extends CI_Model {
 
     function search($limit=0,$keyword="", $position=array(), $industry=array(), $location=array(), $type=array(), $educationtype=array()) {
         $select = "*";
+        $select .= ", ".TBL_VACANCIES.".".COL_VACANCYID." as ".COL_VACANCYID;
         $select .= ", GROUP_CONCAT(DISTINCT ".TBL_LOCATIONS.".".COL_LOCATIONNAME." SEPARATOR ', ') as Locations";
         $select .= ", GROUP_CONCAT(DISTINCT ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." SEPARATOR ', ') as Educations";
         $this->db->select($select);
@@ -112,6 +118,7 @@ class Mvacancy extends CI_Model {
 
     function getbycompany($compid, $all=false) {
         $select = "*";
+        $select .= ", ".TBL_VACANCIES.".".COL_VACANCYID." as ".COL_VACANCYID;
         $select .= ", GROUP_CONCAT(DISTINCT ".TBL_LOCATIONS.".".COL_LOCATIONNAME." SEPARATOR ', ') as Locations";
         $select .= ", GROUP_CONCAT(DISTINCT ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." SEPARATOR ', ') as Educations";
         $this->db->select($select);
@@ -137,6 +144,7 @@ class Mvacancy extends CI_Model {
 
     function detail($id, $all=false) {
         $select = "*";
+        $select .= ", ".TBL_VACANCIES.".".COL_VACANCYID." as ".COL_VACANCYID;
         $select .= ", GROUP_CONCAT(DISTINCT ".TBL_LOCATIONS.".".COL_LOCATIONNAME." SEPARATOR ', ') as Locations";
         $select .= ", GROUP_CONCAT(DISTINCT ".TBL_EDUCATIONTYPES.".".COL_EDUCATIONTYPENAME." SEPARATOR ', ') as Educations";
         $this->db->select($select);

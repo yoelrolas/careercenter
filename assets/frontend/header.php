@@ -144,10 +144,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     }
                     ?>
                     <li class="w3layouts_header_list">
-                        <a href="faq.html">FAQ</a><i>|</i>
+                        <a href="<?=site_url("post/view/faq")?>">FAQ</a><i>|</i>
                     </li>
                     <li class="w3layouts_header_list">
-                        <a href="contact.html">Contact Us</a>
+                        <a href="<?=site_url("post/view/contact-us")?>">Contact Us</a>
                     </li>
                 </ul>
             </div>

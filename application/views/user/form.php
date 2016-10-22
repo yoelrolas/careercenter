@@ -143,7 +143,7 @@
                                         <img src="<?=MY_UPLOADURL.$data[COL_FILENAME]?>" alt="Logo" height="80" /><br />
                                     <?php } ?>
                                     <label class="label-control">Logo (Optional - Max size: 500KB)</label>
-                                    <input type="file" name="companyfile" />
+                                    <input type="file" name="companyfile" accept="image/*" />
                                 </div>
                             </div>
                         </div>
@@ -223,7 +223,7 @@
                                 <div class="form-group">
                                     <div class="input-group">
                                         <div class="input-group-addon"><input type="checkbox" value="1" name="<?=COL_ISGRADUATED?>" <?=!empty($data[COL_ISGRADUATED]) && $data[COL_ISGRADUATED] ? 'checked' : ''?> /> Graduated</div>
-                                        <input type="text" class="form-control datepicker" name="<?=COL_MAJORNAME?>" value="<?=!empty($data[COL_MAJORNAME]) ? $data[COL_MAJORNAME] : ''?>" placeholder="On">
+                                        <input type="text" class="form-control datepicker" name="<?=COL_GRADUATEDDATE?>" value="<?=!empty($data[COL_GRADUATEDDATE]) ? $data[COL_GRADUATEDDATE] : ''?>" placeholder="On">
                                     </div>
                                 </div>
                                 <div class="form-group">

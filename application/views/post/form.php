@@ -82,7 +82,7 @@
                                     <img src="<?=MY_UPLOADURL.$data[COL_FILENAME]?>" alt="Logo" height="80" /><br />
                                 <?php } ?>
                                 <label class="label-control">Logo (Optional - Max size: 1000KB)</label>
-                                <input type="file" name="userfile" />
+                                <input type="file" name="userfile" accept="image/*" />
                             </div>
                         </div>
                         <div class="clearfix"></div>

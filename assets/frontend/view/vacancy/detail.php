@@ -45,6 +45,17 @@
                                 <p class="list-item-value"><a class="pull-right"><?=$vacancy[COL_VACANCYEMAIL]?></a></p>
                             </li>
                         </ul>
+                        <?php if(IsLogin() && GetLoggedUser()) {
+                            ?>
+                            <a class="btn btn-success btn-block btn-flat btn-apply" data-url="<?=site_url("vacancy/apply/".$vacancy[COL_VACANCYID])?>" data-username="<?=GetLoggedUser()[COL_USERNAME]?>"><b> Apply</b></a>
+                        <?php
+                        } else {
+                            ?>
+                            <div style="margin-bottom: 20px;">Silahkan <a href="<?=site_url('user/login')?>">login</a> untuk apply lowongan.</div>
+                        <?php
+                        }
+                        ?>
+
                         <a href="<?=site_url('company/detail/'.$vacancy[COL_COMPANYID])?>" class="btn btn-primary btn-block btn-flat"><b> Detail Perusahaan</b></a>
                     </div>
                 </div>
@@ -78,3 +89,39 @@
     </section>
 </div>
 <?php $this->load->view('frontend/footer') ?>
+<script>
+    $(document).ready(function() {
+        $('.btn-apply').click(function(){
+            var a = $(this);
+            var url = $(this).data("url");
+            var username = $(this).data("username");
+            var confirmDialog = $("#confirmDialog");
+            var alertDialog = $("#alertDialog");
+            var successDialog = $("#successDialog");
+
+            confirmDialog.on("hidden.bs.modal", function(){
+                $(".modal-body", confirmDialog).html("");
+            });
+            alertDialog.on("hidden.bs.modal", function(){
+                $(".modal-body", alertDialog).html("");
+            });
+
+            $(".modal-body", confirmDialog).html("Profil anda akan dikirimkan ke perusahaan melalui email secara otomatis. Apakah anda yakin?");
+            confirmDialog.modal("show");
+            $(".btn-ok", confirmDialog).click(function() {
+                $(this).html("Loading...");
+                $.post(url, {UserName: username}, function(res) {
+                    confirmDialog.modal("hide");
+                    if(res.error){
+                        $(".modal-body", alertDialog).html(res.error);
+                        alertDialog.modal("show");
+                    }else{
+                        $(".modal-body", successDialog).html("Profil anda telah dikirim ke perusahaan.");
+                        successDialog.modal("show");
+                    }
+                });
+            });
+            return false;
+        });
+    });
+</script>

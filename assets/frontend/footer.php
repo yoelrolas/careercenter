@@ -27,9 +27,9 @@
             </div>
             <div class="agileits_follow_us_right">
                 <ul class="w3_agileits_social_icons">
-                    <li><a href="#" class="wthree_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                    <li><a href="#" class="wthree_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                    <li><a href="#" class="wthree_instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                    <li><a href="https://www.facebook.com/Institut.Teknologi.Del/?fref=ts" class="wthree_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                    <li><a href="https://twitter.com/institut_del" class="wthree_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                    <li><a href="https://www.instagram.com/it.del/" class="wthree_instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
                 </ul>
             </div>
 
@@ -56,6 +56,66 @@
     </div>
 </div>
 <!-- //footer -->
+
+<!-- Modals -->
+<div class="modal fade" id="confirmDialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                <h4 class="modal-title">Confirm Dialog</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary btn-flat btn-ok">OK</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade modal-danger" id="alertDialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                <h4 class="modal-title">Alert!</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade modal-success" id="successDialog" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-close"></i></span></button>
+                <h4 class="modal-title">Success!</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-right" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.Modals -->
 
 <script class="include" type="text/javascript" src="<?=FRONTENDURL?>/js/jquery.jqplot.js"></script>
 <script class="include" type="text/javascript" src="<?=FRONTENDURL?>/js/jqplot.dateAxisRenderer.js"></script>

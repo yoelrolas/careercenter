@@ -105,7 +105,15 @@
 <div class="wrapper">
     <?php
     $ruser = GetLoggedUser();
-    $displayname = $ruser ? $ruser[COL_USERNAME] : "Guest"
+    $displayname = $ruser ? $ruser[COL_USERNAME] : "Guest";
+    $displaypicture = MY_IMAGEURL.'user.jpg';
+    if($ruser) {
+        if($ruser[COL_ROLEID] == ROLECOMPANY) {
+            $displaypicture = $ruser[COL_FILENAME] ? MY_UPLOADURL.$ruser[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg';
+        } else {
+            $displaypicture = $ruser[COL_IMAGEFILENAME] ? MY_UPLOADURL.$ruser[COL_IMAGEFILENAME] : MY_IMAGEURL.'user.jpg';
+        }
+    }
     ?>
     <header class="main-header">
 
@@ -126,53 +134,10 @@
             <!-- Navbar Right Menu -->
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    <!-- Notifications: style can be found in dropdown.less -->
-                    <li class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <span class="label label-warning">10</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">You have 10 notifications</li>
-                            <li>
-                                <!-- inner menu: contains the actual data -->
-                                <ul class="menu">
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                                            page and may cause design problems
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-users text-red"></i> 5 new members joined
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <i class="fa fa-user text-red"></i> You changed your username
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="footer"><a href="#">View all</a></li>
-                        </ul>
-                    </li>
-
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="<?=base_url()?>assets/tbs/img/user.jpg" class="user-image" alt="Your Profile Image">
+                            <img src="<?=$displaypicture?>" class="user-image" alt="Your Profile Image">
                             <span class="hidden-xs"><?=$displayname?></span>
                         </a>
                         <ul class="dropdown-menu">
@@ -274,6 +239,8 @@
                         </ul>
                     </li>
                 <?php } ?>
+
+                <?php if($ruser[COL_ROLEID] == ROLEADMIN || $ruser[COL_ROLEID] == ROLECOMPANY) { ?>
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-bookmark-o"></i> <span>Vacancies</span>
@@ -286,6 +253,7 @@
                         <li><a href="<?=site_url('vacancy/add')?>"><i class="fa fa-circle-o"></i> Add Vacancy</a></li>
                     </ul>
                 </li>
+                <?php } ?>
 
                 <?php if($ruser[COL_ROLEID] == ROLEADMIN) { ?>
                     <li class="treeview">

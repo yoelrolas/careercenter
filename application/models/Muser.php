@@ -125,16 +125,22 @@ class Muser extends CI_Model {
         }
     }
     function IsSuspend($username){
-        $user = $this->db->where(COL_USERNAME, $username)->get($this->table)->row_array();
+        $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_USERNAME." = ".TBL_USERS.".".COL_USERNAME,"inner");
+        $this->db->where("(".TBL_USERS.".".COL_USERNAME." = '".$username."' OR ".TBL_USERINFORMATION.".".COL_EMAIL." = '".$username."')");
+
+        $user = $this->db->get($this->table)->row_array();
         if($user && !$user[COL_ISSUSPEND]) return FALSE;
         else return TRUE;
     }
     function getdetails($username){
         $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_USERNAME." = ".TBL_USERS.".".COL_USERNAME,"inner");
         $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_USERINFORMATION.".".COL_COMPANYID,"left");
+        $this->db->join(TBL_RELIGIONS,TBL_RELIGIONS.'.'.COL_RELIGIONID." = ".TBL_USERINFORMATION.".".COL_RELIGIONID,"left");
+        $this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_USERINFORMATION.".".COL_EDUCATIONID,"left");
         //$this->db->join(TBL_EMPLOYEES,TBL_EMPLOYEES.'.'.COL_EMPLOYEEID." = ".TBL_USERINFORMATION.".".COL_EMPLOYEEID,"left");
         $this->db->join(TBL_INDUSTRYTYPES,TBL_INDUSTRYTYPES.'.'.COL_INDUSTRYTYPEID." = ".TBL_COMPANIES.".".COL_INDUSTRYTYPEID,"left");
-        $this->db->where(TBL_USERS.".".COL_USERNAME,$username);
+        //$this->db->where(TBL_USERS.".".COL_USERNAME,$username);
+        $this->db->where("(".TBL_USERS.".".COL_USERNAME." = '".$username."' OR ".TBL_USERINFORMATION.".".COL_EMAIL." = '".$username."')");
 
         return $this->db->get($this->table)->row_array();
     }

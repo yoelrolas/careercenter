@@ -211,14 +211,21 @@
             });
         }
         $('a[href="<?=current_url()?>"]').addClass('active').parents('li').addClass('active');
-        $('li.treeview.active').find('ul').eq(0).show();
-        $('li.treeview.active').find('.fa-angle-left').removeClass('fa-angle-left').addClass('fa-angle-down');
+        //$('li.treeview.active').find('ul').eq(0).show();
+        //$('li.treeview.active').find('.fa-angle-left').removeClass('fa-angle-left').addClass('fa-angle-down');
 
         $(".editor").wysihtml5();
         $("select").select2();
         $('.datepicker').datepicker({
             autoclose: true,
             format: 'dd M yyyy'
+        });
+
+        /*$(".alert").fadeTo(2000, 500).slideUp(500, function(){
+            $(".alert").slideUp(500);
+        });*/
+        $( ".alert" ).fadeOut(2500, function() {
+            // Animation complete.
         });
         //iCheck for checkbox and radio inputs
         /*$('input[type="checkbox"], input[type="radio"]').iCheck({

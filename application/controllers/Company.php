@@ -15,7 +15,7 @@ class Company extends MY_Controller {
         $this->form_validation->set_rules($rules);
         if($this->form_validation->run()){
             $config['upload_path'] = MY_UPLOADPATH;
-            $config['allowed_types'] = "gif|jpg|jpeg|png";
+            $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
             $config['max_size']	= 500;
             $config['max_width']  = 1024;
             $config['max_height']  = 768;
@@ -129,7 +129,7 @@ class Company extends MY_Controller {
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()) {
                 $config['upload_path'] = MY_UPLOADPATH;
-                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
                 $config['max_size']	= 500;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;
@@ -210,7 +210,7 @@ class Company extends MY_Controller {
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
                 $config['upload_path'] = MY_UPLOADPATH;
-                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
                 $config['max_size']	= 500;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;

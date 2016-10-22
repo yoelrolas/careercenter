@@ -111,7 +111,7 @@
                             <div class="form-group col-sm-12">
                                 <label class="control-label col-sm-4">Pendidikan</label>
                                 <div class="col-sm-8">
-                                    <select name="EducationTypeID[]" class="form-control" multiple>
+                                    <select name="EducationTypeID[]" class="form-control" multiple required>
                                         <?=GetCombobox("SELECT * FROM educationtypes ORDER BY EducationTypeName", COL_EDUCATIONTYPEID, COL_EDUCATIONTYPENAME, (!empty($edus) ? $edus : null))?>
                                     </select>
                                 </div>

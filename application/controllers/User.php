@@ -70,9 +70,10 @@ class User extends MY_Controller {
             else {
                 redirect(site_url('user/login')."?msg=notmatch");
             }
-        }else{
+        } else {
             $this->load->view('user/login');
         }
+
     }
     function Logout(){
         UnsetLoginSession();
@@ -96,24 +97,26 @@ class User extends MY_Controller {
             return;
         }
         if(!empty($_POST)) {
-            $data['data'] = $_POST;
+            //$data['data'] = $_POST;
             $this->load->model('mcompany');
-            $rules = $this->mcompany->rules(false);
+            $rules = $this->muser->rules(false, $user[COL_ROLEID]);
             $this->form_validation->set_rules($rules);
 
             if($this->form_validation->run()){
                 $config['upload_path'] = MY_UPLOADPATH;
-                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
                 $config['max_size']	= 500;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;
                 $config['overwrite'] = FALSE;
 
                 $this->load->library('upload',$config);
-                if(!$this->upload->do_upload()){
-                    $data['upload_errors'] = $this->upload->display_errors();
-                    $this->load->view('user/profile', $data);
-                    return;
+                if(!empty($_FILES["userfile"]["name"])) {
+                    if(!$this->upload->do_upload()){
+                        $data['upload_errors'] = $this->upload->display_errors();
+                        $this->load->view('user/profile', $data);
+                        return;
+                    }
                 }
 
                 $dataupload = $this->upload->data();
@@ -131,7 +134,48 @@ class User extends MY_Controller {
                     $companydata[COL_FILENAME] = $dataupload['file_name'];
                 }
 
-                $reg = $this->db->where(COL_COMPANYID, $rdata[COL_COMPANYID])->update(TBL_COMPANIES, $companydata);
+                $userdata = array(
+                    COL_NAME => $this->input->post(COL_NAME),
+                    COL_IDENTITYNO => $this->input->post(COL_IDENTITYNO),
+                    COL_BIRTHDATE => date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))),
+                    COL_RELIGIONID => $this->input->post(COL_RELIGIONID),
+                    COL_GENDER => $this->input->post(COL_GENDER),
+                    COL_ADDRESS => $this->input->post(COL_ADDRESS),
+                    COL_PHONENUMBER => $this->input->post(COL_PHONENUMBER),
+                    COL_EDUCATIONID => $this->input->post(COL_EDUCATIONID),
+                    COL_UNIVERSITYNAME => $this->input->post(COL_UNIVERSITYNAME),
+                    COL_FACULTYNAME => $this->input->post(COL_FACULTYNAME),
+                    COL_MAJORNAME => $this->input->post(COL_MAJORNAME),
+                    COL_ISGRADUATED => $this->input->post(COL_ISGRADUATED) ? $this->input->post(COL_ISGRADUATED) : false,
+                    COL_GRADUATEDDATE => ($this->input->post(COL_ISGRADUATED) && $this->input->post(COL_GRADUATEDDATE) ? date('Y-m-d', strtotime($this->input->post(COL_GRADUATEDDATE))) : null),
+                    COL_YEAROFEXPERIENCE => $this->input->post(COL_YEAROFEXPERIENCE),
+                    COL_RECENTPOSITION => $this->input->post(COL_RECENTPOSITION),
+                    COL_RECENTSALARY => $this->input->post(COL_RECENTSALARY),
+                    COL_EXPECTEDSALARY => $this->input->post(COL_EXPECTEDSALARY)
+                );
+                if(!empty($dataupload) && $dataupload['file_name']) {
+                    $userdata[COL_IMAGEFILENAME] = $dataupload['file_name'];
+                }
+
+                // Upload CV
+                if(!empty($_FILES["cvfile"]["name"])) {
+                    if(!$this->upload->do_upload("cvfile")){
+                        $data['upload_errors'] = $this->upload->display_errors();
+                        $this->load->view('user/profile', $data);
+                        return;
+                    }
+                    $dataupload = $this->upload->data();
+                    if(!empty($dataupload) && $dataupload['file_name']) {
+                        $userdata[COL_CVFILENAME] = $dataupload['file_name'];
+                    }
+                }
+
+                if($user[COL_ROLEID] == ROLECOMPANY) {
+                    $reg = $this->db->where(COL_COMPANYID, $rdata[COL_COMPANYID])->update(TBL_COMPANIES, $companydata);
+                } else {
+                    $reg = $this->db->where(COL_USERNAME, $rdata[COL_USERNAME])->update(TBL_USERINFORMATION, $userdata);
+                }
+
                 if($reg) redirect(site_url('user/profile')."?success=1");
                 else redirect(site_url('user/profile')."?error=1");
             }
@@ -255,7 +299,7 @@ class User extends MY_Controller {
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()) {
                 $config['upload_path'] = MY_UPLOADPATH;
-                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
                 $config['max_size']	= 500;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;
@@ -358,7 +402,7 @@ class User extends MY_Controller {
             $this->form_validation->set_rules($rules);
             if($this->form_validation->run()){
                 $config['upload_path'] = MY_UPLOADPATH;
-                $config['allowed_types'] = "gif|jpg|jpeg|png";
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
                 $config['max_size']	= 500;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;
@@ -424,5 +468,21 @@ class User extends MY_Controller {
         else {
             $this->load->view('user/form', $data);
         }
+    }
+
+    function detail($uname) {
+        $username = GetDecryption($uname);
+
+        $data['data'] = $rdata = $this->muser->getdetails($username);
+        if(!$rdata) {
+            show_404();
+            return false;
+        }
+        $data['title'] = $rdata[COL_NAME];
+        $this->load->view('user/detail', $data);
+    }
+
+    function encrypt() {
+        echo GetEncryption("yoelrolas");
     }
 }

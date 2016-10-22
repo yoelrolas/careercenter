@@ -23,3 +23,5 @@ define('FRONTENDPATH', './assets/frontend');
 define('FRONTENDVIEWPATH', FRONTENDPATH.'/view');
 
 define("URL_SUFFIX", ".aspx");
+
+define("UPLOAD_ALLOWEDTYPES", "gif|jpg|jpeg|png|doc|docx|txt|pdf");

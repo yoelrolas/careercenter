@@ -10,6 +10,10 @@ class Vacancy extends MY_Controller {
             redirect('user/dashboard');
         }
         $user = GetLoggedUser();
+        if(!$user || ($user[COL_ROLEID] != ROLECOMPANY && $user[COL_ROLEID] != ROLEADMIN)) {
+            redirect('user/dashboard');
+        }
+
         $data['title'] = "Vacancies";
 
         $data['res'] = $this->mvacancy->getall($user[COL_COMPANYID], $user[COL_ROLEID]);
@@ -21,6 +25,9 @@ class Vacancy extends MY_Controller {
             redirect('user/dashboard');
         }
         $user = GetLoggedUser();
+        if(!$user || ($user[COL_ROLEID] != ROLECOMPANY && $user[COL_ROLEID] != ROLEADMIN)) {
+            redirect('user/dashboard');
+        }
         $data['title'] = "Vacancy";
         $data['edit'] = FALSE;
 
@@ -108,6 +115,10 @@ class Vacancy extends MY_Controller {
             redirect('user/dashboard');
         }
         $user = GetLoggedUser();
+        if(!$user || ($user[COL_ROLEID] != ROLECOMPANY && $user[COL_ROLEID] != ROLEADMIN)) {
+            redirect('user/dashboard');
+        }
+
         $data['title'] = "Vacancy";
         $data['edit'] = FALSE;
         $data['data'] = $rdata = $this->db->where(COL_VACANCYID, $id)->get(TBL_VACANCIES)->row_array();
@@ -154,7 +165,7 @@ class Vacancy extends MY_Controller {
                     COL_ISALLLOCATION => $this->input->post(COL_ISALLLOCATION) ? $this->input->post(COL_ISALLLOCATION) : false,
                     COL_UPDATEDBY => $user[COL_USERNAME],
                     COL_UPDATEDON => date('Y-m-d H:i:s'),
-                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : true) : true)
+                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false) : true)
                 );
 
                 if(empty($data[COL_ISALLLOCATION]) || !$data[COL_ISALLLOCATION]) {
@@ -202,7 +213,8 @@ class Vacancy extends MY_Controller {
                     }
                 }
 
-                if(!$this->db->insert(TBL_VACANCIES, $data)) {
+
+                if(!$this->db->where(COL_VACANCYID, $rdata[COL_VACANCYID])->update(TBL_VACANCIES, $data)) {
                     $this->db->trans_rollback();
                     redirect(site_url('vacancy/add').'?error=1');
                 }
@@ -220,6 +232,12 @@ class Vacancy extends MY_Controller {
     }
 
     function delete(){
+        $user = GetLoggedUser();
+        if(!$user || ($user[COL_ROLEID] != ROLECOMPANY && $user[COL_ROLEID] != ROLEADMIN)) {
+            ShowJsonError("Anda memiliki akses terhadap modul ini.");
+            return;
+        }
+
         $this->load->model('mvacancy');
         $data = $this->input->post('cekbox');
         $deleted = 0;
@@ -236,6 +254,12 @@ class Vacancy extends MY_Controller {
     }
 
     function activate($suspend=false){
+        $user = GetLoggedUser();
+        if(!$user || $user[COL_ROLEID] != ROLEADMIN) {
+            ShowJsonError("Anda memiliki akses terhadap modul ini.");
+            return;
+        }
+
         $data = $this->input->post('cekbox');
         $deleted = 0;
         foreach ($data as $datum) {
@@ -259,8 +283,9 @@ class Vacancy extends MY_Controller {
 
         $data['title'] = "Lowongan";
         $data['res'] = $res = $this->mvacancy->search(0, $keyword, $pos, $industry, $location);
-        //echo $this->db->last_query();
         $this->load->view('vacancy/all', $data);
+        //echo $this->db->last_query()."<br />";
+        //print_r($res);
     }
 
     function detail($id) {
@@ -278,5 +303,54 @@ class Vacancy extends MY_Controller {
         $this->db->update(TBL_VACANCIES);
 
         $this->load->view('vacancy/detail', $data);
+    }
+
+    function apply($id){
+        $user = GetLoggedUser();
+        if(!$user) {
+            ShowJsonError("Silahkan login terlebih dahulu.");
+            return;
+        }
+
+        $this->load->model("muser");
+        $ruser = $this->muser->getdetails($user[COL_USERNAME]);
+        if(!$ruser) {
+            ShowJsonError("Profil tidak ditemukan.");
+            return;
+        }
+        $encrypt = GetEncryption($ruser[COL_USERNAME]);
+
+        $this->load->model('mvacancy');
+        $rvacancy = $this->mvacancy->detail($id, false);
+        if(!$rvacancy) {
+            ShowJsonError("Lowongan tidak ditemukan.");
+            return;
+        }
+
+        if(IsNotificationActive(NOTIFICATION_LAMARANBARUPERUSAHAAN)) {
+            $this->load->library('email',GetEmailConfig());
+            $this->email->set_newline("\r\n");
+
+            $pref = GetNotification(NOTIFICATION_LAMARANBARUPERUSAHAAN);
+
+            $content = $pref[COL_NOTIFICATIONCONTENT];
+            $subject = $pref[COL_NOTIFICATIONSUBJECT];
+
+            $subject = str_replace(array("@NAME@"), array((!empty($ruser)?$ruser[COL_NAME]:"Unknown")), $subject);
+            $content = str_replace(array("@COMPANYNAME@", "@SITENAME@", "@VACANCYTITLE@", "@URL@", "@NAME@", "@EMAIL@", "@ADDRESS@", "@EDUCATIONTYPENAME@"),
+                array((!empty($rvacancy)?$rvacancy[COL_COMPANYNAME]:"Unknown"), SITENAME, $rvacancy[COL_VACANCYTITLE]
+                ,site_url('user/detail/'.$encrypt), ($ruser[COL_NAME]?$ruser[COL_NAME]:"Unknown")
+                ,($ruser[COL_EMAIL]?$ruser[COL_EMAIL]:"Unknown"),($ruser[COL_ADDRESS]?$ruser[COL_ADDRESS]:"Unknown"),($ruser[COL_EDUCATIONTYPENAME]?$ruser[COL_EDUCATIONTYPENAME]:"Unknown")),
+                $content);
+
+            $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+            $this->email->to($rvacancy[COL_VACANCYEMAIL]);
+            $this->email->cc($rvacancy[COL_COMPANYEMAIL]);
+            $this->email->subject($subject);
+            $this->email->message($content);
+            $this->email->send();
+        }
+
+        ShowJsonSuccess("Success");
     }
 }
