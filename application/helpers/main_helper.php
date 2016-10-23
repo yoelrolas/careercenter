@@ -199,3 +199,20 @@ function slugify($text) {
 
     return $text;
 }
+function random_color_part() {
+    return str_pad( dechex( mt_rand( 0, 255 ) ), 2, '0', STR_PAD_LEFT);
+}
+function random_color() {
+    return random_color_part() . random_color_part() . random_color_part();
+}
+function desimal($number,$digit=0){
+    return number_format($number,$digit,'.',',');
+}
+function rupiah($number,$digit=0){
+    return "Rp <span>".number_format($number,$digit,'.',',')."</span>";
+}
+function toNum($t){
+    $cariini = array(',');
+    $a = str_replace($cariini,"",$t);
+    return $a;
+}

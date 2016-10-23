@@ -83,6 +83,8 @@ class User extends MY_Controller {
         if(!IsLogin()) {
             redirect('user/login');
         }
+        $this->load->model('mvacancy');
+        $this->load->model('mpost');
         $this->load->view('user/dashboard');
     }
     function Profile() {

@@ -264,8 +264,10 @@ class Vacancy extends MY_Controller {
         $deleted = 0;
         foreach ($data as $datum) {
             $this->db->where(COL_VACANCYID, $datum)->update(TBL_VACANCIES, array(COL_ISSUSPEND=>$suspend));
-            $rvacancy = $this->db->where(COL_VACANCYID, $datum)->get(TBL_VACANCIES)->row_array();
-            $this->mvacancy->sendnotification($rvacancy);
+            if(!$suspend) {
+                $rvacancy = $this->db->where(COL_VACANCYID, $datum)->get(TBL_VACANCIES)->row_array();
+                $this->mvacancy->sendnotification($rvacancy);
+            }
             $deleted++;
         }
         if($deleted){
