@@ -301,6 +301,7 @@ class Company extends MY_Controller {
                 }
                 if(!$suspend) {
                     $this->db->where(COL_COMPANYID, $datum)->update(TBL_COMPANIES, array(COL_APPROVEDDATE=>date('Y-m-d H:i:s')));
+                    $this->db->where(COL_COMPANYID, $datum)->update(TBL_USERINFORMATION, array(COL_REGISTEREDDATE=>date('Y-m-d H:i:s')));
 
                     // Notifications
                     if(IsNotificationActive(NOTIFICATION_AKTIVASIAKUNPERUSAHAAN)) {

@@ -147,7 +147,7 @@
 
                                 <p>
                                     <?=$displayname?>
-                                    <small>Member since <?=date('M Y', strtotime(($ruser[COL_REGISTERDATE])))?></small>
+                                    <small>Member since <?=date('M Y', strtotime(($ruser[COL_REGISTEREDDATE])))?></small>
                                 </p>
                             </li>
                             <!-- Menu Footer-->

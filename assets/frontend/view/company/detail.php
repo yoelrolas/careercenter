@@ -13,7 +13,7 @@
             <div class="col-sm-4">
                 <div class="box box-default" style="border-top-color: transparent !important;">
                     <div class="box-body box-profile">
-                        <img class="profile-user-img img-responsive" src="<?=!empty($company) ? MY_UPLOADURL.$company[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg' ?>" alt="Logo">
+                        <img class="profile-user-img img-responsive" src="<?=!empty($company[COL_FILENAME]) ? MY_UPLOADURL.$company[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg' ?>" alt="Logo">
                         <p style="margin-top: 10px" class="text-muted text-center">Terdaftar sejak <?=date('d M Y', strtotime($company[COL_REGISTERDATE]))?></p>
 
                         <ul class="list-group list-group-unbordered">

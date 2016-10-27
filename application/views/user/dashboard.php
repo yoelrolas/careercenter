@@ -63,6 +63,9 @@ $ruser = GetLoggedUser();
 
             // vacancy-related query
             $vacancies = $this->mvacancy->getall($ruser[COL_COMPANYID], $ruser[COL_ROLEID]);
+            //print_r($vacancies);
+            //echo $this->db->last_query();
+            //return;
             $activevacancies = array();
             $VacancyWithAllLocation = array();
             $VacancyPositions = array();
@@ -101,19 +104,30 @@ $ruser = GetLoggedUser();
                     );
                 }
                 else {
-                    $VacancyPositionsByMonth[$vac[COL_POSITIONNAME]][$month] += 1;
+                    if(!array_key_exists($month, $VacancyPositionsByMonth[$vac[COL_POSITIONNAME]])) {
+                        $VacancyPositionsByMonth[$vac[COL_POSITIONNAME]] = array_merge(array($month=>1), $VacancyPositionsByMonth[$vac[COL_POSITIONNAME]]);
+                    } else {
+                        $VacancyPositionsByMonth[$vac[COL_POSITIONNAME]][$month] += 1;
+                    }
                 }
             }
             $ArrVacancyPositions = json_encode($VacancyPositions);
             //echo json_encode($VacancyPositionsByMonth);
             //return;
 
+            // re-arrange months ascending
+            $VacancyMonthsAsc = array();
+            for($i=count($VacancyMonths)-1; $i>=0; $i--) {
+                if(!empty($VacancyMonths[$i])) $VacancyMonthsAsc[] = $VacancyMonths[$i];
+            }
+
             $VacancyPositions2 = array();
             $VacancyPositionColors2 = array();
             foreach($VacancyPositionsByMonth as $vpm) {
                 // Prepare data
                 $data = array();
-                foreach($VacancyMonths as $vm) {
+                //foreach($VacancyMonths as $vm) {
+                foreach($VacancyMonthsAsc as $vm) {
                     if(!empty($vpm[$vm])) $data[] =  $vpm[$vm];
                     else $data[] = 0;
                 }
@@ -213,7 +227,7 @@ $ruser = GetLoggedUser();
             ?>
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="fa fa-users"></i></span>
+                    <a href="<?=site_url('user/index')?>" class="info-box-icon bg-aqua"><i class="fa fa-users"></i></a>
                     <div class="info-box-content">
                         <span class="info-box-text">Total User</span>
                         <span class="info-box-number"><?=count($users)?></span>
@@ -228,7 +242,7 @@ $ruser = GetLoggedUser();
             </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="fa fa-building"></i></span>
+                    <a href="<?=site_url('company/index')?>" class="info-box-icon bg-green"><i class="fa fa-building"></i></a>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Company</span>
                         <span class="info-box-number"><?=count($companies)?></span>
@@ -243,7 +257,7 @@ $ruser = GetLoggedUser();
             </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-orange"><i class="fa fa-bookmark-o"></i></span>
+                    <a href="<?=site_url('vacancy/index')?>" class="info-box-icon bg-orange"><i class="fa fa-bookmark-o"></i></a>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Vacancy</span>
                         <span class="info-box-number"><?=count($vacancies)?></span>
@@ -258,7 +272,7 @@ $ruser = GetLoggedUser();
             </div>
             <div class="col-md-3 col-sm-6 col-xs-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-red"><i class="fa fa-tags"></i></span>
+                    <a href="<?=site_url('post/index')?>" class="info-box-icon bg-red"><i class="fa fa-tags"></i></a>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Post</span>
                         <span class="info-box-number"><?=count($posts)?></span>
@@ -606,12 +620,19 @@ $ruser = GetLoggedUser();
             }
             $ArrLocations = json_encode($Locations);
 
+            // re-arrange months ascending
+            $VacancyMonthsAsc = array();
+            for($i=count($VacancyMonths)-1; $i>=0; $i--) {
+                if(!empty($VacancyMonths[$i])) $VacancyMonthsAsc[] = $VacancyMonths[$i];
+            }
+
             $VacancyPositions2 = array();
             $VacancyPositionColors2 = array();
             foreach($VacancyPositionsByMonth as $vpm) {
                 // Prepare data
                 $data = array();
-                foreach($VacancyMonths as $vm) {
+                //foreach($VacancyMonths as $vm) {
+                foreach($VacancyMonthsAsc as $vm) {
                     if(!empty($vpm[$vm])) $data[] =  $vpm[$vm];
                     else $data[] = 0;
                 }
@@ -907,7 +928,7 @@ $ruser = GetLoggedUser();
             //Boolean - If we should show the scale at all
             showScale: true,
             //Boolean - Whether grid lines are shown across the chart
-            scaleShowGridLines: false,
+            scaleShowGridLines: true,
             //String - Colour of the grid lines
             scaleGridLineColor: "rgba(0,0,0,.05)",
             //Number - Width of the grid lines
@@ -947,7 +968,7 @@ $ruser = GetLoggedUser();
             var PositionAreaChartCanvas = PositionArea.get(0).getContext("2d");
             var PositionAreaChart = new Chart(PositionAreaChartCanvas);
             var PositionAreaChartData = {
-                labels: <?=!empty($VacancyMonths)?json_encode($VacancyMonths):json_encode(array())?>,
+                labels: <?=!empty($VacancyMonthsAsc)?json_encode($VacancyMonthsAsc):json_encode(array())?>,
                 datasets: <?=!empty($ArrVacancyPositions2)?$ArrVacancyPositions2:json_encode(array())?>
             };
             console.log(PositionAreaChartData);

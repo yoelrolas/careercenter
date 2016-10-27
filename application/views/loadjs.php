@@ -224,7 +224,7 @@
         /*$(".alert").fadeTo(2000, 500).slideUp(500, function(){
             $(".alert").slideUp(500);
         });*/
-        $( ".alert" ).fadeOut(2500, function() {
+        $( ".alert" ).fadeOut(3000, function() {
             // Animation complete.
         });
         //iCheck for checkbox and radio inputs

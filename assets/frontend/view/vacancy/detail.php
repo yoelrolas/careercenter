@@ -13,7 +13,7 @@
             <div class="col-sm-4">
                 <div class="box box-default" style="border-top-color: transparent !important;">
                     <div class="box-body box-profile">
-                        <img class="profile-user-img img-responsive" src="<?=!empty($vacancy) ? MY_UPLOADURL.$vacancy[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg' ?>" alt="Logo">
+                        <img class="profile-user-img img-responsive" src="<?=!empty($vacancy[COL_FILENAME]) ? MY_UPLOADURL.$vacancy[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg' ?>" alt="Logo">
                         <div class="profile-caption" style="padding: 10px 0px;">
                             <h4 class="text-center"><?=$vacancy[COL_COMPANYNAME]?></h4>
                             <p style="margin-top: 10px" class="text-muted text-center">Terdaftar sejak <?=date('d M Y', strtotime($vacancy[COL_REGISTERDATE]))?></p>

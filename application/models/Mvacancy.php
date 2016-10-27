@@ -48,7 +48,7 @@ class Mvacancy extends CI_Model {
         $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
         $this->db->join(TBL_VACANCYTYPES,TBL_VACANCYTYPES.'.'.COL_VACANCYTYPEID." = ".TBL_VACANCIES.".".COL_VACANCYTYPEID,"inner");
         $this->db->join(TBL_POSITIONS,TBL_POSITIONS.'.'.COL_POSITIONID." = ".TBL_VACANCIES.".".COL_POSITIONID,"inner");
-        $this->db->order_by(TBL_VACANCIES.".".COL_CREATEDBY, 'desc');
+        $this->db->order_by(TBL_VACANCIES.".".COL_CREATEDON, 'desc');
         if($role != ROLEADMIN) {
             $this->db->where(TBL_COMPANIES.".".COL_COMPANYID, $id);
         }
