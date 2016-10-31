@@ -731,7 +731,10 @@ $ruser = GetLoggedUser();
                             <span class="progress-number"><b><?=count($activevacancies)?></b>/<?=count($vacancies)?></span>
 
                             <div class="progress sm">
-                                <div class="progress-bar progress-bar-green" style="width: <?=(count($activevacancies)/count($vacancies))*100?>%"></div>
+                                <?php
+                                $activeprogress = count($vacancies) > 0 ? (count($activevacancies)/count($vacancies)) : 0;
+                                ?>
+                                <div class="progress-bar progress-bar-green" style="width: <?=$activeprogress*100?>%"></div>
                             </div>
                         </div>
                         <div class="progress-group">
@@ -739,7 +742,10 @@ $ruser = GetLoggedUser();
                             <span class="progress-number"><b><?=count($suspendvacancies)?></b>/<?=count($vacancies)?></span>
 
                             <div class="progress sm">
-                                <div class="progress-bar progress-bar-red" style="width: <?=(count($suspendvacancies)/count($vacancies))*100?>%"></div>
+                                <?php
+                                $suspendprogress = count($vacancies) > 0 ? (count($suspendvacancies)/count($vacancies)) : 0;
+                                ?>
+                                <div class="progress-bar progress-bar-red" style="width: <?=$suspendprogress*100?>%"></div>
                             </div>
                         </div>
                         <div class="progress-group">
@@ -747,7 +753,10 @@ $ruser = GetLoggedUser();
                             <span class="progress-number"><b><?=count($expiredvacancies)?></b>/<?=count($vacancies)?></span>
 
                             <div class="progress sm">
-                                <div class="progress-bar progress-bar-yellow" style="width: <?=(count($expiredvacancies)/count($vacancies))*100?>%"></div>
+                                <?php
+                                $expiredprogress = count($vacancies) > 0 ? (count($expiredvacancies)/count($vacancies)) : 0;
+                                ?>
+                                <div class="progress-bar progress-bar-yellow" style="width: <?=$expiredprogress*100?>%"></div>
                             </div>
                         </div>
                     </div>

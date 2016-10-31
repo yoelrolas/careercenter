@@ -3,7 +3,7 @@ $i = 0;
 foreach ($res as $d) {
     $res[$i] = array(
         '<input type="checkbox" class="cekbox" name="cekbox[]" value="' . $d[COL_POSTID] . '" />',
-        $d[COL_ISSUSPEND] ? '<small class="label pull-left bg-red">Suspend</small>' : (strtotime($d[COL_POSTEXPIREDDATE]) > strtotime(date('Y-m-d')) ? '<small class="label pull-left bg-green">Active</small>' : '<small class="label pull-left bg-orange">Expired</small>'),
+        $d[COL_ISSUSPEND] ? '<small class="label pull-left bg-red">Suspend</small>' : (strtotime($d[COL_POSTEXPIREDDATE]) >= strtotime(date('Y-m-d')) ? '<small class="label pull-left bg-green">Active</small>' : '<small class="label pull-left bg-orange">Expired</small>'),
         anchor('post/edit/'.$d[COL_POSTID],$d[COL_POSTTITLE]),
         $d[COL_POSTCATEGORYNAME],
         '<a href="'.site_url('post/view/'.$d[COL_POSTSLUG]).'">'.site_url('post/view/'.$d[COL_POSTSLUG]).'</a>',

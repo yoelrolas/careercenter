@@ -101,25 +101,29 @@
 
             confirmDialog.on("hidden.bs.modal", function(){
                 $(".modal-body", confirmDialog).html("");
+                $(".btn-ok", confirmDialog).html("OK");
             });
             alertDialog.on("hidden.bs.modal", function(){
                 $(".modal-body", alertDialog).html("");
+                $(".btn-ok", alertDialog).html("OK");
             });
 
             $(".modal-body", confirmDialog).html("Profil anda akan dikirimkan ke perusahaan melalui email secara otomatis. Apakah anda yakin?");
             confirmDialog.modal("show");
-            $(".btn-ok", confirmDialog).click(function() {
+            $(".btn-ok", confirmDialog).unbind("click").click(function() {
                 $(this).html("Loading...");
                 $.post(url, {UserName: username}, function(res) {
                     confirmDialog.modal("hide");
-                    if(res.error){
+                    if(res.error!=0){
                         $(".modal-body", alertDialog).html(res.error);
                         alertDialog.modal("show");
+                        return false;
                     }else{
                         $(".modal-body", successDialog).html("Profil anda telah dikirim ke perusahaan.");
                         successDialog.modal("show");
+                        return false;
                     }
-                });
+                },"json");
             });
             return false;
         });

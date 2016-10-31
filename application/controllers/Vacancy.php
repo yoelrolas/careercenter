@@ -314,6 +314,15 @@ class Vacancy extends MY_Controller {
             return;
         }
 
+        // Check previous apply
+        $this->db->where(COL_USERNAME, $user[COL_USERNAME]);
+        $this->db->where(COL_VACANCYID, $id);
+        $prev = $this->db->get(TBL_VACANCYAPPLIES)->row_array();
+        if($prev) {
+            ShowJsonError("Anda sudah pernah melamar pada lowongan ini.");
+            return;
+        }
+
         $this->load->model("muser");
         $ruser = $this->muser->getdetails($user[COL_USERNAME]);
         if(!$ruser) {
@@ -328,6 +337,9 @@ class Vacancy extends MY_Controller {
             ShowJsonError("Lowongan tidak ditemukan.");
             return;
         }
+
+        // Insert into vacancyapplies
+        $this->db->insert(TBL_VACANCYAPPLIES, array(COL_VACANCYID=>$id, COL_USERNAME=>$user[COL_USERNAME], COL_APPLYDATE=>date("Y-m-d H:i:s")));
 
         if(IsNotificationActive(NOTIFICATION_LAMARANBARUPERUSAHAAN)) {
             $this->load->library('email',GetEmailConfig());
