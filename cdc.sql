@@ -1,6 +1,6 @@
 /*
-SQLyog Community v11.24 (32 bit)
-MySQL - 5.5.27 : Database - cdc
+SQLyog Community v11.51 (32 bit)
+MySQL - 5.6.25 : Database - cdc
 *********************************************************************
 */
 
@@ -34,11 +34,11 @@ CREATE TABLE `companies` (
   `ApprovedDate` datetime DEFAULT NULL,
   `FileName` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`CompanyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Data for the table `companies` */
 
-insert  into `companies`(`CompanyID`,`CompanyName`,`CompanyAddress`,`CompanyTelp`,`CompanyFax`,`CompanyWebsite`,`CompanyEmail`,`IndustryTypeID`,`CompanyDescription`,`RegisterDate`,`ApprovedDate`,`FileName`) values (1,'Institut Teknologi Del','Sitoluama, Laguboti','123456','123456','http://www.del.ac.id','info@del.ac.id',1,NULL,'2016-10-23 19:45:07','2016-10-23 19:45:07',''),(2,'Tao Toba Technologies','Medan','123456','123456','http://www.taotobatech.co.id','info@taotobatech.co.id',1,NULL,'2016-10-23 19:46:33','2016-10-23 19:46:33',''),(3,'Bintika Bangun Nusa','Medan','123456','123456','http://www.bbn.co.id','info@bbn.co.id',2,NULL,'2016-10-23 19:47:38','2016-10-23 19:55:29',''),(4,'BANK INDONESIA','Jakarta','123456','123456','http://www.bankindonesia.co.id','info@bankindonesia.co.id',2,NULL,'2016-10-23 19:48:29','2016-10-23 19:55:29',''),(5,'PERTAMINA','Jakarta','123456','123456','http://www.pertamina.co.id','info@pertamina.co.id',3,NULL,'2016-10-23 19:49:22','2016-10-23 19:49:22',''),(6,'DJARUM','Kudus','123456','123456','http://djarum.com','info@djarumindonesia.co.id',3,NULL,'2016-10-23 19:50:29','2016-10-23 19:50:29',''),(7,'Coffindo','Medan','123456','123456','http://www.coffindo.co.id','info@coffindo.co.id',1,NULL,'2016-10-23 19:52:21','2016-10-23 19:52:21','');
+insert  into `companies`(`CompanyID`,`CompanyName`,`CompanyAddress`,`CompanyTelp`,`CompanyFax`,`CompanyWebsite`,`CompanyEmail`,`IndustryTypeID`,`CompanyDescription`,`RegisterDate`,`ApprovedDate`,`FileName`) values (1,'Institut Teknologi Del','Sitoluama, Laguboti','123456','123456','http://www.del.ac.id','info@del.ac.id',1,NULL,'2016-10-23 19:45:07','2016-10-23 19:45:07',''),(2,'Tao Toba Technologies','Medan','123456','123456','http://www.taotobatech.co.id','info@taotobatech.co.id',1,NULL,'2016-10-23 19:46:33','2016-10-23 19:46:33',''),(3,'Bintika Bangun Nusa','Medan','123456','123456','http://www.bbn.co.id','info@bbn.co.id',2,NULL,'2016-10-23 19:47:38','2016-10-23 19:55:29',''),(4,'BANK INDONESIA','Jakarta','123456','123456','http://www.bankindonesia.co.id','info@bankindonesia.co.id',2,NULL,'2016-10-23 19:48:29','2016-10-23 19:55:29',''),(5,'PERTAMINA','Jakarta','123456','123456','http://www.pertamina.co.id','info@pertamina.co.id',3,NULL,'2016-10-23 19:49:22','2016-10-23 19:49:22',''),(6,'DJARUM','Kudus','123456','123456','http://djarum.com','info@djarumindonesia.co.id',3,NULL,'2016-10-23 19:50:29','2016-10-23 19:50:29',''),(7,'Coffindo','Medan','123456','123456','http://www.coffindo.co.id','info@coffindo.co.id',1,NULL,'2016-10-23 19:52:21','2016-10-23 19:52:21',''),(8,'MANIK Inc.','MEDAN','123456','123456','http://horas.sumuttekno.com','rirismanik17@gmail.com',3,NULL,'2016-10-28 20:53:30','2016-10-28 20:53:30','');
 
 /*Table structure for table `educationtypes` */
 
@@ -120,7 +120,7 @@ CREATE TABLE `notifications` (
 
 /*Data for the table `notifications` */
 
-insert  into `notifications`(`NotificationID`,`NotificationName`,`NotificationSubject`,`NotificationContent`,`NotificationSenderEmail`,`NotificationSenderName`,`NotificationToEmail`,`NotificationCCEmail`,`NotificationBCCEmail`,`IsActive`) values (1,'Perusahaan Baru','Pendaftaran Perusahaan Baru','<p>Dear admin,<br />\r\n<br />\r\nPendaftaran perusahaan baru dengan rincian sebagai berikut:<br />\r\n<br />\r\nUsername : @USERNAME@<br />\r\nEmail : @EMAIL@<br />\r\nNama Perusahaan : @COMPANYNAME@<br />\r\n<br />\r\nSilahkan mengunjungi @URL@ untuk melihat data dan konfirmasi akun.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,0),(2,'Konfirmasi Aktivasi Akun Perusahaan','Akun Perusahaan Telah Diaktivasi','<p>Dear @COMPANYNAME@,<br />\r\n<br />\r\nSelamat bergabung di @SITENAME@!<br />\r\nAkun anda telah diaktivasi oleh administrator dengan rincian sebagai berikut:<br />\r\n<br />\r\nUsername : @USERNAME@<br />\r\nEmail : @EMAIL@<br />\r\nNama Perusahaan : @COMPANYNAME@<br />\r\n<br />\r\nAnda dapat login melalui link berikut: @URL@. Harap menjaga kerahasiaan akun anda dan menggunakannya sebaik mungkin.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,0),(3,'Lowongan Baru Untuk Admin','Lowongan Baru dari @COMPANYNAME@','<p>Dear admin,<br />\r\n<br />\r\n@COMPANYNAME@ telah menambahkan lowongan baru pada @SITENAME@ dengan rincian sebagai berikut:<br />\r\n<br />\r\nJudul Lowongan : @VACANCYTITLE@<br />\r\nTipe : @VACANCYTYPE@<br />\r\nPosisi : @VACANCYPOSITION@<br />\r\n<br />\r\nStatus lowongan saat ini adalah @STATUS@, silahkan kunjungi @URL@ untuk melihat detil lowongan diatas.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,0),(4,'Lowongan Baru Untuk User','Lowongan Baru dari @COMPANYNAME@','<p>Dear @NAME@,<br />\r\n<br />\r\n@COMPANYNAME@ telah menambahkan lowongan baru pada @SITENAME@ dengan rincian sebagai berikut:<br />\r\n<br />\r\nJudul Lowongan : @VACANCYTITLE@<br />\r\nTipe : @VACANCYTYPE@<br />\r\nPosisi : @VACANCYPOSITION@<br />\r\n<br />\r\nSilahkan kunjungi @URL@ untuk melihat detil lowongan diatas.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,0),(5,'Lamaran Baru Untuk Perusahaan','Lamaran Baru dari @NAME@','<p>Dear @COMPANYNAME@,<br />\r\n<br />\r\n@NAME@ telah melihat lowongan anda (@VACANCYTITLE@) pada @SITENAME@ dan tertarik untuk\r\nmelamar pada lowongan dengan rincian: <br />\r\n<br />\r\nNama : @NAME@<br />\r\nEmail : @EMAIL@<br />\r\nAlamat : @ADDRESS@<br />\r\nPendidikan : @EDUCATIONTYPENAME@<br />\r\n<br />\r\nSilahkan kunjungi @URL@ untuk melihat detil pelamar diatas.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,0),(6,'Lamaran Baru Untuk User','Lamaran Anda Telah Dikirim','TEST','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,0);
+insert  into `notifications`(`NotificationID`,`NotificationName`,`NotificationSubject`,`NotificationContent`,`NotificationSenderEmail`,`NotificationSenderName`,`NotificationToEmail`,`NotificationCCEmail`,`NotificationBCCEmail`,`IsActive`) values (1,'Perusahaan Baru','Pendaftaran Perusahaan Baru','<p>Dear admin,<br />\r\n<br />\r\nPendaftaran perusahaan baru dengan rincian sebagai berikut:<br />\r\n<br />\r\nUsername : @USERNAME@<br />\r\nEmail : @EMAIL@<br />\r\nNama Perusahaan : @COMPANYNAME@<br />\r\n<br />\r\nSilahkan mengunjungi @URL@ untuk melihat data dan konfirmasi akun.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,1),(2,'Konfirmasi Aktivasi Akun Perusahaan','Akun Perusahaan Telah Diaktivasi','<p>Dear @COMPANYNAME@,<br />\r\n<br />\r\nSelamat bergabung di @SITENAME@!<br />\r\nAkun anda telah diaktivasi oleh administrator dengan rincian sebagai berikut:<br />\r\n<br />\r\nUsername : @USERNAME@<br />\r\nEmail : @EMAIL@<br />\r\nNama Perusahaan : @COMPANYNAME@<br />\r\n<br />\r\nAnda dapat login melalui link berikut: @URL@. Harap menjaga kerahasiaan akun anda dan menggunakannya sebaik mungkin.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,1),(3,'Lowongan Baru Untuk Admin','Lowongan Baru dari @COMPANYNAME@','<p>Dear admin,<br />\r\n<br />\r\n@COMPANYNAME@ telah menambahkan lowongan baru pada @SITENAME@ dengan rincian sebagai berikut:<br />\r\n<br />\r\nJudul Lowongan : @VACANCYTITLE@<br />\r\nTipe : @VACANCYTYPE@<br />\r\nPosisi : @VACANCYPOSITION@<br />\r\n<br />\r\nStatus lowongan saat ini adalah @STATUS@, silahkan kunjungi @URL@ untuk melihat detil lowongan diatas.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,1),(4,'Lowongan Baru Untuk User','Lowongan Baru dari @COMPANYNAME@','<p>Dear @NAME@,<br />\r\n<br />\r\n@COMPANYNAME@ telah menambahkan lowongan baru pada @SITENAME@ dengan rincian sebagai berikut:<br />\r\n<br />\r\nJudul Lowongan : @VACANCYTITLE@<br />\r\nTipe : @VACANCYTYPE@<br />\r\nPosisi : @VACANCYPOSITION@<br />\r\n<br />\r\nSilahkan kunjungi @URL@ untuk melihat detil lowongan diatas.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,1),(5,'Lamaran Baru Untuk Perusahaan','Lamaran Baru dari @NAME@','<p>Dear @COMPANYNAME@,<br />\r\n<br />\r\n@NAME@ telah melihat lowongan anda (@VACANCYTITLE@) pada @SITENAME@ dan tertarik untuk\r\nmelamar pada lowongan dengan rincian: <br />\r\n<br />\r\nNama : @NAME@<br />\r\nEmail : @EMAIL@<br />\r\nAlamat : @ADDRESS@<br />\r\nPendidikan : @EDUCATIONTYPENAME@<br />\r\n<br />\r\nSilahkan kunjungi @URL@ untuk melihat detil pelamar diatas.</p>\r\n\r\n<p><br />\r\n@SITENAME@</p>\r\n','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,1),(6,'Lamaran Baru Untuk User','Lamaran Anda Telah Dikirim','TEST','noreply@sumuttekno.com','Del Career Center',NULL,NULL,NULL,1);
 
 /*Table structure for table `positions` */
 
@@ -221,6 +221,20 @@ CREATE TABLE `settings` (
 
 insert  into `settings`(`SettingID`,`SettingLabel`,`SettingName`,`SettingValue`) values (1,'Webmail','Webmail','yoelrolas@gmail.com'),(2,'Email Pengirim','EmailSender','noreply@sumuttekno.com'),(3,'Nama Email Pengirim','EmailSenderName','Sumut Tekno'),(4,'Protokol Email','EmailProtocol','smtp'),(5,'SMTP Host','SMTPHost','ssl://smtp.googlemail.com'),(6,'SMTP Port','SMTPPort','465'),(7,'SMTP Password','SMTPPassword','kairos120895'),(8,'SMTP Email','SMTPEmail','yoelrolas@gmail.com');
 
+/*Table structure for table `status` */
+
+DROP TABLE IF EXISTS `status`;
+
+CREATE TABLE `status` (
+  `StatusID` int(10) NOT NULL,
+  `StatusName` varchar(50) NOT NULL,
+  PRIMARY KEY (`StatusID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `status` */
+
+insert  into `status`(`StatusID`,`StatusName`) values (1,'Diproses'),(2,'Diterima'),(3,'Ditolak');
+
 /*Table structure for table `userinformation` */
 
 DROP TABLE IF EXISTS `userinformation`;
@@ -254,7 +268,7 @@ CREATE TABLE `userinformation` (
 
 /*Data for the table `userinformation` */
 
-insert  into `userinformation`(`UserName`,`Email`,`CompanyID`,`Name`,`IdentityNo`,`BirthDate`,`ReligionID`,`Gender`,`Address`,`PhoneNumber`,`EducationID`,`UniversityName`,`FacultyName`,`MajorName`,`IsGraduated`,`GraduatedDate`,`YearOfExperience`,`RecentPosition`,`RecentSalary`,`ExpectedSalary`,`CVFilename`,`ImageFilename`,`RegisteredDate`) values ('admin','webmaster@cdc.del.ac.id',NULL,'Administrator',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),('adminbank','info@bankindonesia.co.id',4,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('adminbbn','info@bbn.co.id',3,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('admincoffindo','info@coffindo.co.id',7,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admindel','info@del.ac.id',1,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('admindjarum','info@djarumindonesia.co.id',6,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('adminpertamina','info@pertamina.co.id',5,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('operator','operator@dcc.sumutekno.com',NULL,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-16'),('taotobatech','info@taotobatech.co.id',2,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('yoelrolas','yoelrolas@gmail.com',NULL,'Yoel Rolas Simanjuntak','123456','1995-08-12',1,1,'Jln. Karya Gang Adil No.16 Kel. Sei Agul, Medan','089669100393',6,'Institut Teknologi Del','Teknik Elektro dan Informatika','Teknik Komputer',1,'2015-09-05',1,'Web Programmer',4000000,NULL,NULL,NULL,'2016-10-24');
+insert  into `userinformation`(`UserName`,`Email`,`CompanyID`,`Name`,`IdentityNo`,`BirthDate`,`ReligionID`,`Gender`,`Address`,`PhoneNumber`,`EducationID`,`UniversityName`,`FacultyName`,`MajorName`,`IsGraduated`,`GraduatedDate`,`YearOfExperience`,`RecentPosition`,`RecentSalary`,`ExpectedSalary`,`CVFilename`,`ImageFilename`,`RegisteredDate`) values ('admin','webmaster@cdc.del.ac.id',NULL,'Administrator',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),('adminbank','info@bankindonesia.co.id',4,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('adminbbn','info@bbn.co.id',3,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('admincoffindo','info@coffindo.co.id',7,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),('admindel','info@del.ac.id',1,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('admindjarum','info@djarumindonesia.co.id',6,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('adminpertamina','info@pertamina.co.id',5,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('operator','operator@dcc.sumutekno.com',NULL,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-16'),('rirismanik','rirismanik17@gmail.com',8,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-28'),('taotobatech','info@taotobatech.co.id',2,'','','1970-01-01',0,1,'','',0,'','','',0,NULL,0,'',0,NULL,NULL,NULL,'2016-10-23'),('yoelrolas','yoelrolas@gmail.com',NULL,'Yoel Rolas Simanjuntak','123456','1995-08-12',1,1,'Jln. Karya Gang Adil No.16 Kel. Sei Agul, Medan','089669100393',6,'Institut Teknologi Del','Teknik Elektro dan Informatika','Teknik Komputer',1,'2015-09-05',1,'Web Programmer',4000000,NULL,NULL,NULL,'2016-10-24');
 
 /*Table structure for table `users` */
 
@@ -272,7 +286,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`UserName`,`Password`,`RoleID`,`IsSuspend`,`LastLogin`,`LastLoginIP`) values ('admin','21232f297a57a5a743894a0e4a801fc3',1,0,'2016-10-24 20:43:35','::1'),('adminbank','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('adminbbn','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('admincoffindo','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('admindel','e10adc3949ba59abbe56e057f20f883e',2,0,'2016-10-24 19:58:02','::1'),('admindjarum','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('adminpertamina','e10adc3949ba59abbe56e057f20f883e',2,0,'2016-10-24 20:36:27','::1'),('operator','bbfb3b97637d3caa18d4f73c6bf1b3b6',1,0,NULL,NULL),('taotobatech','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('yoelrolas','e10adc3949ba59abbe56e057f20f883e',3,0,NULL,NULL);
+insert  into `users`(`UserName`,`Password`,`RoleID`,`IsSuspend`,`LastLogin`,`LastLoginIP`) values ('admin','21232f297a57a5a743894a0e4a801fc3',1,0,'2016-10-28 21:52:40','::1'),('adminbank','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('adminbbn','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('admincoffindo','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('admindel','e10adc3949ba59abbe56e057f20f883e',2,0,'2016-10-31 15:45:37','::1'),('admindjarum','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('adminpertamina','e10adc3949ba59abbe56e057f20f883e',2,0,'2016-10-24 20:36:27','::1'),('operator','bbfb3b97637d3caa18d4f73c6bf1b3b6',1,0,NULL,NULL),('rirismanik','e10adc3949ba59abbe56e057f20f883e',2,1,'2016-10-28 20:54:03','::1'),('taotobatech','e10adc3949ba59abbe56e057f20f883e',2,0,NULL,NULL),('yoelrolas','e10adc3949ba59abbe56e057f20f883e',3,0,'2016-10-28 22:04:28','::1');
 
 /*Table structure for table `vacancies` */
 
@@ -296,12 +310,26 @@ CREATE TABLE `vacancies` (
   `UpdatedBy` varchar(50) NOT NULL,
   `UpdatedOn` datetime NOT NULL,
   `IsSuspend` tinyint(1) NOT NULL DEFAULT '1',
+  `AttachmentFileName` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`VacancyID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 /*Data for the table `vacancies` */
 
-insert  into `vacancies`(`VacancyID`,`CompanyID`,`VacancyTypeID`,`PositionID`,`VacancyTitle`,`EndDate`,`VacancyEmail`,`VacancyDesc`,`VacancyResponsibility`,`VacancyRequirement`,`IsAllLocation`,`TotalView`,`CreatedBy`,`CreatedOn`,`UpdatedBy`,`UpdatedOn`,`IsSuspend`) values (1,1,1,2,'Full Stack Web Developer','2016-10-31','info@del.ac.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 19:57:28',0),(2,5,4,7,'Human Resource Manager','2016-11-05','info@pertamina.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 19:58:24',0),(3,3,4,4,'Accounting Manager','2016-11-05','info@bbn.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,3,'admin','2016-10-23 19:57:28','admin','2016-10-23 20:01:51',0),(4,2,4,2,'Programmer','2016-11-03','info@taotobatech.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 20:02:50',0),(5,4,4,3,'Branch Manager','2016-11-05','info@bankindonesia.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 20:03:37',0),(6,5,4,2,'Programmer','2016-11-05','info@pertamina.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,0,'admin','2016-10-23 20:05:09','admin','2016-10-23 20:05:09',0),(7,5,4,6,'Medical Clinic Assistant','2016-10-31','info@pertamina.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,0,'admin','2016-10-23 20:06:03','admin','2016-10-23 20:06:03',0);
+insert  into `vacancies`(`VacancyID`,`CompanyID`,`VacancyTypeID`,`PositionID`,`VacancyTitle`,`EndDate`,`VacancyEmail`,`VacancyDesc`,`VacancyResponsibility`,`VacancyRequirement`,`IsAllLocation`,`TotalView`,`CreatedBy`,`CreatedOn`,`UpdatedBy`,`UpdatedOn`,`IsSuspend`,`AttachmentFileName`) values (1,1,1,2,'Full Stack Web Developer','2016-10-31','info@del.ac.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,3,'admin','2016-10-23 19:57:28','admindel','2016-10-31 16:14:12',0,'DCC_Vacancies2.pdf'),(2,5,4,7,'Human Resource Manager','2016-11-05','info@pertamina.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 19:58:24',0,NULL),(3,3,4,4,'Accounting Manager','2016-11-05','info@bbn.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,6,'admin','2016-10-23 19:57:28','admin','2016-10-23 20:01:51',0,NULL),(4,2,4,2,'Programmer','2016-11-03','info@taotobatech.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 20:02:50',0,NULL),(5,4,4,3,'Branch Manager','2016-11-05','info@bankindonesia.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,0,'admin','2016-10-23 19:57:28','admin','2016-10-23 20:03:37',0,NULL),(6,5,4,2,'Programmer','2016-11-05','info@pertamina.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',0,2,'admin','2016-10-23 20:05:09','admin','2016-10-23 20:05:09',0,NULL),(7,5,4,6,'Medical Clinic Assistant','2016-10-31','info@pertamina.co.id','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,3,'admin','2016-10-23 20:06:03','admin','2016-10-23 20:06:03',0,NULL),(8,8,4,2,'Programmer','2016-11-05','rirismanik17@gmail.com','<p>TEST</p>\r\n','<p>TEST</p>\r\n','<p>TEST</p>\r\n',1,16,'rirismanik','2016-10-28 21:25:43','rirismanik','2016-10-28 21:25:43',0,NULL);
+
+/*Table structure for table `vacancyapplies` */
+
+DROP TABLE IF EXISTS `vacancyapplies`;
+
+CREATE TABLE `vacancyapplies` (
+  `VacancyID` int(10) NOT NULL,
+  `UserName` varchar(50) NOT NULL,
+  `ApplyDate` date NOT NULL,
+  `StatusID` int(10) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `vacancyapplies` */
 
 /*Table structure for table `vacancyeducations` */
 
@@ -315,7 +343,7 @@ CREATE TABLE `vacancyeducations` (
 
 /*Data for the table `vacancyeducations` */
 
-insert  into `vacancyeducations`(`VacancyID`,`EducationTypeID`) values (1,6),(1,7),(1,8),(2,8),(3,8),(3,9),(4,6),(4,7),(4,8),(5,9),(5,10),(6,8),(7,8);
+insert  into `vacancyeducations`(`VacancyID`,`EducationTypeID`) values (1,6),(1,7),(1,8),(2,8),(3,8),(3,9),(4,6),(4,7),(4,8),(5,9),(5,10),(6,8),(7,8),(8,6);
 
 /*Table structure for table `vacancylocations` */
 

@@ -39,6 +39,23 @@ class Vacancy extends MY_Controller {
                 $id = GetLastID(TBL_VACANCIES, COL_VACANCYID) + 1;
                 $locations = array();
                 $educations = array();
+
+                $config['upload_path'] = MY_UPLOADPATH;
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
+                $config['max_size']	= 10240;
+                $config['overwrite'] = FALSE;
+
+                $this->load->library('upload',$config);
+                if(!empty($_FILES["userfile"]["name"])) {
+                    if(!$this->upload->do_upload()){
+                        $data['upload_errors'] = $this->upload->display_errors();
+                        $this->load->view('vacancy/form', $data);
+                        return;
+                    }
+                }
+
+                $dataupload = $this->upload->data();
+
                 $data = array(
                     COL_VACANCYID => $id,
                     COL_COMPANYID => $this->input->post(COL_COMPANYID),
@@ -55,7 +72,8 @@ class Vacancy extends MY_Controller {
                     COL_CREATEDON => date('Y-m-d H:i:s'),
                     COL_UPDATEDBY => $user[COL_USERNAME],
                     COL_UPDATEDON => date('Y-m-d H:i:s'),
-                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false) : true)
+                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false) : true),
+                    COL_ATTACHMENTFILENAME => $dataupload['file_name']
                 );
 
                 if(empty($data[COL_ISALLLOCATION]) || !$data[COL_ISALLLOCATION]) {
@@ -120,7 +138,7 @@ class Vacancy extends MY_Controller {
         }
 
         $data['title'] = "Vacancy";
-        $data['edit'] = FALSE;
+        $data['edit'] = TRUE;
         $data['data'] = $rdata = $this->db->where(COL_VACANCYID, $id)->get(TBL_VACANCIES)->row_array();
         if(!$rdata) {
             show_404();
@@ -152,6 +170,23 @@ class Vacancy extends MY_Controller {
             if($this->form_validation->run()){
                 $locations = array();
                 $educations = array();
+
+                $config['upload_path'] = MY_UPLOADPATH;
+                $config['allowed_types'] = UPLOAD_ALLOWEDTYPES;
+                $config['max_size']	= 10240;
+                $config['overwrite'] = FALSE;
+
+                $this->load->library('upload',$config);
+                if(!empty($_FILES["userfile"]["name"])) {
+                    if(!$this->upload->do_upload()){
+                        $data['upload_errors'] = $this->upload->display_errors();
+                        $this->load->view('vacancy/form', $data);
+                        return;
+                    }
+                }
+
+                $dataupload = $this->upload->data();
+
                 $data = array(
                     COL_COMPANYID => $this->input->post(COL_COMPANYID),
                     COL_VACANCYTYPEID => $this->input->post(COL_VACANCYTYPEID),
@@ -165,8 +200,15 @@ class Vacancy extends MY_Controller {
                     COL_ISALLLOCATION => $this->input->post(COL_ISALLLOCATION) ? $this->input->post(COL_ISALLLOCATION) : false,
                     COL_UPDATEDBY => $user[COL_USERNAME],
                     COL_UPDATEDON => date('Y-m-d H:i:s'),
-                    COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false) : true)
+                    //COL_ISSUSPEND => ($user[COL_ROLEID] == ROLEADMIN ? ($this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false) : true)
                 );
+                if($user[COL_ROLEID] == ROLEADMIN) {
+                    $data[COL_ISSUSPEND] = $this->input->post(COL_ISSUSPEND) ? $this->input->post(COL_ISSUSPEND) : false;
+                }
+
+                if(!empty($dataupload) && $dataupload['file_name']) {
+                    $data[COL_ATTACHMENTFILENAME] = $dataupload['file_name'];
+                }
 
                 if(empty($data[COL_ISALLLOCATION]) || !$data[COL_ISALLLOCATION]) {
                     $locs = $this->input->post(COL_LOCATIONID);

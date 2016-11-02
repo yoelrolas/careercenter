@@ -82,6 +82,20 @@
                         <div class="well">
                             <?=$vacancy[COL_VACANCYRESPONSIBILITY]?>
                         </div>
+
+                        <h4 style="margin-bottom: 10px;">Lampiran</h4>
+                        <?php
+                        if(!empty($vacancy[COL_ATTACHMENTFILENAME])) {
+                            ?>
+                            <a href="<?=MY_UPLOADURL.$vacancy[COL_ATTACHMENTFILENAME]?>" ><?=$vacancy[COL_ATTACHMENTFILENAME]?></a>
+                            <?php
+                        } else {
+                            ?>
+                            <span>-</span>
+                        <?php
+                            //print_r($vacancy);
+                        }
+                        ?>
                     </div>
                 </div>
             </div>

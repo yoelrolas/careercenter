@@ -4,7 +4,7 @@ foreach ($res as $d) {
     $res[$i] = array(
         '<input type="checkbox" class="cekbox" name="cekbox[]" value="' . $d[COL_VACANCYID] . '" />',
         //$d[COL_ISSUSPEND] ? '<small class="label pull-left bg-red">Suspend</small>' : '<small class="label pull-left bg-green">Active</small>',
-        $d[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($d[COL_ENDDATE]) > strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>'),
+        $d[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($d[COL_ENDDATE]) >= strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>'),
         anchor('vacancy/edit/'.$d[COL_VACANCYID],$d[COL_VACANCYTITLE]),
         $d[COL_COMPANYNAME],
         $d[COL_POSITIONNAME],

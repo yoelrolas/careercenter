@@ -36,7 +36,7 @@
                             </div>
                         <?php } ?>
 
-                        <?=form_open(current_url(),array('role'=>'form','id'=>'vacancy'))?>
+                        <?=form_open_multipart(current_url(),array('role'=>'form','id'=>'vacancy'))?>
                         <div class="col-sm-6">
                             <div class="form-group col-sm-10">
                                 <div class="input-group">
@@ -130,6 +130,17 @@
                             <div class="form-group">
                                 <label>Requirements</label>
                                 <textarea id="req_editor" class="form-control" rows="4" placeholder="Vacancy Requirements" name="<?=COL_VACANCYREQUIREMENT?>"><?=!empty($data[COL_VACANCYREQUIREMENT]) ? $data[COL_VACANCYREQUIREMENT] : ''?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="label-control">Lampiran (Optional - Max size: 10MB)</label>
+                                <?php
+                                if(!empty($data[COL_ATTACHMENTFILENAME])) {
+                                    ?>
+                                    <a href="<?=MY_UPLOADURL.$data[COL_ATTACHMENTFILENAME]?>" ><?=$data[COL_ATTACHMENTFILENAME]?></a>
+                                    <?php
+                                }
+                                ?>
+                                <input type="file" name="userfile" accept="application/msword, text/plain, application/pdf" />
                             </div>
                         </div>
                         <div class="clearfix"></div>
