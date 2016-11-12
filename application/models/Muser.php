@@ -174,6 +174,12 @@ class Muser extends CI_Model {
                 }
             }
 
+            // Delete Vacancy Applies
+            if(!$this->db->delete(TBL_VACANCYAPPLIES, array(COL_USERNAME => $datum))) {
+                $this->db->trans_rollback();
+                return false;
+            }
+
             if(!$this->db->delete(TBL_USERINFORMATION, array(COL_USERNAME => $datum))) {
                 $this->db->trans_rollback();
                 return false;
