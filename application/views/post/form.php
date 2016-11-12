@@ -16,25 +16,34 @@
                 <div class="box box-primary" style="border-top-color: transparent">
                     <div class="box-body">
                         <?php if(validation_errors()){ ?>
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger alert-dismissible">
                                 <i class="fa fa-ban"></i>
                                 <?= validation_errors() ?>
                             </div>
                         <?php } ?>
 
                         <?php  if($this->input->get('success')){ ?>
-                            <div class="form-group alert alert-success">
+                            <div class="form-group alert alert-success alert-dismissible">
                                 <i class="fa fa-check"></i>
                                 Update post berhasil.
                             </div>
                         <?php } ?>
 
                         <?php  if($this->input->get('error')){ ?>
-                            <div class="form-group alert alert-danger">
+                            <div class="form-group alert alert-danger alert-dismissible">
                                 <i class="fa fa-ban"></i>
                                 Gagal mengupdate post, silahkan coba kembali
                             </div>
-                        <?php } ?>
+                        <?php }
+                        if(!empty($upload_errors)) {
+                            ?>
+                            <div class="alert alert-danger alert-dismissible">
+                                <i class="fa fa-ban"></i>
+                                <?=$upload_errors?>
+                            </div>
+                            <?php
+                        }
+                        ?>
 
                         <?=form_open_multipart(current_url(),array('role'=>'form','id'=>'post'))?>
                         <div class="col-sm-12">
@@ -81,7 +90,7 @@
                                 <?php if(!empty($data[COL_FILENAME])) { ?>
                                     <img src="<?=MY_UPLOADURL.$data[COL_FILENAME]?>" alt="Logo" height="80" /><br />
                                 <?php } ?>
-                                <label class="label-control">Logo (Optional - Max size: 1000KB)</label>
+                                <label class="label-control">Image (Optional - Max size: 50MB)</label>
                                 <input type="file" name="userfile" accept="image/*" />
                             </div>
                         </div>

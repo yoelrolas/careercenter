@@ -34,7 +34,7 @@ class Post extends MY_Controller {
 
                 $config['upload_path'] = MY_UPLOADPATH;
                 $config['allowed_types'] = "gif|jpg|jpeg|png";
-                $config['max_size']	= 1000;
+                $config['max_size']	= 512000;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;
                 $config['overwrite'] = FALSE;
@@ -102,7 +102,7 @@ class Post extends MY_Controller {
             if($this->form_validation->run()){
                 $config['upload_path'] = MY_UPLOADPATH;
                 $config['allowed_types'] = "gif|jpg|jpeg|png";
-                $config['max_size']	= 500;
+                $config['max_size']	= 512000;
                 $config['max_width']  = 1024;
                 $config['max_height']  = 768;
                 $config['overwrite'] = FALSE;

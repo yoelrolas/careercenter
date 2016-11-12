@@ -93,6 +93,7 @@ class Mvacancy extends CI_Model {
         if(!empty($keyword)) {
             $where = "(".TBL_COMPANIES.".".COL_COMPANYNAME." LIKE '%".$keyword."%'";
             $where .= " OR ".TBL_VACANCIES.".".COL_VACANCYTITLE." LIKE '%".$keyword."%'";
+            $where .= " OR ".TBL_VACANCIES.".".COL_OTHERLOCATIONS." LIKE '%".$keyword."%'";
             $where .= " OR ".TBL_POSITIONS.".".COL_POSITIONNAME." LIKE '%".$keyword."%'";
             $where .= " OR ".TBL_VACANCYTYPES.".".COL_VACANCYTYPENAME." LIKE '%".$keyword."%'";
             $where .= " OR ".TBL_LOCATIONS.".".COL_LOCATIONNAME." LIKE '%".$keyword."%'";

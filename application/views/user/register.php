@@ -19,6 +19,10 @@
     <link href="<?=base_url()?>assets/tbs/css/ionicons.min.css" rel="stylesheet" type="text/css" />
     <!-- Select 2 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/datepicker/datepicker3.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/dist/css/AdminLTE.min.css">
     <!-- iCheck -->
@@ -90,22 +94,6 @@
             <div class="alert alert-danger">
                 <?= validation_errors() ?>
             </div>
-        <?php }
-        if(!empty($upload_errors)) {
-            ?>
-            <div class="alert alert-danger">
-                <i class="fa fa-ban"></i>
-                <?=$upload_errors?>
-            </div>
-            <?php
-        }
-        ?>
-
-        <?php  if($this->input->get('success')){ ?>
-            <div class="form-group alert alert-success">
-                <i class="fa fa-check"></i>
-                Registrasi berhasil. Informasi aktifasi akun akan dikirimkan melalui email.
-            </div>
         <?php } ?>
 
         <?php  if($this->input->get('error')){ ?>
@@ -118,31 +106,48 @@
         <?= form_open_multipart(current_url(),array('id'=>'validate')) ?>
 
         <div class="col-sm-6">
-            <h4>Company Info</h4>
+            <h4>User Information</h4>
             <div class="form-group">
                 <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-building-o"></i></div>
-                    <input type="text" class="form-control" name="<?=COL_COMPANYNAME?>" value="<?=!empty($data[COL_COMPANYNAME]) ? $data[COL_COMPANYNAME] : ''?>" placeholder="Company Name" required>
+                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                    <input type="text" class="form-control required" name="<?=COL_NAME?>" value="<?=!empty($data[COL_NAME]) ? $data[COL_NAME] : ''?>" placeholder="Full Name">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-credit-card"></i></div>
+                    <input type="text" class="form-control required" name="<?=COL_IDENTITYNO?>" value="<?=!empty($data[COL_IDENTITYNO]) ? $data[COL_IDENTITYNO] : ''?>" placeholder="Identity No">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                    <input type="text" class="form-control datepicker" name="<?=COL_BIRTHDATE?>" value="<?=!empty($data[COL_BIRTHDATE]) ? date('d M Y', strtotime($data[COL_BIRTHDATE])) : ''?>" placeholder="Birth  Date">
+                </div>
+            </div>
+            <div class="form-group">
+                <select name="<?=COL_RELIGIONID?>" class="form-control required">
+                    <option value="">Select Religion</option>
+                    <?=GetCombobox("SELECT * FROM religions", COL_RELIGIONID, COL_RELIGIONNAME, (!empty($data[COL_RELIGIONID]) ? $data[COL_RELIGIONID] : null))?>
+                </select>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-5">
+                    <label class="control-label">Gender</label>
+                </div>
+                <div class="col-sm-7" style="margin-bottom: 10px;">
+                    <label><input type="radio" name="<?=COL_GENDER?>" value="1" <?=(!empty($data[COL_GENDER]) ? ($data[COL_GENDER]==1?"checked":"") : "checked")?> /> &nbsp; Male</label> &nbsp;&nbsp;
+                    <label><input type="radio" name="<?=COL_GENDER?>" value="2" <?=(!empty($data[COL_GENDER]) && $data[COL_GENDER]==2?"checked":"")?> /> &nbsp; Female</label> &nbsp;&nbsp;
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-phone"></i></div>
-                    <input type="text" class="form-control" name="<?=COL_COMPANYTELP?>" value="<?=!empty($data[COL_COMPANYTELP]) ? $data[COL_COMPANYTELP] : ''?>" placeholder="Company Telephone No." required>
+                    <input type="text" class="form-control required" name="<?=COL_PHONENUMBER?>" value="<?=!empty($data[COL_PHONENUMBER]) ? $data[COL_PHONENUMBER] : ''?>" placeholder="Phone Number">
                 </div>
             </div>
             <div class="form-group">
-                <label>Company Industry</label>
-                <select name="<?=COL_INDUSTRYTYPEID?>" class="form-control" required>
-                    <?=GetCombobox("SELECT * FROM industrytypes ORDER BY IndustryTypeName", COL_INDUSTRYTYPEID, COL_INDUSTRYTYPENAME, (!empty($data[COL_INDUSTRYTYPEID]) ? $data[COL_INDUSTRYTYPEID] : null))?>
-                </select>
-            </div>
-            <div class="form-group">
-                <textarea class="form-control" rows="3" placeholder="Company Address" name="<?=COL_COMPANYADDRESS?>" required><?=!empty($data[COL_COMPANYADDRESS]) ? $data[COL_COMPANYADDRESS] : ''?></textarea>
-            </div>
-            <div class="form-group">
-                <label class="label-control">Logo (Optional - Max size: 500KB)</label>
-                <input type="file" name="userfile" />
+                <textarea class="form-control required" rows="4" placeholder="Address" name="<?=COL_ADDRESS?>"><?=!empty($data[COL_ADDRESS]) ? $data[COL_ADDRESS] : ''?></textarea>
             </div>
         </div>
 
@@ -187,8 +192,17 @@
 </div>
 <!-- Select 2 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.full.min.js"></script>
+<!-- date-range-picker -->
+<script src="<?=base_url()?>assets/js/moment.js"></script>
+<script src="<?=base_url()?>assets/adminlte/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="<?=base_url()?>assets/adminlte/plugins/datepicker/bootstrap-datepicker.js"></script>
 <script>
     $("select").select2();
+    $('.datepicker').datepicker({
+        autoclose: true,
+        format: 'dd M yyyy'
+    });
 </script>
 </body>
 </html>

@@ -109,6 +109,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="col-sm-12">
                                     <button type="submit" class="btn btn-primary btn-flat pull-right">Cari Lowongan</button>
@@ -161,7 +162,7 @@
                                                         <p class="info-body"><?=date("d M Y", strtotime($vac[COL_ENDDATE]))?></p>
                                                     </div>
                                                     <div class="clearfix"></div>
-                                                    <a href="<?=site_url('vacancy/detail/'.$vac[COL_VACANCYID])?>" class="btn btn-default btn-block btn-flat btn-detail">Detail</a>
+                                                    <a href="<?=site_url('vacancy/detail/'.$vac[COL_VACANCYID])?>" class="btn btn-default btn-block btn-flat btn-detail" target="_blank">Detail</a>
                                                 </div>
                                             </div>
                                         </div>

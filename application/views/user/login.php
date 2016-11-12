@@ -126,7 +126,7 @@
 
         <div class="footer" style="text-align: right;">
             <button type="submit" class="btn btn-primary btn-block btn-flat">Sign me in</button>
-            <p style="padding: 10px 0px">Or <a href="<?= site_url('company/register') ?>" class="text-center">register as Employer</a></p>
+            <p style="padding: 10px 0px">Register as <a href="<?= site_url('company/register') ?>" class="text-center">company</a> or <a href="<?= site_url('user/register') ?>" class="text-center">jobseeker</a></p>
         </div>
 
         <?= form_close(); ?>

@@ -14,4 +14,20 @@ class Home extends MY_Controller {
         $this->load->view('home/index', $data);
         //echo $this->db->last_query();
     }
+
+    public function migrate() {
+        $olddata = $this->db->get("industries")->result_array();
+        $arrdata = array();
+
+        $id = 1;
+        foreach($olddata as $dat) {
+            $arrdata[] = array(
+                COL_INDUSTRYTYPEID => $id,
+                COL_INDUSTRYTYPENAME => $dat["IndustryName"]
+            );
+            $id++;
+        }
+
+        $this->db->insert_batch(TBL_INDUSTRYTYPES, $arrdata);
+    }
 }

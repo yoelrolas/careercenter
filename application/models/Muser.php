@@ -188,4 +188,37 @@ class Muser extends CI_Model {
         $this->db->trans_commit();
         return true;
     }
+
+    function IsProfileComplete() {
+        $user = GetLoggedUser();
+        if($user[COL_ROLEID] == ROLEUSER) {
+            if(empty($user[COL_NAME]) || empty($user[COL_IDENTITYNO]) || empty($user[COL_BIRTHDATE]) ||
+                empty($user[COL_RELIGIONID]) || empty($user[COL_GENDER]) || empty($user[COL_ADDRESS]) || empty($user[COL_PHONENUMBER]) ||
+                empty($user[COL_EDUCATIONID]) || empty($user[COL_UNIVERSITYNAME]) || empty($user[COL_FACULTYNAME]) || empty($user[COL_MAJORNAME]) ||
+                empty($user[COL_EXPECTEDSALARY]) || empty($user[COL_CVFILENAME]) || empty($user[COL_IMAGEFILENAME])) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+
+    function IsVacancyFitToUser($vacancy) {
+        $user = GetLoggedUser();
+        $retval = true;
+        /*if(!empty($user)) {
+            $pref = $this->db->where(COL_USERNAME, $user[COL_USERNAME])->get(TBL_USERPREFERENCES)->result_array();
+            foreach($pref as $p) {
+                if($pref[COL_PREFERENCETYPEID] == PREFERENCETYPE_INDUSTRYTYPE && $vacancy[COL_INDUSTRYTYPEID] != $pref[COL_PREFERENCEVALUE]) {
+                    if($retval == true)
+                }
+            }
+        } else {
+            return false;
+        }*/
+
+        return $retval;
+    }
 }

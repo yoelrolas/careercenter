@@ -128,6 +128,9 @@
 <!-- Select 2 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.full.min.js"></script>
 
+<!-- Bootstrap select -->
+<script src="<?=base_url()?>assets/js/bootstrap-select.js"></script>
+
 <!-- Bootstrap WYSIHTML5 -->
 <!--<script src="<?=base_url()?>assets/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>-->
 
@@ -160,6 +163,7 @@
 
         //$(".editor").wysihtml5();
         $(".select2").select2();
+        //$(".select2").selectpicker();
         $('.input-datepicker').datepicker({
             autoclose: true,
             format: 'dd M yyyy'

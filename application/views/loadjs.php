@@ -21,6 +21,8 @@
 <script src="<?=base_url()?>assets/adminlte/plugins/iCheck/icheck.min.js"></script>
 <!-- Select 2 -->
 <script src="<?=base_url()?>assets/adminlte/plugins/select2/select2.full.min.js"></script>
+<!-- Bootstrap select -->
+<script src="<?=base_url()?>assets/js/bootstrap-select.js"></script>
 
 <!-- Block UI -->
 <script type="text/javascript" src="<?=base_url() ?>assets/js/jquery.blockUI.js"></script>
@@ -172,7 +174,7 @@
                 $(".modal-body", confirmDialog).html("Apa anda yakin?");
                 confirmDialog.modal("show");
                 $(".btn-ok", confirmDialog).click(function() {
-                    $(this).html("Loading...");
+                    $(this).html("Loading...").attr("disabled", true);
                     $('#dataform').ajaxSubmit({
                         dataType: 'json',
                         url : a.attr('href'),
@@ -187,7 +189,7 @@
                             }
                         },
                         complete: function(){
-                            $(this).html("OK");
+                            $(this).html("OK").attr("disabled", false);
                             confirmDialog.modal("hide");
                         }
                     });
@@ -216,6 +218,7 @@
 
         $(".editor").wysihtml5();
         $("select").select2();
+        //$("select").selectpicker();
         $('.datepicker').datepicker({
             autoclose: true,
             format: 'dd M yyyy'
@@ -224,7 +227,7 @@
         /*$(".alert").fadeTo(2000, 500).slideUp(500, function(){
             $(".alert").slideUp(500);
         });*/
-        $( ".alert" ).fadeOut(3000, function() {
+        $( ".alert-dismissible" ).fadeOut(3000, function() {
             // Animation complete.
         });
         //iCheck for checkbox and radio inputs

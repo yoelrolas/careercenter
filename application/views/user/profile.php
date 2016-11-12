@@ -145,14 +145,14 @@
                 <div class="col-md-8">
 
                     <?php if(validation_errors()){ ?>
-                        <div class="alert alert-danger">
+                        <div class="alert alert-danger alert-dismissible">
                             <i class="fa fa-ban"></i>
                             <?= validation_errors() ?>
                         </div>
                     <?php }
                     if(!empty($upload_errors)) {
                         ?>
-                        <div class="alert alert-danger">
+                        <div class="alert alert-danger alert-dismissible">
                             <i class="fa fa-ban"></i>
                             <?=$upload_errors?>
                         </div>
@@ -161,14 +161,14 @@
                     ?>
 
                     <?php  if($this->input->get('success')){ ?>
-                        <div class="form-group alert alert-success">
+                        <div class="form-group alert alert-success alert-dismissible">
                             <i class="fa fa-check"></i>
                             Update profil berhasil.
                         </div>
                     <?php } ?>
 
                     <?php  if($this->input->get('error')){ ?>
-                        <div class="form-group alert alert-danger">
+                        <div class="form-group alert alert-danger alert-dismissible">
                             <i class="fa fa-ban"></i>
                             Gagal mengupdate profil, silahkan coba kembali
                         </div>

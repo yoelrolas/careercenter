@@ -13,7 +13,7 @@
                                 <b>Email</b> <a class="pull-right"><?=$data[COL_EMAIL]?></a>
                             </li>
                             <li class="list-group-item">
-                                <b>Tanggal Lahir</b> <a class="pull-right"><?=date("d M Y", strtotime($data[COL_BIRTHDATE]))?></a>
+                                <b>Tanggal Lahir</b> <a class="pull-right"><?=!empty($data[COL_BIRTHDATE])? date("d M Y", strtotime($data[COL_BIRTHDATE])) : "-"?></a>
                             </li>
                             <li class="list-group-item">
                                 <b>Jenis Kelamin</b> <a class="pull-right"><?=$data[COL_GENDER] == 1 ? "Pria" : "Wanita"?></a>

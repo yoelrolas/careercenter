@@ -52,6 +52,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <!-- Select 2 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
 
+    <!-- Bootstrap select -->
+    <!--<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap-select.css">-->
+
     <!-- datatable css -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/datatable/media/css/dataTables.bootstrap.min.css">
 

@@ -22,7 +22,7 @@
                         <?php
                         if($this->input->get('error') == 1){
                             ?>
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger alert-dismissible">
                                 <i class="fa fa-ban"></i>
                                 <span class="">Data gagal disimpan, silahkan coba kembali</span>
                             </div>
@@ -30,7 +30,7 @@
                         }
                         if(validation_errors()){
                             ?>
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger alert-dismissible">
                                 <i class="fa fa-ban"></i>
                                 <?=validation_errors()?>
                             </div>
@@ -38,7 +38,7 @@
                         }
                         if(!empty($upload_errors)) {
                             ?>
-                            <div class="alert alert-danger">
+                            <div class="alert alert-danger alert-dismissible">
                                 <i class="fa fa-ban"></i>
                                 <?=$upload_errors?>
                             </div>
@@ -102,7 +102,7 @@
                                 <div class="form-group">
                                     <select name="<?=COL_INDUSTRYTYPEID?>" class="form-control required">
                                         <option value="">Select Industry Type</option>
-                                        <?=GetCombobox("SELECT * FROM industrytypes", COL_INDUSTRYTYPEID, COL_INDUSTRYTYPENAME, (!empty($data[COL_INDUSTRYTYPEID]) ? $data[COL_INDUSTRYTYPEID] : null))?>
+                                        <?=GetCombobox("SELECT * FROM industrytypes ORDER BY IndustryTypeName", COL_INDUSTRYTYPEID, COL_INDUSTRYTYPENAME, (!empty($data[COL_INDUSTRYTYPEID]) ? $data[COL_INDUSTRYTYPEID] : null))?>
                                     </select>
                                 </div>
                                 <div class="form-group">

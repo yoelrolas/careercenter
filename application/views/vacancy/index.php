@@ -1,12 +1,15 @@
-<?php $data = array();
+<?php
+$data = array();
 $i = 0;
+$user = GetLoggedUser();
 foreach ($res as $d) {
+    $appls = $this->db->where(COL_VACANCYID, $d[COL_VACANCYID])->count_all_results(TBL_VACANCYAPPLIES);
     $res[$i] = array(
         '<input type="checkbox" class="cekbox" name="cekbox[]" value="' . $d[COL_VACANCYID] . '" />',
         //$d[COL_ISSUSPEND] ? '<small class="label pull-left bg-red">Suspend</small>' : '<small class="label pull-left bg-green">Active</small>',
         $d[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($d[COL_ENDDATE]) >= strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>'),
         anchor('vacancy/edit/'.$d[COL_VACANCYID],$d[COL_VACANCYTITLE]),
-        $d[COL_COMPANYNAME],
+        ($user[COL_ROLEID]==ROLECOMPANY?desimal($appls):$d[COL_COMPANYNAME]),
         $d[COL_POSITIONNAME],
         $d[COL_VACANCYTYPENAME],
         //substr($d[COL_COMPANYADDRESS], 0, 25),
@@ -15,7 +18,6 @@ foreach ($res as $d) {
     $i++;
 }
 $data = json_encode($res);
-$user = GetLoggedUser();
 ?>
 
 <?php $this->load->view('header')
@@ -71,7 +73,7 @@ $user = GetLoggedUser();
                     {"sTitle": "<input type=\"checkbox\" id=\"cekbox\" class=\"\" />","sWidth":15,bSortable:false},
                     {"sTitle": "Status"},
                     {"sTitle": "Name", "width": "20%"},
-                    {"sTitle": "Company", "width": "20%"},
+                    {"sTitle": "<?=$user[COL_ROLEID]==ROLECOMPANY?"Applicants":"Company"?>", "width": "20%"},
                     {"sTitle": "Position"},
                     {"sTitle": "Type", "width": "15%"},
                     //{"sTitle": "Address"},

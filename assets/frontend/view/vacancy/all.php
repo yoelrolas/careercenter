@@ -4,7 +4,7 @@ $i = 0;
 foreach ($res as $d) {
     $res[$i] = array(
         //'<img src="'.(!empty($d[COL_FILENAME]) ? MY_UPLOADURL.$d[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg').'" height="40">',
-        anchor('vacancy/detail/'.$d[COL_VACANCYID],$d[COL_VACANCYTITLE]),
+        anchor('vacancy/detail/'.$d[COL_VACANCYID],$d[COL_VACANCYTITLE], array('target'=>'_blank')),
         anchor('company/detail/'.$d[COL_COMPANYID],$d[COL_COMPANYNAME]),
         $d[COL_VACANCYTYPENAME],
         $d[COL_POSITIONNAME],

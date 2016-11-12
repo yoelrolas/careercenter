@@ -86,6 +86,7 @@ class Vacancy extends MY_Controller {
                             );
                         }
                     }
+                    $data[COL_OTHERLOCATIONS] = $this->input->post(COL_OTHERLOCATIONS);
                 }
 
                 $edus = $this->input->post(COL_EDUCATIONTYPEID);
@@ -220,6 +221,7 @@ class Vacancy extends MY_Controller {
                             );
                         }
                     }
+                    $data[COL_OTHERLOCATIONS] = $this->input->post(COL_OTHERLOCATIONS);
                 }
 
                 $edus = $this->input->post(COL_EDUCATIONTYPEID);
@@ -408,5 +410,41 @@ class Vacancy extends MY_Controller {
         }
 
         ShowJsonSuccess("Success");
+    }
+
+    function applicants($vacancy=null) {
+        if(!IsLogin()) {
+            redirect('user/dashboard');
+        }
+        $user = GetLoggedUser();
+        if(!$user || ($user[COL_ROLEID] != ROLECOMPANY && $user[COL_ROLEID] != ROLEADMIN)) {
+            redirect('user/dashboard');
+        }
+
+        $data['title'] = "Applicants";
+
+        $this->db->join(TBL_VACANCIES,TBL_VACANCIES.'.'.COL_VACANCYID." = ".TBL_VACANCYAPPLIES.".".COL_VACANCYID,"inner");
+        $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+        $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_USERNAME." = ".TBL_VACANCYAPPLIES.".".COL_USERNAME,"inner");
+        $this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_USERINFORMATION.".".COL_EDUCATIONID,"left");
+        $this->db->join(TBL_STATUS,TBL_STATUS.'.'.COL_STATUSID." = ".TBL_VACANCYAPPLIES.".".COL_STATUSID,"inner");
+
+        if($user[COL_ROLEID] == ROLECOMPANY) $this->db->where(TBL_COMPANIES.".".COL_COMPANYID, $user[COL_COMPANYID]);
+        if($_POST) {
+            $data["filter"] = $id = $this->input->post(COL_VACANCYID);
+            if($id) {
+                $this->db->where(TBL_VACANCYAPPLIES.".".COL_VACANCYID, $id);
+            }
+        }
+        if($vacancy) {
+            $data["filter"] = $vacancy;
+            $this->db->where(TBL_VACANCYAPPLIES.".".COL_VACANCYID, $vacancy);
+        }
+
+        $this->db->order_by(TBL_VACANCYAPPLIES.".".COL_APPLYDATE, "desc");
+        $this->db->order_by(TBL_USERINFORMATION.".".COL_NAME, "asc");
+        $data['res'] = $this->db->get(TBL_VACANCYAPPLIES)->result_array();
+
+        $this->load->view('vacancy/applicants', $data);
     }
 }

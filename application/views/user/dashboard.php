@@ -218,6 +218,8 @@ $ruser = GetLoggedUser();
             }
             $ArrLocations = json_encode($Locations);
 
+
+
             // post-related query
             $posts = $this->mpost->getall();
             $activeposts = array();
@@ -418,7 +420,7 @@ $ruser = GetLoggedUser();
                                             ?>
                                                 <li>
                                                     <i class="fa fa-circle-o" style="color: <?=$pos["color"]?>"></i>
-                                                    <b><?=desimal(($pos["value"]/count($vacancies))*100)?>%</b>
+                                                    <!--<b><?=desimal(($pos["value"]/count($vacancies))*100)?>%</b>-->
                                                     <?=$pos["label"]?>
                                                 </li>
                                                 <?php
@@ -440,7 +442,7 @@ $ruser = GetLoggedUser();
                                                 ?>
                                                 <li>
                                                     <i class="fa fa-circle-o" style="color: <?=$edu["color"]?>"></i>
-                                                    <b><?=desimal(($edu["value"]/count($vacancies))*100)?>%</b>
+                                                    <!--<b><?=desimal(($edu["value"]/count($vacancies))*100)?>%</b>-->
                                                     <?=$edu["label"]?>
                                                 </li>
                                                 <?php
@@ -462,7 +464,7 @@ $ruser = GetLoggedUser();
                                                 ?>
                                                 <li>
                                                     <i class="fa fa-circle-o" style="color: <?=$loc["color"]?>"></i>
-                                                    <b><?=desimal(($loc["value"]/count($vacancies))*100)?>%</b>
+                                                    <!--<b><?=desimal(($loc["value"]/count($vacancies))*100)?>%</b>-->
                                                     <?=$loc["label"]?>
                                                 </li>
                                                 <?php
@@ -657,43 +659,61 @@ $ruser = GetLoggedUser();
                 );
             }
             $ArrVacancyPositions2 = json_encode($VacancyPositions2);
+
+            // applications related query
+            $this->db->join(TBL_VACANCIES,TBL_VACANCIES.'.'.COL_VACANCYID." = ".TBL_VACANCYAPPLIES.".".COL_VACANCYID,"inner");
+            $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+            $this->db->join(TBL_USERINFORMATION,TBL_USERINFORMATION.'.'.COL_USERNAME." = ".TBL_VACANCYAPPLIES.".".COL_USERNAME,"inner");
+            $this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_USERINFORMATION.".".COL_EDUCATIONID,"left");
+            $this->db->join(TBL_STATUS,TBL_STATUS.'.'.COL_STATUSID." = ".TBL_VACANCYAPPLIES.".".COL_STATUSID,"inner");
+            $this->db->where(TBL_COMPANIES.".".COL_COMPANYID, $ruser[COL_COMPANYID]);
+            $this->db->order_by(TBL_VACANCYAPPLIES.".".COL_APPLYDATE, "desc");
+            $this->db->limit(10);
+            $appl = $this->db->get(TBL_VACANCYAPPLIES)->result_array();
             ?>
             <!-- VACANCIES -->
             <div class="col-sm-8">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Latest Vacancies</h3>
+                        <h3 class="box-title">Latest Applicants</h3>
 
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         </div>
                     </div>
                     <div class="box-body">
-                        <?php if(count($vacancies) > 0) {
+                        <?php if(count($appl) > 0) {
                             ?>
                             <div class="table-responsive">
-                                <table class="table no-margin">
+                                <table class="table no-margin" id="applicants">
                                     <thead>
                                     <tr>
-                                        <th>Title</th>
-                                        <th>Created On</th>
+                                        <th><input type="checkbox" id="appl-cekbox"/></th>
+                                        <th>Name</th>
+                                        <th>Education</th>
+                                        <th>Vacancy</th>
+                                        <th>Date</th>
                                         <th>Status</th>
-                                        <th>View</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                    for($i=0; $i<5; $i++) {
-                                        if(empty($vacancies[$i])) break;
-                                        $vac = $vacancies[$i];
+                                    foreach($appl as $dat) {
+                                        $encrypt = GetEncryption($dat[COL_USERNAME]);
+                                        $status = "";
+                                        if($dat[COL_STATUSID] == STATUS_DIPROSES) $status = '<smal class="label label-primary pull-left">'.$dat[COL_STATUSNAME].'</smal>';
+                                        if($dat[COL_STATUSID] == STATUS_DITERIMA) $status = '<smal class="label label-success pull-left">'.$dat[COL_STATUSNAME].'</smal>';
+                                        if($dat[COL_STATUSID] == STATUS_DITOLAK) $status = '<smal class="label label-warning pull-left">'.$dat[COL_STATUSNAME].'</smal>';
                                         ?>
                                         <tr>
-                                            <td><a href="<?=site_url('vacancy/edit/'.$vac[COL_VACANCYID])?>"><?=$vac[COL_VACANCYTITLE]?></a></td>
-                                            <td><?=date("d M Y", strtotime($vac[COL_CREATEDON]))?></td>
-                                            <td><?=$vac[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($vac[COL_ENDDATE]) > strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>')?></td>
-                                            <td><?=desimal($vac[COL_TOTALVIEW])?></td>
+                                            <td><input type="checkbox" class="cekbox" name="cekbox" value="<?=$dat[COL_VACANCYAPPLYID]?>" /></td>
+                                            <td><a href="<?=site_url('user/detail/'.$encrypt)?>" target="_blank"><?=$dat[COL_NAME]?></a></td>
+                                            <td><?=!empty($dat[COL_EDUCATIONTYPENAME])?$dat[COL_EDUCATIONTYPENAME]:"-"?></td>
+                                            <td><?=$dat[COL_VACANCYTITLE]?></td>
+                                            <td><?=date("d M Y H:i:s", strtotime($dat[COL_APPLYDATE]))?></td>
+                                            <td><?=$status?></td>
                                         </tr>
-                                    <?php
+                                        <?php
                                     }
                                     ?>
                                     </tbody>
@@ -710,16 +730,64 @@ $ruser = GetLoggedUser();
                         ?>
                     </div>
                     <div class="box-footer clearfix">
-                        <a href="<?=site_url('vacancy/add')?>" class="btn btn-sm btn-info btn-flat pull-left">Add New</a>
-                        <a href="<?=site_url('vacancy/index')?>" class="btn btn-sm btn-default btn-flat pull-right">View All</a>
+                        <a data-href="<?=site_url('applicant/response')?>" data-accept="1" class="btn btn-sm btn-success btn-flat btn-response pull-left" style="margin-right: 5px"> <i class="fa fa-check"></i> Accept</a>
+                        <a data-href="<?=site_url('applicant/response')?>" data-accept="0" class="btn btn-sm btn-warning btn-flat btn-response pull-left"> <i class="fa fa-close"></i> Reject</a>
+                        <a href="<?=site_url('vacancy/applicants')?>" class="btn btn-sm btn-default btn-flat pull-right">View All</a>
                     </div>
                     <!-- /.box-body -->
+                    <script>
+                        var table = $("#applicants");
+                        $('#appl-cekbox', table).click(function(){
+                            if($(this).is(':checked')){
+                                $('.cekbox', table).prop('checked',true);
+                            }else{
+                                $('.cekbox', table).prop('checked',false);
+                            }
+                        });
+
+                        $(".btn-response").click(function() {
+                            var checked = $("[name=cekbox]:checked", table).map(function(i,n) { return $(n).val(); }).get();
+                            var url = $(this).data("href");
+                            var accept = $(this).data("accept");
+                            if(checked && checked.length > 0) {
+                                var promptDialog = $("#promptDialog");
+                                var alertDialog = $("#alertDialog");
+                                promptDialog.on("hidden.bs.modal", function(){
+                                    $(".modal-body", promptDialog).html("");
+                                    $(".btn-ok", promptDialog).html("OK").attr("disabled", false);
+                                });
+                                alertDialog.on("hidden.bs.modal", function(){
+                                    $(".modal-body", alertDialog).html("");
+                                });
+
+                                $(".modal-body", promptDialog).html('<textarea name="MessageContent" rows="3" cols="5" class="form-control"></textarea>');
+                                promptDialog.modal("show");
+
+                                $(".btn-ok", promptDialog).unbind("click").click(function(){
+                                    $(this).html("Loading...").attr("disabled", true);
+                                    // Ajax here...
+                                    var message = $("[name=MessageContent]", promptDialog).val();
+                                    var datapost = {cekbox: checked, message: message, accept: accept};
+                                    $.post(url, datapost, function(res) {
+                                        promptDialog.modal("hide");
+                                        if(res.error!=0){
+                                            $(".modal-body", alertDialog).html(res.error);
+                                            alertDialog.modal("show");
+                                            return false;
+                                        }else{
+                                            window.location.reload();
+                                        }
+                                    },"json");
+                                });
+                            }
+                        });
+                    </script>
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Status</h3>
+                        <h3 class="box-title">Vacancy Status</h3>
 
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -772,85 +840,143 @@ $ruser = GetLoggedUser();
                         </div>
                     </div>
                     <div class="box-body">
+                        <div class="col-sm-12" style="border: 1px solid #dedede;">
+                            <div class="col-sm-6">
+                                <h4>Latest Vacancies</h4>
+                                <?php if(count($vacancies) > 0) {
+                                    ?>
+                                    <div class="table-responsive">
+                                        <table class="table no-margin">
+                                            <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Created On</th>
+                                                <th>Status</th>
+                                                <th>View</th>
+                                                <th>Applicants</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <?php
+                                            for($i=0; $i<5; $i++) {
+                                                if(empty($vacancies[$i])) break;
+                                                $vac = $vacancies[$i];
+                                                $appls = $this->db->where(COL_VACANCYID, $vac[COL_VACANCYID])->count_all_results(TBL_VACANCYAPPLIES);
+                                                ?>
+                                                <tr>
+                                                    <td><a href="<?=site_url('vacancy/edit/'.$vac[COL_VACANCYID])?>"><?=$vac[COL_VACANCYTITLE]?></a></td>
+                                                    <td><?=date("d M Y", strtotime($vac[COL_CREATEDON]))?></td>
+                                                    <td><?=$vac[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($vac[COL_ENDDATE]) > strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>')?></td>
+                                                    <td><?=desimal($vac[COL_TOTALVIEW])?></td>
+                                                    <td><?=desimal($appls)?></td>
+                                                </tr>
+                                                <?php
+                                            }
+                                            ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="clearfix" style="margin-top: 20px"></div>
+                                    <a href="<?=site_url('vacancy/add')?>" class="btn btn-sm btn-info btn-flat pull-left">Add New</a>
+                                    <a href="<?=site_url('vacancy/index')?>" class="btn btn-sm btn-default btn-flat pull-right">View All</a>
+                                    <div class="clearfix" style="margin-bottom: 20px"></div>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <div class="col-sm-12">
+                                        <span class="no-data">No data available</span>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                            <div class="col-sm-6">
+                                <?php if(count($vacancies) > 0 && $VacancyPositions && count($VacancyPositions) > 0) {
+                                    ?>
+                                    <div class="col-sm-12" style="padding: 10px;">
+                                        <p>Positions</p>
+                                        <div class="col-sm-6">
+                                            <canvas id="PositionChart" style="height:250px"></canvas>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <ul class="chart-legend clearfix">
+                                                <?php
+                                                foreach($VacancyPositions as $pos) {
+                                                    ?>
+                                                    <li>
+                                                        <i class="fa fa-circle-o" style="color: <?=$pos["color"]?>"></i>
+                                                        <!--<b><?=desimal(($pos["value"]/count($vacancies))*100)?>%</b>-->
+                                                        <?=$pos["label"]?>
+                                                    </li>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12" style="padding: 10px;">
+                                        <p>Educations</p>
+                                        <div class="col-sm-6">
+                                            <canvas id="EducationChart" style="height:250px"></canvas>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <ul class="chart-legend clearfix">
+                                                <?php
+                                                foreach($Educations as $edu) {
+                                                    ?>
+                                                    <li>
+                                                        <i class="fa fa-circle-o" style="color: <?=$edu["color"]?>"></i>
+                                                        <!--<b><?=desimal(($edu["value"]/count($vacancies))*100)?>%</b>-->
+                                                        <?=$edu["label"]?>
+                                                    </li>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-12" style="padding: 10px;">
+                                        <p>Locations</p>
+                                        <div class="col-sm-6">
+                                            <canvas id="LocationChart" style="height:250px"></canvas>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <ul class="chart-legend clearfix">
+                                                <?php
+                                                foreach($Locations as $loc) {
+                                                    ?>
+                                                    <li>
+                                                        <i class="fa fa-circle-o" style="color: <?=$loc["color"]?>"></i>
+                                                        <!--<b><?=desimal(($loc["value"]/count($vacancies))*100)?>%</b>-->
+                                                        <?=$loc["label"]?>
+                                                    </li>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <div class="col-sm-12">
+                                        <span class="no-data">No data available</span>
+                                    </div>
+                                    <?php
+                                }
+                                ?>
+                            </div>
+                        </div>
+
+                        <div class="clearfix" style="margin-bottom: 20px"></div>
+
                         <?php if(count($vacancies) > 0 && $VacancyPositions && count($VacancyPositions) > 0) {
                             ?>
-                            <div class="col-sm-4" style="padding: 10px;">
-                                <p>Positions</p>
-                                <div class="col-sm-6">
-                                    <canvas id="PositionChart" style="height:250px"></canvas>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="chart-legend clearfix">
-                                        <?php
-                                        foreach($VacancyPositions as $pos) {
-                                            ?>
-                                            <li>
-                                                <i class="fa fa-circle-o" style="color: <?=$pos["color"]?>"></i>
-                                                <b><?=desimal(($pos["value"]/count($vacancies))*100)?>%</b>
-                                                <?=$pos["label"]?>
-                                            </li>
-                                            <?php
-                                        }
-                                        ?>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4" style="padding: 10px;">
-                                <p>Educations</p>
-                                <div class="col-sm-6">
-                                    <canvas id="EducationChart" style="height:250px"></canvas>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="chart-legend clearfix">
-                                        <?php
-                                        foreach($Educations as $edu) {
-                                            ?>
-                                            <li>
-                                                <i class="fa fa-circle-o" style="color: <?=$edu["color"]?>"></i>
-                                                <b><?=desimal(($edu["value"]/count($vacancies))*100)?>%</b>
-                                                <?=$edu["label"]?>
-                                            </li>
-                                            <?php
-                                        }
-                                        ?>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4" style="padding: 10px;">
-                                <p>Locations</p>
-                                <div class="col-sm-6">
-                                    <canvas id="LocationChart" style="height:250px"></canvas>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="chart-legend clearfix">
-                                        <?php
-                                        foreach($Locations as $loc) {
-                                            ?>
-                                            <li>
-                                                <i class="fa fa-circle-o" style="color: <?=$loc["color"]?>"></i>
-                                                <b><?=desimal(($loc["value"]/count($vacancies))*100)?>%</b>
-                                                <?=$loc["label"]?>
-                                            </li>
-                                            <?php
-                                        }
-                                        ?>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="clearfix" style="margin-bottom: 20px"></div>
-
                             <div class="col-sm-12" style="border: 1px solid #dedede; padding: 10px">
                                 <p><h4 class="text-center">Monthly Statistic</h4></p>
                                 <canvas id="PositionAreaChart" style="height: 250px; width: 467px;" height="250" width="467"></canvas>
-                            </div>
-                            <?php
-                        } else {
-                            ?>
-                            <div class="col-sm-12">
-                                <span class="no-data">No data available</span>
                             </div>
                             <?php
                         }
@@ -860,6 +986,176 @@ $ruser = GetLoggedUser();
                 </div>
             </div>
             <!-- /. VACANCIES -->
+        <?php
+        } else if($ruser[COL_ROLEID] == ROLEUSER) {
+            // application-related query
+            $this->db->join(TBL_VACANCIES,TBL_VACANCIES.'.'.COL_VACANCYID." = ".TBL_VACANCYAPPLIES.".".COL_VACANCYID,"inner");
+            $this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+            $this->db->join(TBL_STATUS,TBL_STATUS.'.'.COL_STATUSID." = ".TBL_VACANCYAPPLIES.".".COL_STATUSID,"inner");
+            $this->db->where(TBL_VACANCYAPPLIES.".".COL_USERNAME, $ruser[COL_USERNAME]);
+            $this->db->order_by(TBL_VACANCYAPPLIES.".".COL_APPLYDATE, "desc");
+            $appl = $this->db->get(TBL_VACANCYAPPLIES)->result_array();
+
+            $dataapply = array();
+            $dat = array();
+            $i = 0;
+            if(count($appl)> 0) {
+                foreach ($appl as $d) {
+                    $status = "";
+                    if($d[COL_STATUSID] == STATUS_DIPROSES) $status = '<smal class="label label-primary pull-left">'.$d[COL_STATUSNAME].'</smal>';
+                    if($d[COL_STATUSID] == STATUS_DITERIMA) $status = '<smal class="label label-success pull-left">'.$d[COL_STATUSNAME].'</smal>';
+                    if($d[COL_STATUSID] == STATUS_DITOLAK) $status = '<smal class="label label-warning pull-left">'.$d[COL_STATUSNAME].'</smal>';
+
+                    $appls = $this->db->where(COL_VACANCYID, $d[COL_VACANCYID])->count_all_results(TBL_VACANCYAPPLIES);
+                    $dat[$i] = array(
+                        anchor('vacancy/detail/'.$d[COL_VACANCYID],$d[COL_VACANCYTITLE], array('target'=>'_blank')),
+                        anchor('company/detail/'.$d[COL_COMPANYID],$d[COL_COMPANYNAME], array('target'=>'_blank')),
+                        date('d M Y', strtotime($d[COL_APPLYDATE])),
+                        desimal($appls),
+                        $status
+                    );
+                    $i++;
+                }
+            }
+            $dataapply = json_encode($dat);
+
+            // vacancy related quer
+            $pref_industry = array();
+            $pref_education = array();
+            $pref_position = array();
+            $pref_location = array();
+            $pref_type = array();
+
+            if($ruser[COL_EDUCATIONID]) $pref_education[] = $ruser[COL_EDUCATIONID];
+            // preferences
+            $pref = $this->db->where(COL_USERNAME, $ruser[COL_USERNAME])->get(TBL_USERPREFERENCES)->result_array();
+            if($pref) {
+                foreach($pref as $p) {
+                    if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_INDUSTRYTYPE) $pref_industry[] = $p[COL_PREFERENCEVALUE];
+                    if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_EDUCATIONTYPE) $pref_education[] = $p[COL_PREFERENCEVALUE];
+                    if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_POSITION) $pref_position[] = $p[COL_PREFERENCEVALUE];
+                    if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_LOCATION) $pref_location[] = $p[COL_PREFERENCEVALUE];
+                    if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_VACANCYTYPE) $pref_type[] = $p[COL_PREFERENCEVALUE];
+                }
+            }
+            $vacancies = $this->mvacancy->search(0,"", $pref_position, $pref_industry, $pref_location, $pref_type, $pref_education);
+            $datavacancies = array();
+            $dat = array();
+            $i = 0;
+            if(count($vacancies)> 0) {
+                foreach ($vacancies as $d) {
+                    $dat[$i] = array(
+                        //'<img src="'.(!empty($d[COL_FILENAME]) ? MY_UPLOADURL.$d[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg').'" height="40">',
+                        anchor('vacancy/detail/'.$d[COL_VACANCYID],$d[COL_VACANCYTITLE], array('target'=>'_blank')),
+                        anchor('company/detail/'.$d[COL_COMPANYID],$d[COL_COMPANYNAME]),
+                        $d[COL_VACANCYTYPENAME],
+                        $d[COL_POSITIONNAME],
+                        $d["Educations"],
+                        $d[COL_ISALLLOCATION]?"Seluruh Indonesia":$d["Locations"],
+                        //substr($d[COL_COMPANYADDRESS], 0, 25),
+                        date('d M Y', strtotime($d[COL_ENDDATE]))
+                    );
+                    $i++;
+                }
+            }
+            $datavacancies = json_encode($dat);
+            ?>
+            <div class="col-sm-12">
+                <?php
+                if(!$this->muser->IsProfileComplete()) {
+                    ?>
+                    <div class="alert alert-warning">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-close"></i></button>
+                        <h4><i class="icon fa fa-warning"></i> Peringatan</h4>
+                        Profil anda belum lengkap. Silahkan lengkapi profil anda <a href="<?=site_url('user/profile')?>">disini</a>
+                    </div>
+                <?php
+                }
+                ?>
+
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">My Application</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <form id="appform" method="post" action="#">
+                            <table id="applist" class="table table-bordered table-hover">
+
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Recommended Vacancies</h3>
+
+                        <div class="box-tools pull-right">
+                            <a href="<?=site_url('user/preference')?>" class="btn btn-box-tool" title="Preferences"><i class="fa fa-cogs"></i></a>
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <form id="vacancyform" method="post" action="#">
+                            <table id="vacancylist" class="table table-bordered table-hover">
+
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    var apptable = $('#applist').dataTable({
+                        //"sDom": "Rlfrtip",
+                        "aaData": <?=$dataapply?>,
+                        //"bJQueryUI": true,
+                        "aaSorting" : [[2,'desc']],
+                        //"scrollY" : 400,
+                        //"scrollX": "200%",
+                        "iDisplayLength": 100,
+                        "aLengthMenu": [[100, 1000, 5000, -1], [100, 1000, 5000, "Semua"]],
+                        "dom":"R<'row'<'col-sm-4'l><'col-sm-4'B><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
+                        "buttons": ['copyHtml5','excelHtml5','csvHtml5','pdfHtml5'],
+                        "aoColumns": [
+                            {"sTitle": "Vacancy"},
+                            {"sTitle": "Company"},
+                            {"sTitle": "Date", "width": "15%"},
+                            {"sTitle": "Total Applicants", "width": "15%"},
+                            {"sTitle": "Status", "width": "10%"}
+                        ]
+                    });
+
+                    var vacancytable = $('#vacancylist').dataTable({
+                        //"sDom": "Rlfrtip",
+                        "aaData": <?=$datavacancies?>,
+                        //"bJQueryUI": true,
+                        "aaSorting" : [[0,'desc']],
+                        //"scrollY" : 400,
+                        "scrollX": "200%",
+                        "iDisplayLength": 100,
+                        "aLengthMenu": [[100, 1000, 5000, -1], [100, 1000, 5000, "Semua"]],
+                        "dom":"R<'row'<'col-sm-4'l><'col-sm-4'B><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>",
+                        "buttons": ['copyHtml5','excelHtml5','csvHtml5','pdfHtml5'],
+                        "aoColumns": [
+                            //{"sTitle": ""},
+                            {"sTitle": "Nama Lowongan", "width": "20%"},
+                            {"sTitle": "Perusahaan", "width": "20%"},
+                            {"sTitle": "Tipe Lowongan", "width": "12%"},
+                            {"sTitle": "Posisi", "width": "15%"},
+                            {"sTitle": "Pendidikan Min.", "width": "15%"},
+                            {"sTitle": "Penempatan", "width": "25%"},
+                            {"sTitle": "Deadline", "width": "20%"}
+                        ]
+                    });
+                });
+            </script>
         <?php
         }
         ?>

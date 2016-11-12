@@ -16,6 +16,7 @@
                         <img class="profile-user-img img-responsive" src="<?=!empty($vacancy[COL_FILENAME]) ? MY_UPLOADURL.$vacancy[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg' ?>" alt="Logo">
                         <div class="profile-caption" style="padding: 10px 0px;">
                             <h4 class="text-center"><?=$vacancy[COL_COMPANYNAME]?></h4>
+                            <p class="text-center"><?=$vacancy[COL_INDUSTRYTYPENAME]?></p>
                             <p style="margin-top: 10px" class="text-muted text-center">Terdaftar sejak <?=date('d M Y', strtotime($vacancy[COL_REGISTERDATE]))?></p>
                         </div>
 
@@ -34,7 +35,7 @@
                             </li>
                             <li class="list-group-item">
                                 <p class="list-item-label">Penempatan</p>
-                                <p class="list-item-value"><a class="pull-right"><?=$vacancy[COL_ISALLLOCATION]?"Seluruh Indonesia":$vacancy["Locations"]?></a></p>
+                                <p class="list-item-value"><a class="pull-right"><?=$vacancy[COL_ISALLLOCATION]?"Seluruh Indonesia":($vacancy["Locations"].(!empty($vacancy[COL_OTHERLOCATIONS])?", ".$vacancy[COL_OTHERLOCATIONS]:""))?></a></p>
                             </li>
                             <li class="list-group-item">
                                 <p class="list-item-label">Deadline</p>

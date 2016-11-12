@@ -4,8 +4,63 @@ $CI->load->model('mpost');
 $news = $CI->mpost->search(10,"",POSTCATEGORY_NEWS);
 $blogs = $CI->mpost->search(10,"",POSTCATEGORY_BLOG);
 $events = $CI->mpost->search(10,"",POSTCATEGORY_EVENT);
+
+// deadlined vacancies
+$interval = 14;
+$this->db->join(TBL_COMPANIES,TBL_COMPANIES.'.'.COL_COMPANYID." = ".TBL_VACANCIES.".".COL_COMPANYID,"inner");
+$this->db->join(TBL_POSITIONS,TBL_POSITIONS.'.'.COL_POSITIONID." = ".TBL_VACANCIES.".".COL_POSITIONID,"inner");
+$this->db->join(TBL_VACANCYTYPES,TBL_VACANCYTYPES.'.'.COL_VACANCYTYPEID." = ".TBL_VACANCIES.".".COL_VACANCYTYPEID,"inner");
+$this->db->join(TBL_VACANCYLOCATIONS,TBL_VACANCYLOCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+$this->db->join(TBL_LOCATIONS,TBL_LOCATIONS.'.'.COL_LOCATIONID." = ".TBL_VACANCYLOCATIONS.".".COL_LOCATIONID,"left");
+$this->db->join(TBL_VACANCYEDUCATIONS,TBL_VACANCYEDUCATIONS.'.'.COL_VACANCYID." = ".TBL_VACANCIES.".".COL_VACANCYID,"left");
+$this->db->join(TBL_EDUCATIONTYPES,TBL_EDUCATIONTYPES.'.'.COL_EDUCATIONTYPEID." = ".TBL_VACANCYEDUCATIONS.".".COL_EDUCATIONTYPEID,"left");
+$this->db->where(TBL_VACANCIES.".".COL_ISSUSPEND, false);
+$this->db->where(TBL_VACANCIES.".".COL_ENDDATE." >= ", date("Y-m-d"));
+$this->db->where(TBL_VACANCIES.".".COL_ENDDATE." <= ", date("Y-m-d", strtotime("+".$interval." day")));
+$this->db->order_by(TBL_VACANCIES.".".COL_ENDDATE, "asc");
+$this->db->group_by(TBL_VACANCIES.".".COL_VACANCYID);
+$deadlined = $this->db->get(TBL_VACANCIES)->result_array();
 ?>
 <div class="col-md-4 agileinfo_news_original_grids_left">
+    <div class="box box-default">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-exclamation"></i>&nbsp;&nbsp; Lowongan Hampir Tutup</h3>
+        </div>
+        <div class="box-body">
+            <ul class="products-list product-list-in-box">
+                <?php
+                if(!empty($deadlined) && count($deadlined) > 0) {
+                    foreach($deadlined as $n) {
+                        ?>
+                        <li class="item">
+                            <div class="product-img">
+                                <img src="<?=!empty($vac[COL_FILENAME]) ? MY_UPLOADURL.$vac[COL_FILENAME] : MY_IMAGEURL.'company-icon.jpg'?>" alt="<?=$n[COL_COMPANYNAME]?>">
+                            </div>
+                            <div class="product-info">
+                                <a href="<?=site_url('vacancy/detail/'.$n[COL_VACANCYID])?>" class="product-title" target="_blank">
+                                    <?=$n[COL_VACANCYTITLE]?>
+                                    <span class="label label-danger pull-right blink"><?=date("d M Y", strtotime($n[COL_ENDDATE]))?></span>
+                                </a>
+                                <span class="product-description">
+                                    <?=anchor('company/detail/'.$n[COL_COMPANYID],$n[COL_COMPANYNAME])?>
+                                </span>
+                            </div>
+                        </li>
+                        <?php
+                    }
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="box-footer text-center">
+            <?php if(!empty($deadlined) && count($deadlined) > 0) { ?>
+
+            <?php } else { ?>
+                <span style="font-style: italic">Tidak ada data tersedia</span>
+            <?php } ?>
+        </div>
+    </div>
+
     <div class="box box-default">
         <div class="box-header with-border">
             <h3 class="box-title"><i class="fa fa-newspaper-o"></i>&nbsp;&nbsp; News</h3>

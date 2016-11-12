@@ -30,6 +30,9 @@
     <!-- Select 2 -->
     <link rel="stylesheet" href="<?=base_url()?>assets/adminlte/plugins/select2/select2.min.css">
 
+    <!-- Bootstrap select -->
+    <!--<link rel="stylesheet" href="<?=base_url()?>assets/css/bootstrap-select.css">-->
+
     <!-- datatable css -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/datatable/media/css/dataTables.bootstrap.min.css">
 
@@ -143,7 +146,7 @@
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="<?=base_url()?>assets/tbs/img/user.jpg" class="img-circle" alt="User Image">
+                                <img src="<?=$displaypicture?>" class="img-circle" alt="User Image">
 
                                 <p>
                                     <?=$displayname?>
@@ -192,7 +195,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="<?=site_url('user/dashboard')?>"><i class="fa fa-circle-o"></i> Dashboard</a></li>
-                        <li><a href="<?=site_url()?>"><i class="fa fa-circle-o"></i> Homepage</a></li>
+                        <li><a href="<?=site_url()?>" target="_blank"><i class="fa fa-circle-o"></i> Homepage</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -241,18 +244,30 @@
                 <?php } ?>
 
                 <?php if($ruser[COL_ROLEID] == ROLEADMIN || $ruser[COL_ROLEID] == ROLECOMPANY) { ?>
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-bookmark-o"></i> <span>Vacancies</span>
-                        <span class="pull-right-container">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-bookmark-o"></i> <span>Vacancies</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="<?=site_url('vacancy/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                            <li><a href="<?=site_url('vacancy/add')?>"><i class="fa fa-circle-o"></i> Add Vacancy</a></li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a href="<?=site_url('vacancy/applicants')?>">
+                            <i class="fa fa-male"></i> <span>Applicants</span>
+                        <!--<span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
-                        </span>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li><a href="<?=site_url('vacancy/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
-                        <li><a href="<?=site_url('vacancy/add')?>"><i class="fa fa-circle-o"></i> Add Vacancy</a></li>
-                    </ul>
-                </li>
+                        </span>-->
+                        </a>
+                        <!--<ul class="treeview-menu">
+                            <li><a href="<?=site_url('vacancy/index')?>"><i class="fa fa-circle-o"></i> Data</a></li>
+                            <li><a href="<?=site_url('vacancy/add')?>"><i class="fa fa-circle-o"></i> Add Vacancy</a></li>
+                        </ul>-->
+                    </li>
                 <?php } ?>
 
                 <?php if($ruser[COL_ROLEID] == ROLEADMIN) { ?>
@@ -293,6 +308,14 @@
                             <li><a href="<?=site_url('setting/main')?>"><i class="fa fa-circle-o"></i> Main</a></li>
                             <li><a href="<?=site_url('setting/notification')?>"><i class="fa fa-circle-o"></i> Notification</a></li>
                         </ul>
+                    </li>
+                <?php } ?>
+
+                <?php if($ruser[COL_ROLEID] == ROLEUSER) { ?>
+                    <li class="treeview">
+                        <a href="<?=site_url('user/preference')?>">
+                            <i class="fa fa-cogs"></i> <span>Preferences</span>
+                        </a>
                     </li>
                 <?php } ?>
             </ul>

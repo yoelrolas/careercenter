@@ -139,7 +139,7 @@ class User extends MY_Controller {
                 $userdata = array(
                     COL_NAME => $this->input->post(COL_NAME),
                     COL_IDENTITYNO => $this->input->post(COL_IDENTITYNO),
-                    COL_BIRTHDATE => date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))),
+                    COL_BIRTHDATE => $this->input->post(COL_BIRTHDATE)?date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))):null,
                     COL_RELIGIONID => $this->input->post(COL_RELIGIONID),
                     COL_GENDER => $this->input->post(COL_GENDER),
                     COL_ADDRESS => $this->input->post(COL_ADDRESS),
@@ -177,6 +177,9 @@ class User extends MY_Controller {
                 } else {
                     $reg = $this->db->where(COL_USERNAME, $rdata[COL_USERNAME])->update(TBL_USERINFORMATION, $userdata);
                 }
+
+                $userdetails = $this->muser->getdetails($user[COL_USERNAME]);
+                SetLoginSession($userdetails);
 
                 if($reg) redirect(site_url('user/profile')."?success=1");
                 else redirect(site_url('user/profile')."?error=1");
@@ -332,7 +335,7 @@ class User extends MY_Controller {
                     COL_COMPANYID => ($userdata[COL_ROLEID] == ROLECOMPANY ? $companyid : null),
                     COL_NAME => $this->input->post(COL_NAME),
                     COL_IDENTITYNO => $this->input->post(COL_IDENTITYNO),
-                    COL_BIRTHDATE => date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))),
+                    COL_BIRTHDATE => $this->input->post(COL_BIRTHDATE)?date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))):null,
                     COL_RELIGIONID => $this->input->post(COL_RELIGIONID),
                     COL_GENDER => $this->input->post(COL_GENDER),
                     COL_ADDRESS => $this->input->post(COL_ADDRESS),
@@ -436,7 +439,7 @@ class User extends MY_Controller {
                 $userdata = array(
                     COL_NAME => $this->input->post(COL_NAME),
                     COL_IDENTITYNO => $this->input->post(COL_IDENTITYNO),
-                    COL_BIRTHDATE => date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))),
+                    COL_BIRTHDATE => $this->input->post(COL_BIRTHDATE)?date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))):null,
                     COL_RELIGIONID => $this->input->post(COL_RELIGIONID),
                     COL_GENDER => $this->input->post(COL_GENDER),
                     COL_ADDRESS => $this->input->post(COL_ADDRESS),
@@ -486,5 +489,184 @@ class User extends MY_Controller {
 
     function encrypt() {
         echo GetEncryption("yoelrolas");
+    }
+
+    function Preference() {
+        if(!IsLogin()) {
+            redirect('user/login');
+        }
+        $loginuser = GetLoggedUser();
+        if(!$loginuser || $loginuser[COL_ROLEID] != ROLEUSER) {
+            show_error('Anda tidak memiliki akses terhadap modul ini.');
+            return;
+        }
+
+        $data["title"] = "Preference";
+        if(!empty($_POST)) {
+            $this->db->trans_begin();
+            // Delete preference of this user
+            if(!$this->db->where(COL_USERNAME, $loginuser[COL_USERNAME])->delete(TBL_USERPREFERENCES)) {
+                $this->db->trans_rollback();
+                echo "gagal delete";
+                return;
+                redirect(current_url());
+            }
+
+            $pref_industry = $this->input->post(COL_PREFERENCEVALUE."-".PREFERENCETYPE_INDUSTRYTYPE);
+            if($pref_industry && count($pref_industry) > 0) {
+                $arrinsert = array();
+                for($i=0; $i<count($pref_industry); $i++) {
+                    $p = $pref_industry[$i];
+                    $arrinsert[] = array(
+                        COL_USERNAME => $loginuser[COL_USERNAME],
+                        COL_PREFERENCETYPEID => PREFERENCETYPE_INDUSTRYTYPE,
+                        COL_PREFERENCEVALUE => $p
+                    );
+                }
+                if(!$this->db->insert_batch(TBL_USERPREFERENCES, $arrinsert)) {
+                    $this->db->trans_rollback();
+                    redirect(current_url());
+                }
+            }
+
+            $pref_education = $this->input->post(COL_PREFERENCEVALUE."-".PREFERENCETYPE_EDUCATIONTYPE);
+            if($pref_education && count($pref_education) > 0) {
+                $arrinsert = array();
+                for($i=0; $i<count($pref_education); $i++) {
+                    $p = $pref_education[$i];
+                    $arrinsert[] = array(
+                        COL_USERNAME => $loginuser[COL_USERNAME],
+                        COL_PREFERENCETYPEID => PREFERENCETYPE_EDUCATIONTYPE,
+                        COL_PREFERENCEVALUE => $p
+                    );
+                }
+                if(!$this->db->insert_batch(TBL_USERPREFERENCES, $arrinsert)) {
+                    $this->db->trans_rollback();
+                    redirect(current_url());
+                }
+            }
+
+            $pref_position = $this->input->post(COL_PREFERENCEVALUE."-".PREFERENCETYPE_POSITION);
+            if($pref_position && count($pref_position) > 0) {
+                $arrinsert = array();
+                for($i=0; $i<count($pref_position); $i++) {
+                    $p = $pref_position[$i];
+                    $arrinsert[] = array(
+                        COL_USERNAME => $loginuser[COL_USERNAME],
+                        COL_PREFERENCETYPEID => PREFERENCETYPE_POSITION,
+                        COL_PREFERENCEVALUE => $p
+                    );
+                }
+                if(!$this->db->insert_batch(TBL_USERPREFERENCES, $arrinsert)) {
+                    $this->db->trans_rollback();
+                    redirect(current_url());
+                }
+            }
+
+            $pref_location = $this->input->post(COL_PREFERENCEVALUE."-".PREFERENCETYPE_LOCATION);
+            if($pref_location && count($pref_location) > 0) {
+                $arrinsert = array();
+                for($i=0; $i<count($pref_location); $i++) {
+                    $p = $pref_location[$i];
+                    $arrinsert[] = array(
+                        COL_USERNAME => $loginuser[COL_USERNAME],
+                        COL_PREFERENCETYPEID => PREFERENCETYPE_LOCATION,
+                        COL_PREFERENCEVALUE => $p
+                    );
+                }
+                if(!$this->db->insert_batch(TBL_USERPREFERENCES, $arrinsert)) {
+                    $this->db->trans_rollback();
+                    redirect(current_url());
+                }
+            }
+
+            $pref_type = $this->input->post(COL_PREFERENCEVALUE."-".PREFERENCETYPE_VACANCYTYPE);
+            if($pref_type && count($pref_type) > 0) {
+                $arrinsert = array();
+                for($i=0; $i<count($pref_type); $i++) {
+                    $p = $pref_type[$i];
+                    $arrinsert[] = array(
+                        COL_USERNAME => $loginuser[COL_USERNAME],
+                        COL_PREFERENCETYPEID => PREFERENCETYPE_VACANCYTYPE,
+                        COL_PREFERENCEVALUE => $p
+                    );
+                }
+                if(!$this->db->insert_batch(TBL_USERPREFERENCES, $arrinsert)) {
+                    $this->db->trans_rollback();
+                    redirect(current_url());
+                }
+            }
+            $this->db->trans_commit();
+        }
+
+        $pref_industry = array();
+        $pref_education = array();
+        $pref_position = array();
+        $pref_location = array();
+        $pref_type = array();
+        $data["pref"] = $pref = $this->db->where(COL_USERNAME, $loginuser[COL_USERNAME])->get(TBL_USERPREFERENCES)->result_array();
+
+        if($pref && count($pref) > 0) {
+            foreach($pref as $p) {
+                if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_INDUSTRYTYPE) $pref_industry[] = $p[COL_PREFERENCEVALUE];
+                if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_EDUCATIONTYPE) $pref_education[] = $p[COL_PREFERENCEVALUE];
+                if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_POSITION) $pref_position[] = $p[COL_PREFERENCEVALUE];
+                if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_LOCATION) $pref_location[] = $p[COL_PREFERENCEVALUE];
+                if($p[COL_PREFERENCETYPEID] == PREFERENCETYPE_VACANCYTYPE) $pref_type[] = $p[COL_PREFERENCEVALUE];
+            }
+        }
+        $data["industry"] = $pref_industry;
+        $data["education"] = $pref_education;
+        $data["position"] = $pref_position;
+        $data["location"] = $pref_location;
+        $data["type"] = $pref_type;
+
+        $this->load->view('user/preference', $data);
+    }
+
+    function register() {
+        $data['title'] = "Register as Jobseeker";
+        $datapost = !empty($_POST) ? $this->input->post() : null;
+        $data['data'] = $datapost;
+        $rules = $this->muser->rules(true, ROLEUSER);
+        $this->form_validation->set_rules($rules);
+
+        if($this->form_validation->run()){
+            $userdata = array(
+                COL_USERNAME => $this->input->post(COL_USERNAME),
+                COL_PASSWORD => md5($this->input->post(COL_PASSWORD)),
+                COL_ROLEID => ROLEUSER,
+                COL_ISSUSPEND => false
+            );
+            $userinfo = array(
+                COL_USERNAME => $this->input->post(COL_USERNAME),
+                COL_EMAIL => $this->input->post(COL_EMAIL),
+                COL_NAME => $this->input->post(COL_NAME),
+                COL_IDENTITYNO => $this->input->post(COL_IDENTITYNO),
+                COL_BIRTHDATE => $this->input->post(COL_BIRTHDATE)?date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))):null,
+                COL_RELIGIONID => $this->input->post(COL_RELIGIONID),
+                COL_GENDER => $this->input->post(COL_GENDER),
+                COL_ADDRESS => $this->input->post(COL_ADDRESS),
+                COL_PHONENUMBER => $this->input->post(COL_PHONENUMBER),
+                COL_EDUCATIONID => $this->input->post(COL_EDUCATIONID),
+                COL_UNIVERSITYNAME => $this->input->post(COL_UNIVERSITYNAME),
+                COL_FACULTYNAME => $this->input->post(COL_FACULTYNAME),
+                COL_MAJORNAME => $this->input->post(COL_MAJORNAME),
+                COL_ISGRADUATED => $this->input->post(COL_ISGRADUATED) ? $this->input->post(COL_ISGRADUATED) : false,
+                COL_GRADUATEDDATE => ($this->input->post(COL_ISGRADUATED) && $this->input->post(COL_GRADUATEDDATE) ? date('Y-m-d', strtotime($this->input->post(COL_GRADUATEDDATE))) : null),
+                COL_YEAROFEXPERIENCE => $this->input->post(COL_YEAROFEXPERIENCE),
+                COL_RECENTPOSITION => $this->input->post(COL_RECENTPOSITION),
+                COL_RECENTSALARY => $this->input->post(COL_RECENTSALARY),
+                COL_EXPECTEDSALARY => $this->input->post(COL_EXPECTEDSALARY),
+                COL_REGISTEREDDATE => date('Y-m-d')
+            );
+
+            $reg = $this->muser->register($userdata, $userinfo, null);
+            if($reg) redirect(site_url('user/login'));
+            else redirect(current_url().'?error=1');
+
+        }else{
+            $this->load->view('user/register', array('data' => $datapost));
+        }
     }
 }
