@@ -176,7 +176,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="<?=base_url()?>assets/tbs/img/user.jpg" class="img-circle" alt="User Image">
+                    <img src="<?=$displaypicture?>" class="img-circle" alt="User Image">
                 </div>
                 <div class="pull-left info">
                     <p>Howdy, <?=$displayname?></p>

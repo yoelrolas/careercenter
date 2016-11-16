@@ -106,6 +106,7 @@
         <?php } ?>
 
         <?= form_open(current_url(),array('id'=>'validate')) ?>
+        <p style="padding: 10px 0px; text-align: right"><a href="<?= site_url('user/forgotpassword') ?>">Lupa Password?</a></p>
         <div class="form-group">
             <div class="input-group">
                 <div class="input-group-addon"><i class="fa fa-user"></i></div>

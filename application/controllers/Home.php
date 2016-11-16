@@ -30,4 +30,8 @@ class Home extends MY_Controller {
 
         $this->db->insert_batch(TBL_INDUSTRYTYPES, $arrdata);
     }
+
+    function _404() {
+        $this->load->view('home/error');
+    }
 }

@@ -669,4 +669,156 @@ class User extends MY_Controller {
             $this->load->view('user/register', array('data' => $datapost));
         }
     }
+
+    function ForgotPassword() {
+        $data["title"] = "Lupa Password";
+        if(!empty($_POST)) {
+            $email = $this->input->post(COL_EMAIL);
+
+            $this->db->where(COL_EMAIL, $email);
+            $ruser = $this->db->get(TBL_USERINFORMATION)->row_array();
+            if(!$ruser) {
+                redirect(current_url()."?notfound=1");
+                return false;
+            }
+
+            $encryptedmail= GetEncryption($ruser[COL_EMAIL]);
+            if(IsNotificationActive(NOTIFICATION_LUPAPASSWORD)) {
+                $this->load->library('email',GetEmailConfig());
+                $this->email->set_newline("\r\n");
+
+                $pref = GetNotification(NOTIFICATION_LUPAPASSWORD);
+
+                $content = $pref[COL_NOTIFICATIONCONTENT];
+                $subject = $pref[COL_NOTIFICATIONSUBJECT];
+
+                $subject = str_replace(array("@SITENAME@"), array(SITENAME), $subject);
+                $content = str_replace(array("@NAME@", "@RECOVERYLINK@", "@SITENAME@"),
+                    array((!empty($ruser[COL_NAME])?$ruser[COL_NAME]:"Unknown"), site_url("user/resetpassword")."?token=".$encryptedmail, SITENAME),
+                    $content);
+
+                $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+                $this->email->to($ruser[COL_EMAIL]);
+                $this->email->subject($subject);
+                $this->email->message($content);
+                $this->email->send();
+            }
+
+            redirect(current_url()."?success=1");
+            return true;
+        } else {
+            $this->load->view("user/forgotpassword", $data);
+            return true;
+        }
+    }
+
+    function ResetPassword() {
+        $data["title"] = "Reset Password";
+        $data["token"] = $token = $this->input->get("token");
+        if(!$token) {
+            show_404();
+            return false;
+        }
+
+        $email = GetDecryption($token);
+        $this->db->join(TBL_USERS,TBL_USERS.'.'.COL_USERNAME." = ".TBL_USERINFORMATION.".".COL_USERNAME,"inner");
+        $this->db->where(COL_EMAIL, $email);
+        $ruser = $this->db->get(TBL_USERINFORMATION)->row_array();
+        if(!$ruser) {
+            show_404();
+            return false;
+        }
+
+        $rules = array(
+            array(
+                'field' => COL_PASSWORD,
+                'label' => COL_PASSWORD,
+                'rules' => 'required|min_length[6]',
+                'errors' => array(
+                    'required' => 'Password harap diisi',
+                    'min_length' => 'Password harus mengandung minimal {param} karakter'
+                )
+            ),
+            array(
+                'field' => 'RepeatPassword',
+                'label' => 'Repeat Password',
+                'rules' => 'required|matches[Password]',
+                'errors' => array(
+                    'required' => 'Ulangi Password harap diisi',
+                    'matches' => 'Isi Ulangi Password sesuai Password'
+                )
+            )
+        );
+        $this->form_validation->set_rules($rules);
+        if($this->form_validation->run()) {
+            $this->db->where(COL_USERNAME, $ruser[COL_USERNAME]);
+            if(!$this->db->update(TBL_USERS, array(COL_PASSWORD=>md5($this->input->post(COL_PASSWORD))))) {
+                redirect(current_url()."?error=1");
+            } else {
+                redirect(site_url());
+            }
+        } else {
+            $this->load->view("user/resetpassword", $data);
+            return false;
+        }
+    }
+
+    function import() {
+        header('Content-Type: application/json');
+        $token = "horasitdel";
+        $posttoken = $this->input->post("token");
+        $datapost = $_POST;
+        if(!$posttoken || $posttoken != $token) {
+            ShowJsonError("Parameter API tidak valid");
+            return false;
+        }
+
+        $rules = $this->muser->rules(true, ROLEUSER);
+        $this->form_validation->set_rules($rules);
+
+        if($this->form_validation->run()){
+            $userdata = array(
+                COL_USERNAME => $this->input->post(COL_USERNAME),
+                COL_PASSWORD => md5($this->input->post(COL_PASSWORD)),
+                COL_ROLEID => ROLEUSER,
+                COL_ISSUSPEND => false
+            );
+            $userinfo = array(
+                COL_USERNAME => $this->input->post(COL_USERNAME),
+                COL_EMAIL => $this->input->post(COL_EMAIL),
+                COL_NAME => $this->input->post(COL_NAME),
+                COL_IDENTITYNO => $this->input->post(COL_IDENTITYNO),
+                COL_BIRTHDATE => $this->input->post(COL_BIRTHDATE)?date('Y-m-d', strtotime($this->input->post(COL_BIRTHDATE))):null,
+                COL_RELIGIONID => $this->input->post(COL_RELIGIONID),
+                COL_GENDER => $this->input->post(COL_GENDER),
+                COL_ADDRESS => $this->input->post(COL_ADDRESS),
+                COL_PHONENUMBER => $this->input->post(COL_PHONENUMBER),
+                COL_EDUCATIONID => $this->input->post(COL_EDUCATIONID),
+                COL_UNIVERSITYNAME => $this->input->post(COL_UNIVERSITYNAME),
+                COL_FACULTYNAME => $this->input->post(COL_FACULTYNAME),
+                COL_MAJORNAME => $this->input->post(COL_MAJORNAME),
+                COL_ISGRADUATED => $this->input->post(COL_ISGRADUATED) ? $this->input->post(COL_ISGRADUATED) : false,
+                COL_GRADUATEDDATE => ($this->input->post(COL_ISGRADUATED) && $this->input->post(COL_GRADUATEDDATE) ? date('Y-m-d', strtotime($this->input->post(COL_GRADUATEDDATE))) : null),
+                COL_YEAROFEXPERIENCE => $this->input->post(COL_YEAROFEXPERIENCE),
+                COL_RECENTPOSITION => $this->input->post(COL_RECENTPOSITION),
+                COL_RECENTSALARY => $this->input->post(COL_RECENTSALARY),
+                COL_EXPECTEDSALARY => $this->input->post(COL_EXPECTEDSALARY),
+                COL_REGISTEREDDATE => date('Y-m-d')
+            );
+
+            $reg = $this->muser->register($userdata, $userinfo, null);
+            if($reg) {
+                ShowJsonSuccess("Berhasil.");
+                return true;
+            }
+            else {
+                ShowJsonError("Gagal.");
+                return false;
+            }
+
+        }else{
+            ShowJsonError("Parameter API tidak valid.");
+            return false;
+        }
+    }
 }

@@ -249,7 +249,7 @@ $ruser = GetLoggedUser();
                         <span class="info-box-text">Total Company</span>
                         <span class="info-box-number"><?=count($companies)?></span>
                         <div class="progress">
-                            <div class="progress-bar bg-green" style="width: <?=count($companies) > 0 ? (count($activecompanies)/count($companies))*100 : 0?>%">></div>
+                            <div class="progress-bar bg-green" style="width: <?=count($companies) > 0 ? (count($activecompanies)/count($companies))*100 : 0?>%"></div>
                         </div>
                         <span class="progress-description" style="font-size: 12px"><?=count($activecompanies)?> of <?=count($companies)?> active</span>
                     </div>
@@ -841,133 +841,145 @@ $ruser = GetLoggedUser();
                     </div>
                     <div class="box-body">
                         <div class="col-sm-12" style="border: 1px solid #dedede;">
-                            <div class="col-sm-6">
-                                <h4>Latest Vacancies</h4>
-                                <?php if(count($vacancies) > 0) {
-                                    ?>
-                                    <div class="table-responsive">
-                                        <table class="table no-margin">
-                                            <thead>
-                                            <tr>
-                                                <th>Title</th>
-                                                <th>Created On</th>
-                                                <th>Status</th>
-                                                <th>View</th>
-                                                <th>Applicants</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <?php
-                                            for($i=0; $i<5; $i++) {
-                                                if(empty($vacancies[$i])) break;
-                                                $vac = $vacancies[$i];
-                                                $appls = $this->db->where(COL_VACANCYID, $vac[COL_VACANCYID])->count_all_results(TBL_VACANCYAPPLIES);
-                                                ?>
+                            <?php
+                            if(count($vacancies) > 0) {
+                                ?>
+                                <div class="col-sm-6">
+                                    <h4>Latest Vacancies</h4>
+                                    <?php if(count($vacancies) > 0) {
+                                        ?>
+                                        <div class="table-responsive">
+                                            <table class="table no-margin">
+                                                <thead>
                                                 <tr>
-                                                    <td><a href="<?=site_url('vacancy/edit/'.$vac[COL_VACANCYID])?>"><?=$vac[COL_VACANCYTITLE]?></a></td>
-                                                    <td><?=date("d M Y", strtotime($vac[COL_CREATEDON]))?></td>
-                                                    <td><?=$vac[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($vac[COL_ENDDATE]) > strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>')?></td>
-                                                    <td><?=desimal($vac[COL_TOTALVIEW])?></td>
-                                                    <td><?=desimal($appls)?></td>
+                                                    <th>Title</th>
+                                                    <th>Created On</th>
+                                                    <th>Status</th>
+                                                    <th>View</th>
+                                                    <th>Applicants</th>
                                                 </tr>
+                                                </thead>
+                                                <tbody>
                                                 <?php
-                                            }
-                                            ?>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="clearfix" style="margin-top: 20px"></div>
-                                    <a href="<?=site_url('vacancy/add')?>" class="btn btn-sm btn-info btn-flat pull-left">Add New</a>
-                                    <a href="<?=site_url('vacancy/index')?>" class="btn btn-sm btn-default btn-flat pull-right">View All</a>
-                                    <div class="clearfix" style="margin-bottom: 20px"></div>
-                                    <?php
-                                } else {
-                                    ?>
-                                    <div class="col-sm-12">
-                                        <span class="no-data">No data available</span>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
-                            </div>
-                            <div class="col-sm-6">
-                                <?php if(count($vacancies) > 0 && $VacancyPositions && count($VacancyPositions) > 0) {
-                                    ?>
-                                    <div class="col-sm-12" style="padding: 10px;">
-                                        <p>Positions</p>
-                                        <div class="col-sm-6">
-                                            <canvas id="PositionChart" style="height:250px"></canvas>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <ul class="chart-legend clearfix">
-                                                <?php
-                                                foreach($VacancyPositions as $pos) {
+                                                for($i=0; $i<5; $i++) {
+                                                    if(empty($vacancies[$i])) break;
+                                                    $vac = $vacancies[$i];
+                                                    $appls = $this->db->where(COL_VACANCYID, $vac[COL_VACANCYID])->count_all_results(TBL_VACANCYAPPLIES);
                                                     ?>
-                                                    <li>
-                                                        <i class="fa fa-circle-o" style="color: <?=$pos["color"]?>"></i>
-                                                        <!--<b><?=desimal(($pos["value"]/count($vacancies))*100)?>%</b>-->
-                                                        <?=$pos["label"]?>
-                                                    </li>
+                                                    <tr>
+                                                        <td><a href="<?=site_url('vacancy/edit/'.$vac[COL_VACANCYID])?>"><?=$vac[COL_VACANCYTITLE]?></a></td>
+                                                        <td><?=date("d M Y", strtotime($vac[COL_CREATEDON]))?></td>
+                                                        <td><?=$vac[COL_ISSUSPEND] ? '<smal class="label label-danger pull-left">Suspend</smal>' : (strtotime($vac[COL_ENDDATE]) > strtotime(date('Y-m-d')) ? '<small class="label label-success pull-left">Active</small>' : '<small class="label label-warning pull-left">Expired</small>')?></td>
+                                                        <td><?=desimal($vac[COL_TOTALVIEW])?></td>
+                                                        <td><?=desimal($appls)?></td>
+                                                    </tr>
                                                     <?php
                                                 }
                                                 ?>
-                                            </ul>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </div>
+                                        <div class="clearfix" style="margin-top: 20px"></div>
+                                        <a href="<?=site_url('vacancy/add')?>" class="btn btn-sm btn-info btn-flat pull-left">Add New</a>
+                                        <a href="<?=site_url('vacancy/index')?>" class="btn btn-sm btn-default btn-flat pull-right">View All</a>
+                                        <div class="clearfix" style="margin-bottom: 20px"></div>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <div class="col-sm-12">
+                                            <span class="no-data">No data available</span>
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                                <div class="col-sm-6">
+                                    <?php if(count($vacancies) > 0 && $VacancyPositions && count($VacancyPositions) > 0) {
+                                        ?>
+                                        <div class="col-sm-12" style="padding: 10px;">
+                                            <p>Positions</p>
+                                            <div class="col-sm-6">
+                                                <canvas id="PositionChart" style="height:250px"></canvas>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <ul class="chart-legend clearfix">
+                                                    <?php
+                                                    foreach($VacancyPositions as $pos) {
+                                                        ?>
+                                                        <li>
+                                                            <i class="fa fa-circle-o" style="color: <?=$pos["color"]?>"></i>
+                                                            <!--<b><?=desimal(($pos["value"]/count($vacancies))*100)?>%</b>-->
+                                                            <?=$pos["label"]?>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </ul>
+                                            </div>
+                                        </div>
 
-                                    <div class="col-sm-12" style="padding: 10px;">
-                                        <p>Educations</p>
-                                        <div class="col-sm-6">
-                                            <canvas id="EducationChart" style="height:250px"></canvas>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <ul class="chart-legend clearfix">
-                                                <?php
-                                                foreach($Educations as $edu) {
-                                                    ?>
-                                                    <li>
-                                                        <i class="fa fa-circle-o" style="color: <?=$edu["color"]?>"></i>
-                                                        <!--<b><?=desimal(($edu["value"]/count($vacancies))*100)?>%</b>-->
-                                                        <?=$edu["label"]?>
-                                                    </li>
+                                        <div class="col-sm-12" style="padding: 10px;">
+                                            <p>Educations</p>
+                                            <div class="col-sm-6">
+                                                <canvas id="EducationChart" style="height:250px"></canvas>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <ul class="chart-legend clearfix">
                                                     <?php
-                                                }
-                                                ?>
-                                            </ul>
+                                                    foreach($Educations as $edu) {
+                                                        ?>
+                                                        <li>
+                                                            <i class="fa fa-circle-o" style="color: <?=$edu["color"]?>"></i>
+                                                            <!--<b><?=desimal(($edu["value"]/count($vacancies))*100)?>%</b>-->
+                                                            <?=$edu["label"]?>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class="col-sm-12" style="padding: 10px;">
-                                        <p>Locations</p>
-                                        <div class="col-sm-6">
-                                            <canvas id="LocationChart" style="height:250px"></canvas>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <ul class="chart-legend clearfix">
-                                                <?php
-                                                foreach($Locations as $loc) {
-                                                    ?>
-                                                    <li>
-                                                        <i class="fa fa-circle-o" style="color: <?=$loc["color"]?>"></i>
-                                                        <!--<b><?=desimal(($loc["value"]/count($vacancies))*100)?>%</b>-->
-                                                        <?=$loc["label"]?>
-                                                    </li>
+                                        <div class="col-sm-12" style="padding: 10px;">
+                                            <p>Locations</p>
+                                            <div class="col-sm-6">
+                                                <canvas id="LocationChart" style="height:250px"></canvas>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <ul class="chart-legend clearfix">
                                                     <?php
-                                                }
-                                                ?>
-                                            </ul>
+                                                    foreach($Locations as $loc) {
+                                                        ?>
+                                                        <li>
+                                                            <i class="fa fa-circle-o" style="color: <?=$loc["color"]?>"></i>
+                                                            <!--<b><?=desimal(($loc["value"]/count($vacancies))*100)?>%</b>-->
+                                                            <?=$loc["label"]?>
+                                                        </li>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php
-                                } else {
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <div class="col-sm-12">
+                                            <span class="no-data">No data available</span>
+                                        </div>
+                                        <?php
+                                    }
                                     ?>
-                                    <div class="col-sm-12">
-                                        <span class="no-data">No data available</span>
-                                    </div>
-                                    <?php
-                                }
+                                </div>
+                            <?php
+                            } else {
                                 ?>
-                            </div>
+                                <div class="col-sm-12">
+                                    <span class="no-data">No data available</span>
+                                </div>
+                            <?php
+                            }
+                            ?>
                         </div>
 
                         <div class="clearfix" style="margin-bottom: 20px"></div>

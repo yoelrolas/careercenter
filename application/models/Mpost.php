@@ -48,7 +48,13 @@ class Mpost extends CI_Model {
 
             $this->db->where($where);
         }
-        if(!empty($type)) $this->db->where(TBL_POSTS.".".COL_POSTCATEGORYID, $type);
+        if(!empty($type)) {
+            if(is_array($type) && count($type) > 0) {
+                $this->db->where_in(TBL_POSTS.".".COL_POSTCATEGORYID, $type);
+            } else {
+                $this->db->where(TBL_POSTS.".".COL_POSTCATEGORYID, $type);
+            }
+        }
         if($limit > 0) $this->db->limit($limit);
 
         $this->db->where(TBL_POSTS.".".COL_ISSUSPEND, false);

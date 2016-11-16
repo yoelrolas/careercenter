@@ -4281,3 +4281,151 @@ p.list-item-value {
 	animation:fade 3000ms infinite;
 	-webkit-animation:fade 3000ms infinite;
 }
+
+.post-outer {
+	padding: 20px 0 10px;
+	border-bottom: 1px solid #e2e2e2;
+}
+.post {
+	display: block;
+	overflow: hidden;
+	word-wrap: break-word;
+	background: #ffffff;
+}
+.content-outer, .header-outer, .tabs-outer, .main-outer, .main-inner, .footer-outer, .post, .comments, .widget, .date-header, .inline-ad {
+	position: relative;
+	min-height: 0;
+}
+.post-labels {
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	color: #fff !important;
+	padding: 5px 10px;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	z-index: 3;
+	background: #0288d1;
+}
+.post-labels a {
+	color: #fff;
+}
+.block-image {
+	float: left;
+	width: 200px;
+	height: 190px;
+	margin-right: 20px;
+	border-radius: 3px;
+}
+.block-image .thumb {
+	width: 100%;
+	height: 190px;
+	position: relative;
+	display: block;
+	overflow: hidden;
+	border-radius: 3px;
+}
+.block-image a {
+	width: 100%;
+	height: 190px;
+	display: block;
+	border-radius: 3px;
+	transition: all .3s ease-out!important;
+	-webkit-transition: all .3s ease-out!important;
+	-moz-transition: all .3s ease-out!important;
+	-o-transition: all .3s ease-out!important;
+}
+article {
+	padding: 0 10px 0 0;
+}
+article {
+	padding: 0;
+	overflow: hidden;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+section, nav, article, aside, hgroup, header, footer {
+	display: block;
+}
+.retitle h2 {
+	margin: 8px 0;
+	display: block;
+}
+.post h2 {
+	margin: 0 0 10px;
+	padding: 0;
+}
+.post h2 {
+	margin-bottom: 12px;
+	line-height: 37px;
+	font-size: 25px;
+	font-weight: 700;
+}
+.post h2 a {
+	color: #000;
+	letter-spacing: 1px;
+}
+.date-header {
+	color: #bdbdbd;
+	display: block;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.3em;
+	margin: 0!important;
+	padding: 0;
+}
+.post-timestamp {
+	margin-left: 5px;
+}
+.date-header a {
+	color: #bdbdbd;
+}
+.post-cmm {
+	margin-left: 10px;
+}
+.resumo {
+	margin-top: 10px;
+	color: #919191;
+}
+.resumo span {
+	display: block;
+	margin-bottom: 8px;
+	font-size: 16px;
+	line-height: 31px;
+}
+
+@media only screen and (max-width: 768px) {
+	.index .post-outer {
+		float: none;
+		margin: 0 auto;
+		clear: both;
+		width: 100%;
+	}
+	.block-image {
+		float: none;
+		margin: 0 auto;
+		clear: both;
+		width: 100%;
+	}
+	article {
+		padding: 10px;
+	}
+	.index .post h2, .archive .post h2 {
+		line-height: 1.4em;
+		font-size: 19px;
+	}
+	.retitle h2 {
+		margin: 8px 0;
+		display: block;
+		max-height: 100%;
+		overflow: hidden;
+	}
+}
+
+.dropdown-menu {
+	min-width: 240px;
+}

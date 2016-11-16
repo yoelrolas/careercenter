@@ -201,7 +201,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         <li><a href="<?=site_url('company/all')?>">Companies</a></li>
                         <!--<li><a href="#">News</a></li>-->
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Posts<span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Posts &nbsp;<span class="caret"></span></a>
                             <div class="dropdown-menu w3ls_vegetables_menu" style="display: none;">
                                 <ul>
                                     <li><a href="<?=site_url('post/all/'.POSTCATEGORY_NEWS)?>">News</a></li>

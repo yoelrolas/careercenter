@@ -122,6 +122,8 @@
                 var slug = title.replace(/\s/g, "-");
                 $("[name=PostSlug]").val(slug);
             }).trigger("change");
+
+            CKEDITOR.config.height = 400;
             CKEDITOR.replace("content_editor");
         });
     </script>
