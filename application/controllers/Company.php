@@ -78,11 +78,19 @@ class Company extends MY_Controller {
                     array($userinfo[COL_USERNAME], $userinfo[COL_EMAIL], $companydata[COL_COMPANYNAME], SITENAME, site_url('company/index')),
                     $content);
 
-                $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+                /*$this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
                 $this->email->to(GetSetting(SETTING_WEBMAIL));
                 $this->email->subject($subject);
                 $this->email->message($content);
-                $this->email->send();
+                $this->email->send();*/
+
+                $headers = 'From: '.$pref[COL_NOTIFICATIONSENDERNAME].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                    'Reply-To: '.$pref[COL_NOTIFICATIONSENDEREMAIL].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                    'Return-Path: '.$pref[COL_NOTIFICATIONSENDEREMAIL].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                    //'Cc: '.$rvacancy[COL_COMPANYEMAIL] . PHP_EOL .
+                    'MIME-Version: 1.0' . PHP_EOL .
+                    'Content-Type: text/html; charset=ISO-8859-1' . PHP_EOL;
+                mail(GetSetting(SETTING_WEBMAIL), $subject, str_replace("\n.", "\n..", $content), $headers);
             }
 
             if($reg) redirect(site_url('company/register')."?success=1");
@@ -317,11 +325,19 @@ class Company extends MY_Controller {
                             array($row[COL_USERNAME], $row[COL_EMAIL], $row[COL_COMPANYNAME], SITENAME, site_url('user/login')),
                             $content);
 
-                        $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+                        /*$this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
                         $this->email->to($row[COL_EMAIL]);
                         $this->email->subject($subject);
                         $this->email->message($content);
-                        $this->email->send();
+                        $this->email->send();*/
+
+                        $headers = 'From: '.$pref[COL_NOTIFICATIONSENDERNAME].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                            'Reply-To: '.$pref[COL_NOTIFICATIONSENDEREMAIL].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                            'Return-Path: '.$pref[COL_NOTIFICATIONSENDEREMAIL].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                            //'Cc: '.$rvacancy[COL_COMPANYEMAIL] . PHP_EOL .
+                            'MIME-Version: 1.0' . PHP_EOL .
+                            'Content-Type: text/html; charset=ISO-8859-1' . PHP_EOL;
+                        mail($row[COL_EMAIL], $subject, str_replace("\n.", "\n..", $content), $headers);
                     }
                 }
             }

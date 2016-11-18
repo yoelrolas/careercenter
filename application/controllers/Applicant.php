@@ -57,11 +57,19 @@ class Applicant extends MY_Controller
                 array($message, SITENAME),
                 $content);
 
-            $this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
+            /*$this->email->from($pref[COL_NOTIFICATIONSENDEREMAIL], $pref[COL_NOTIFICATIONSENDERNAME]);
             $this->email->to($arremail);
             $this->email->subject($subject);
             $this->email->message($content);
-            $this->email->send();
+            $this->email->send();*/
+
+            $headers = 'From: '.$pref[COL_NOTIFICATIONSENDERNAME].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                'Reply-To: '.$pref[COL_NOTIFICATIONSENDEREMAIL].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                'Return-Path: '.$pref[COL_NOTIFICATIONSENDEREMAIL].' <'.$pref[COL_NOTIFICATIONSENDEREMAIL].'>' . PHP_EOL .
+                //'Cc: '.$rvacancy[COL_COMPANYEMAIL] . PHP_EOL .
+                'MIME-Version: 1.0' . PHP_EOL .
+                'Content-Type: text/html; charset=ISO-8859-1' . PHP_EOL;
+            mail(implode(',', $arremail), $subject, str_replace("\n.", "\n..", $content), $headers);
         }
 
         if($processed){

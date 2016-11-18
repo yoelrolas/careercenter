@@ -1,6 +1,5 @@
 RewriteEngine on
-RewriteBase /cdc
-RewriteCond $1 !^(index\.php|install\.php|assets|sitemap.xml|robots\.txt)
-RewriteRule ^(.*)$ index.php/$1 [L]
-RewriteCond %{HTTP_REFERER} !^http://(www\.)?localhost/ [NC] 
-RewriteRule \.(mp4|mp3|wav|aac|mov|avi|3gp|wmv)$ - [F,NC]
+RewriteCond $1 !^(index\.php|public|\.txt)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?$1
